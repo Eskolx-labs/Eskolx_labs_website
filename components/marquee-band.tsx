@@ -11,12 +11,22 @@ import { LOAM } from '@/lib/field-controller'
  */
 
 const WORDS = ['FROM', 'SEED', 'TO', 'HARVEST']
-const TOTAL = WORDS.join('').length // 18 characters drive the stagger math
+// 17 characters drive the stagger math; PREFIX gives each letter its global
+// index without mutable render state, so both strips of the loop pop in sync
+const TOTAL = WORDS.join('').length
+const PREFIX = (() => {
+  const p = []
+  let acc = 0
+  for (const w of WORDS) {
+    p.push(acc)
+    acc += w.length
+  }
+  return p
+})()
 const TRAVEL_END = 88
 
 export function MarqueeBand() {
   const charDuration = TRAVEL_END / TOTAL
-  let charIndex = 0
 
   return (
     <Root
@@ -39,14 +49,12 @@ export function MarqueeBand() {
         >
           {[0, 1].map((rep) => (
             <span key={rep} className="display flex items-baseline" aria-hidden={rep === 1}>
-              {WORDS.map((word) => {
+              {WORDS.map((word, wi) => {
                 const harvest = word === 'HARVEST'
-                const startIdx = charIndex
-                charIndex += word.length
                 return (
                   <span key={word} className="flex items-baseline">
                     {word.split('').map((ch, i) => {
-                      const gi = startIdx + i
+                      const gi = PREFIX[wi] + i
                       const charStart = charDuration * gi * 0.7
                       return (
                         <Animation
@@ -61,13 +69,10 @@ export function MarqueeBand() {
                               transformOrigin: 'center right',
                             },
                             {
-                              keyframes: {
-                                '0%': { autoAlpha: 0, scale: 0.5 },
-                                '50%': { autoAlpha: 1, scale: 1 },
-                                '100%': { yPercent: 0 },
-                                easeEach: 'power1.out',
-                              },
-                              ease: 'linear',
+                              yPercent: 0,
+                              scale: 1,
+                              autoAlpha: 1,
+                              ease: 'back.out(1.4)',
                             },
                           ]}
                         >

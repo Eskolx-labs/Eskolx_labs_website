@@ -10,7 +10,7 @@ import { GithubIcon, TelegramIcon } from '@/components/brand-icons'
 
 const LINES = [
   { text: 'The only way' },
-  { text: 'to understand a thing' },
+  { text: 'to understand something' },
   { text: 'is to ', accent: 'build it.' },
 ]
 
@@ -126,7 +126,7 @@ export function Hero() {
           >
             <h1
               className="display text-[clamp(2.4rem,5.6vw,4.6rem)] leading-[1.06] field-ink"
-              aria-label="The only way to understand a thing is to build it."
+              aria-label="The only way to understand something is to build it."
             >
               <span aria-hidden="true" className="block">
                 {LINES.map((line, i) => (

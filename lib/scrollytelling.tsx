@@ -110,12 +110,14 @@ export function Root({
 
     gsap.registerPlugin(ScrollTrigger)
     const pinned = !!el.querySelector('[data-pin]')
-    // Flow chapters configured as "top bottom"/"bottom top" resolve their end
-    // edge ourselves: ScrollTrigger's string form lands one viewport past the
-    // true last-scroll position here, which stretches every beat into a range
-    // the reader can never reach (fatal for the final chapter before a short
-    // footer). Exact pixels: the transit spans the section's own height.
-    const exactFlow = !pinned && start === 'top bottom' && end === 'bottom top'
+    // Flow chapters configured as "top bottom"/"bottom top" own their whole
+    // viewport crossing: the natural string-form span is element height +
+    // viewport, which is what makes bands like the seed-catalog marquee read
+    // letter by letter. But a chapter that sits last before a short footer can
+    // never scroll its bottom to the viewport top, so we clamp the span to the
+    // document's last scroll position — mid-page chapters keep the full
+    // crossing, the final one simply completes at book close.
+    const flowTransit = !pinned && start === 'top bottom' && end === 'bottom top'
     const tl = gsap.timeline({
       paused: true,
       defaults: { duration: 1, ease: 'linear' },
@@ -124,8 +126,19 @@ export function Root({
         start,
         end: pinned
           ? () => `+=${el.offsetHeight - window.innerHeight}`
-          : exactFlow
-            ? () => `+=${el.offsetHeight}`
+          : flowTransit
+            ? () => {
+                const rect = el.getBoundingClientRect()
+                const startPx = rect.top + window.scrollY - window.innerHeight
+                // natural crossing span; never past the document's last
+                // scroll position so final chapters complete at book close
+                const natural = el.offsetHeight + window.innerHeight
+                const reachable =
+                  document.documentElement.scrollHeight -
+                  window.innerHeight -
+                  startPx
+                return `+=${Math.max(Math.min(natural, reachable), 1)}`
+              }
             : end,
         scrub,
       },
