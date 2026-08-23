@@ -1,5 +1,8 @@
 'use client'
 
+import { useEffect, useRef } from 'react'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { Root, Animation } from '@/lib/scrollytelling'
 import { Reveal } from '@/components/reveal'
 import {
@@ -45,9 +48,86 @@ const SECONDARY = [
   { icon: TiktokIcon, name: 'TikTok', href: 'https://tiktok.com/@eskolx_labs' },
 ]
 
-const DRIFT = [-18, -36, -54] // yPercent per card across the full transit
+// brand glyphs fill their viewBoxes differently: telegram's disc and
+// linkedin's slab run edge-to-edge while the octocat carries its own
+// padding — optically corrected so every chip holds the same visual weight
+function iconSize(name: string) {
+  return name === 'Telegram' || name === 'LinkedIn' ? 'h-[17px] w-[17px]' : 'h-5 w-5'
+}
 
 export function Community() {
+  const stageRef = useRef<HTMLDivElement>(null)
+
+  // The harvest table is the last chapter before a short footer, so its Root
+  // timeline's tail can fall past the document's final scroll position —
+  // beats scheduled late there strand. Each plate therefore owns a small,
+  // viewport-relative trigger (the hero-dock pattern): the leftmost card
+  // leads and its neighbours cascade as their own boxes cross the same
+  // threshold, so the stagger reads left-to-right and always completes.
+  useEffect(() => {
+    const mm = gsap.matchMedia()
+    mm.add('(prefers-reduced-motion: no-preference) and (min-width: 768px)', () => {
+      const stage = stageRef.current
+      if (!stage) return
+      gsap.registerPlugin(ScrollTrigger)
+      const ctx = gsap.context(() => {
+        const rule = stage.querySelector('[data-harvest-rule]')
+        if (rule) {
+          gsap.fromTo(
+            rule,
+            { scaleX: 0 },
+            {
+              scaleX: 1,
+              ease: 'power2.inOut',
+              scrollTrigger: { trigger: rule, start: 'top 92%', end: 'top 75%', scrub: 0.6 },
+            },
+          )
+        }
+        PRIMARY.forEach((c, i) => {
+          const card = stage.querySelector(`[data-harvest="${i}"]`)
+          if (!card) return
+          const chip = card.querySelector(`[data-chip="${i}"]`)
+          const index = card.querySelector(`[data-index="${i}"]`)
+          // the row shares one baseline, so the cascade comes purely from
+          // threshold offsets — and a higher viewport-% fires earlier,
+          // hence the leftmost plate gets the largest one and leads.
+          const lead = (PRIMARY.length - 1 - i) * 7
+          const tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: card.closest('a') ?? card,
+              start: `top ${88 + lead}%`,
+              end: `top ${56 + lead}%`,
+              scrub: 0.6,
+            },
+          })
+          tl.fromTo(
+            card,
+            { y: 36, opacity: 0, rotate: -1 },
+            { y: 0, opacity: 1, rotate: 0, ease: 'power2.out', duration: 0.7 },
+          )
+          if (chip) {
+            tl.fromTo(
+              chip,
+              { scale: 1.55, opacity: 0 },
+              { scale: 1, opacity: 1, ease: 'power3.in', duration: 0.35 },
+              '-=0.28',
+            )
+          }
+          if (index) {
+            tl.fromTo(
+              index,
+              { opacity: 0, rotate: 8 },
+              { opacity: 1, rotate: 0, ease: 'power2.out', duration: 0.3 },
+              '-=0.15',
+            )
+          }
+        })
+      }, stage)
+      return () => ctx.revert()
+    })
+    return () => mm.revert()
+  }, [])
+
   return (
     <Root
       id="community"
@@ -59,7 +139,7 @@ export function Community() {
         to: { bg: '#ece1c6', ink: '#29190c', soft: '#5c4a33', line: '#b9a67f' },
       }}
     >
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div ref={stageRef} className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <Animation target="[data-harvest-head]" start={6} end={94} fromTo={[{ y: 34 }, { y: -22 }]}>
           <div data-harvest-head className="max-w-3xl">
             <h2 className="display text-[clamp(2rem,3.8vw,3.2rem)] leading-tight text-parchment-ink">
@@ -72,58 +152,69 @@ export function Community() {
           </div>
         </Animation>
 
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
+        <div data-harvest-rule className="mt-12 h-px origin-left bg-parchment-ink/25" />
+
+        <div className="mt-6 grid gap-6 md:grid-cols-3">
           {PRIMARY.map((c, i) => (
             <a
               key={c.name}
               href={c.href}
               target="_blank"
               rel="noreferrer"
-              className="group rounded-sm border border-parchment-ink/25 bg-parchment p-7 transition-colors duration-200 hover:border-wine-500/50"
+              className="group relative flex flex-col overflow-hidden rounded-sm border border-parchment-ink/25 bg-parchment transition-all duration-300 ease-out hover:-translate-y-1 hover:border-wine-500/60 hover:shadow-[0_22px_48px_-24px_rgb(0_0_0/0.4)]"
             >
-              <Animation
-                target={`[data-drift="${i}"]`}
-                start={0}
-                end={100}
-                fromTo={[{ yPercent: 0 }, { yPercent: DRIFT[i] }]}
-              >
-                <div data-drift={i}>
-                  <Animation
-                    target={`[data-harvest="${i}"]`}
-                    start={i * 12 + 8}
-                    end={i * 12 + 32}
-                    fromTo={[{ y: 30, opacity: 0 }, { y: 0, opacity: 1 }]}
+              <div data-harvest={i} className="flex flex-1 flex-col p-7">
+                <div className="flex items-start justify-between">
+                  <span
+                    data-chip={i}
+                    className="flex h-12 w-12 items-center justify-center rounded-full border border-parchment-ink/30 text-parchment-ink transition-all duration-300 group-hover:-rotate-6 group-hover:border-wine-500 group-hover:bg-wine-600 group-hover:text-cream-100"
                   >
-                    <div data-harvest={i}>
-                      <span className="flex h-12 w-12 items-center justify-center rounded-full border border-parchment-ink/30 text-parchment-ink transition-colors duration-200 group-hover:border-wine-500 group-hover:bg-wine-600 group-hover:text-cream-100">
-                        <c.icon className="h-5 w-5" />
-                      </span>
-                      <h3 className="display mt-5 text-xl text-parchment-ink">{c.name}</h3>
-                      <p className="mt-1 font-mono text-xs tracking-wide text-wine-600">{c.handle}</p>
-                      <p className="mt-3 text-[15px] leading-relaxed text-parchment-ink/75">{c.desc}</p>
-                    </div>
-                  </Animation>
+                    <c.icon className={iconSize(c.name)} />
+                  </span>
+                  <span
+                    data-index={i}
+                    aria-hidden="true"
+                    className="mt-1.5 font-mono text-[11px] uppercase tracking-[0.3em] text-parchment-ink/45"
+                  >
+                    No.{i + 1}
+                  </span>
                 </div>
-              </Animation>
+                <h3 className="display mt-5 text-xl text-parchment-ink">{c.name}</h3>
+                <p className="mt-1 font-mono text-xs tracking-wide text-wine-600">{c.handle}</p>
+                <p className="mt-3 text-[15px] leading-relaxed text-parchment-ink/75">{c.desc}</p>
+                <div className="mt-auto pt-6">
+                  <span className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.28em] text-parchment-ink/55 transition-colors duration-200 group-hover:text-wine-600">
+                    Open channel
+                    <svg
+                      viewBox="0 0 14 14"
+                      className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-0.5"
+                      aria-hidden="true"
+                      fill="none"
+                    >
+                      <path d="M3 11 L11 3 M5 3 H11 V9" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </span>
+                </div>
+              </div>
             </a>
           ))}
         </div>
 
         <Reveal className="mt-6">
-          <ul className="grid grid-cols-2 gap-4 sm:grid-cols-5" data-reveal-item>
-          {SECONDARY.map((c) => (
-            <li key={c.name}>
-              <a
-                href={c.href}
-                target="_blank"
-                rel="noreferrer"
-                className="flex items-center gap-3 rounded-sm border border-parchment-ink/25 bg-parchment px-4 py-4 transition-colors duration-200 hover:border-gold-leaf/60"
-              >
-                <c.icon className="h-[18px] w-[18px] shrink-0 text-parchment-ink/60" />
-                <span className="truncate font-serif text-sm text-parchment-ink/85">{c.name}</span>
-              </a>
-            </li>
-          ))}
+          <ul className="grid grid-cols-2 gap-4 sm:grid-cols-5">
+            {SECONDARY.map((c) => (
+              <li key={c.name} data-reveal-item>
+                <a
+                  href={c.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group flex items-center gap-3 rounded-sm border border-parchment-ink/25 bg-parchment px-4 py-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-gold-leaf/60"
+                >
+                  <c.icon className="h-[18px] w-[18px] shrink-0 text-parchment-ink/60 transition-colors duration-200 group-hover:text-wine-600" />
+                  <span className="truncate font-serif text-sm text-parchment-ink/85">{c.name}</span>
+                </a>
+              </li>
+            ))}
           </ul>
         </Reveal>
 

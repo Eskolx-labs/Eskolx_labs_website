@@ -38,7 +38,7 @@ Work happens in small fast-moving builder cohorts on a 3-month cycle: Phase 1 ba
 
 - Name is "Eskolx Labs", never "Eshkol" or "Eskolx" alone.
 - Eshcol root: Hebrew for a rich cluster of grapes, abundance bound to one stem. The grapevine is the brand's central symbol. The X stands for Execution & Automation, eXploration, Scale.
-- Binding visual facts from two user-supplied reference images (axum_template_dark_brown.jpg, axum_template_light_brown.png): the grapevine symbol and two color fields, a light parchment variant and a dark loam variant, are binding. The script-lettered wordmark with the red seal stamp (template 1's logo lockup) is the brand mark. The L-system grapevine AND the authored SVG vine plate were both rejected by the user; no vine illustration ships until a proper engraved asset exists — the grape lives in the seal, the language, and the wine palette.
+- Binding visual facts from two user-supplied reference images (axum_template_dark_brown.jpg, axum_template_light_brown.png): the grapevine symbol and two color fields, a light parchment variant and a dark loam variant, are binding. The script-lettered wordmark is the brand's lettering; on 2026-08-23 the user recut the seal from its red-plate stamp to an engraved die (double hairline in the current field ink, grape cluster in the wine family) so grapes read purple and the mark always contrasts its spread. The L-system grapevine AND the authored SVG vine plate were both rejected by the user; no vine illustration ships until a proper engraved asset exists — the grape lives in the seal-die, the language, and the wine palette.
 - The templates are terrible drafts of the final look, not comps: direction only, never pixel reference.
 
 ## Evidence on Hand

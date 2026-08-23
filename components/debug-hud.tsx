@@ -51,6 +51,7 @@ export function DebugHud() {
   return (
     <pre
       ref={ref}
+      style={{ display: 'none' }}
       className="fixed bottom-4 left-4 z-[9999] rounded-sm bg-black/85 p-3 font-mono text-[11px] leading-relaxed text-lime-300"
     />
   )

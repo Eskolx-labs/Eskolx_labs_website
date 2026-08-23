@@ -44,6 +44,7 @@
   --color-wine-600: #7c2c54;
   --color-wine-700: #5c1f3e;
   --color-gold-leaf: #b3946a;
+  --color-gold-ink: #6f542a;
   --color-vermilion: #bf3b2b;
   --color-parchment: #ece1c6;
   --color-parchment-ink: #29190c;
@@ -91,6 +92,8 @@
 
   /* tan-gold leaf tone from the etched foliage */
   --gold-leaf: #b3946a;
+  /* the same gold darkened to an ink safe on the day spread */
+  --gold-ink: #6f542a;
 
   /* vermilion seal, the one red on every spread */
   --vermilion: #bf3b2b;
@@ -120,15 +123,14 @@
   }
 
   ::-webkit-scrollbar {
-    width: 12px;
+    width: 7px;
   }
   ::-webkit-scrollbar-track {
     background: var(--field-bg);
   }
   ::-webkit-scrollbar-thumb {
     background: var(--wine-700);
-    border: 2px solid var(--field-bg);
-    border-radius: 6px;
+    border-radius: 999px;
   }
   ::-webkit-scrollbar-thumb:hover {
     background: var(--wine-600);
@@ -140,9 +142,16 @@
     border-radius: var(--radius-sm);
   }
 
+  /* the nav logo is dock-hidden at rest (autoAlpha); a keyboard reader who
+     tabs to it must still see where they are */
+  header a[href='#top']:focus-visible {
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
   html {
     scrollbar-color: var(--wine-700) var(--field-bg);
-    scrollbar-width: auto;
+    scrollbar-width: thin;
   }
 
   input,
@@ -217,21 +226,25 @@
   }
 
   .btn-wine {
-    background: var(--vermilion-deep);
+    /* template buttons are dusty plum with a cream border; vermilion is
+       reserved for the seal alone */
+    background: var(--wine-600);
     color: var(--cream-100);
-    border-color: rgba(41, 25, 12, 0.55);
+    border-color: rgb(236 225 198 / 0.75);
   }
   .btn-wine:hover {
-    background: var(--vermilion);
+    background: var(--wine-500);
+    border-color: var(--cream-100);
   }
 
   .btn-outline {
     background: transparent;
     color: var(--field-ink);
+    border-color: rgb(41 25 12 / 0.5);
   }
   .btn-outline:hover {
     background: rgb(41 25 12 / 0.06);
-    border-color: rgba(41, 25, 12, 0.6);
+    border-color: rgba(41, 25, 12, 0.75);
   }
 
   /* hairline rule with a centered diamond, engraving-plate divider */

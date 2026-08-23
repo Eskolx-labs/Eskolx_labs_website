@@ -1,39 +1,40 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
-import {
-  IM_Fell_English,
-  Source_Serif_4,
-  JetBrains_Mono,
-  Kaushan_Script,
-} from 'next/font/google'
+import localFont from 'next/font/local'
 import { SmoothScroll } from '@/lib/motion'
 import { LivingGrain } from '@/components/living-grain'
 import { DebugHud } from '@/components/debug-hud'
 import './globals.css'
 
-const imFell = IM_Fell_English({
-  subsets: ['latin'],
-  weight: ['400'],
-  style: ['normal', 'italic'],
+/*
+ * Self-hosted faces (next/font/local). Recovered from the production build's
+ * own media output so the build no longer depends on reaching Google Fonts —
+ * same families, same CSS variables as before.
+ */
+const imFell = localFont({
+  src: [
+    { path: './fonts/im-fell-english-regular.woff2', weight: '400', style: 'normal' },
+    { path: './fonts/im-fell-english-italic.woff2', weight: '400', style: 'italic' },
+  ],
   variable: '--font-im-fell',
   display: 'swap',
 })
 
-const sourceSerif = Source_Serif_4({
-  subsets: ['latin'],
+const sourceSerif = localFont({
+  src: './fonts/source-serif-4-variable.woff2',
   variable: '--font-source-serif',
   display: 'swap',
 })
 
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ['latin'],
+const jetbrainsMono = localFont({
+  src: './fonts/jetbrains-mono-variable.woff2',
   variable: '--font-jetbrains-mono',
   display: 'swap',
 })
 
-const kaushan = Kaushan_Script({
-  subsets: ['latin'],
-  weight: ['400'],
+const kaushan = localFont({
+  src: './fonts/kaushan-script-400.woff2',
+  weight: '400',
   variable: '--font-kaushan',
   display: 'swap',
 })
@@ -97,7 +98,7 @@ export default function RootLayout({
         <SmoothScroll>{children}</SmoothScroll>
         <LivingGrain />
         <DebugHud />
-        {process.env.NODE_ENV === 'production' && <Analytics />}
+        {process.env.NODE_ENV === 'production' && process.env.VERCEL === '1' && <Analytics />}
       </body>
     </html>
   )

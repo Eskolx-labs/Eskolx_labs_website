@@ -83,7 +83,7 @@ export function OriginStory() {
       }}
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <Reveal className="plate-frame hatch border border-loam-700/70 bg-parchment px-6 py-14 text-parchment-ink shadow-[0_24px_60px_-30px_rgb(0_0_0/0.7)] sm:px-10 lg:px-14">
+        <Reveal className="plate-frame hatch border border-loam-700/70 bg-parchment px-6 py-14 text-parchment-ink shadow-[0_24px_60px_-30px_rgb(0_0_0/0.35)] sm:px-10 lg:px-14">
           <div className="flex items-start justify-between gap-6" data-reveal-item>
             <h2 className="display max-w-xl text-[clamp(2rem,3.6vw,3rem)] leading-tight">
               The Eshcol Identity
@@ -97,20 +97,48 @@ export function OriginStory() {
 
           <div className="mt-12 grid gap-px overflow-hidden rounded-sm border border-parchment-ink/20 bg-parchment-ink/20 md:grid-cols-3" data-reveal-item>
             {CARDS.map((card, i) => (
-              <article key={card.title} className="bg-parchment p-7 lg:p-8">
+              <article key={card.title} className="relative bg-parchment p-7 lg:p-8">
                 <Animation
-                  target={`[data-plate="${i}"]`}
+                  target={`[data-v2-icon="${i}"]`}
                   start={i * 12}
-                  end={i * 12 + 30}
-                  fromTo={[{ y: 36, opacity: 0 }, { y: 0, opacity: 1 }]}
+                  end={i * 12 + 20}
+                  fromTo={[{ clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', ease: 'power2.inOut' }]}
                 >
-                  <div data-plate={i}>
+                  <div data-v2-icon={i} className="inline-block">
                     <card.icon className="h-10 w-10 text-parchment-ink/85" />
-                    <h3 className="display mt-5 text-xl leading-snug">{card.title}</h3>
-                    <p className="mt-3.5 text-[15px] leading-relaxed text-parchment-ink/75">
-                      {card.body}
-                    </p>
                   </div>
+                </Animation>
+                <Animation
+                  target={`[data-v2-title="${i}"]`}
+                  start={i * 12 + 6}
+                  end={i * 12 + 26}
+                  fromTo={[{ clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', ease: 'power2.inOut' }]}
+                >
+                  <h3 data-v2-title={i} className="display mt-5 text-xl leading-snug">
+                    {card.title}
+                  </h3>
+                </Animation>
+                <Animation
+                  target={`[data-v2-body="${i}"]`}
+                  start={i * 12 + 13}
+                  end={i * 12 + 35}
+                  fromTo={[{ clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', ease: 'power2.inOut' }]}
+                >
+                  <p data-v2-body={i} className="mt-3.5 text-[15px] leading-relaxed text-parchment-ink/75">
+                    {card.body}
+                  </p>
+                </Animation>
+                <Animation
+                  target={`[data-v2-stamp="${i}"]`}
+                  start={i * 12 + 31}
+                  end={i * 12 + 39}
+                  fromTo={[{ scale: 1.7, opacity: 0 }, { scale: 1, opacity: 1, ease: 'power4.in' }]}
+                >
+                  <span
+                    data-v2-stamp={i}
+                    aria-hidden="true"
+                    className="absolute right-6 top-6 block h-2 w-2 rounded-full bg-wine-600/80"
+                  />
                 </Animation>
               </article>
             ))}

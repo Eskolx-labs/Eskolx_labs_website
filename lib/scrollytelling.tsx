@@ -110,6 +110,12 @@ export function Root({
 
     gsap.registerPlugin(ScrollTrigger)
     const pinned = !!el.querySelector('[data-pin]')
+    // Flow chapters configured as "top bottom"/"bottom top" resolve their end
+    // edge ourselves: ScrollTrigger's string form lands one viewport past the
+    // true last-scroll position here, which stretches every beat into a range
+    // the reader can never reach (fatal for the final chapter before a short
+    // footer). Exact pixels: the transit spans the section's own height.
+    const exactFlow = !pinned && start === 'top bottom' && end === 'bottom top'
     const tl = gsap.timeline({
       paused: true,
       defaults: { duration: 1, ease: 'linear' },
@@ -118,7 +124,9 @@ export function Root({
         start,
         end: pinned
           ? () => `+=${el.offsetHeight - window.innerHeight}`
-          : end,
+          : exactFlow
+            ? () => `+=${el.offsetHeight}`
+            : end,
         scrub,
       },
     })

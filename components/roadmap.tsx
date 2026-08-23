@@ -1,6 +1,6 @@
 'use client'
 
-import { Root, Pin, Animation, Waypoint } from '@/lib/scrollytelling'
+import { Root, Animation, Waypoint, Pin } from '@/lib/scrollytelling'
 import { Reveal } from '@/components/reveal'
 
 const PHASES = [
@@ -25,11 +25,12 @@ const PHASES = [
 ]
 
 /*
- * The three phases page through one window the size of the method itself:
- * each phase fills the window (h-full cards in a 64vh frame), so at any
- * moment exactly one phase is on the page and the scrub turns the next
- * one in. The pin's timeline ends at release (the Root wraps only the
- * Pin), so the last quarter of the room is choreographed, never dead.
+ * The method told as one pinned, frameless spread: the room holds while
+ * three phases rise onto the same open stage, one at a time — gold rule
+ * first, then the whole entry settles as a unit — while the vine rail draws
+ * itself past each chapter node and a quiet numeral marks your place. No
+ * card, no window dressing; below md (or reduced motion) the beats simply
+ * stack as an ordinary flowing section.
  */
 export function Roadmap() {
   return (
@@ -37,91 +38,132 @@ export function Roadmap() {
       <Root
         id="roadmap"
         className="relative bg-parchment"
-        scrub={true}
         field={{
-          from: { bg: '#241407', ink: '#f0e4c8', soft: '#b8a284', line: '#5a4227' },
+          from: { bg: '#ece1c6', ink: '#29190c', soft: '#5c4a33', line: '#b9a67f' },
           to: { bg: '#ece1c6', ink: '#29190c', soft: '#5c4a33', line: '#b9a67f' },
         }}
       >
-        <Pin height="360vh">
-          <section className="relative flex h-full flex-col overflow-hidden">
-            <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center px-4 sm:px-6 lg:px-8">
-              <Reveal className="max-w-3xl">
-                <h2 className="display text-[clamp(2rem,3.8vw,3.2rem)] leading-tight text-parchment-ink" data-reveal-item>
-                  A three-month growing method
-                </h2>
-                <p className="mt-4 max-w-xl text-lg leading-relaxed text-parchment-ink/75" data-reveal-item>
-                  A high-velocity path from statistical primitives to novel applied
-                  research, shipped as open-source packages.
-                </p>
-              </Reveal>
+        <Pin height="320vh">
+          <div className="mx-auto flex h-full max-w-7xl flex-col justify-center px-4 pb-10 pt-20 sm:px-6 lg:px-8">
+            <Reveal className="max-w-3xl">
+              <h2 className="display text-[clamp(2rem,3.8vw,3.2rem)] leading-tight text-parchment-ink" data-reveal-item>
+                A three-month growing method
+              </h2>
+              <p className="mt-4 max-w-xl text-lg leading-relaxed text-parchment-ink/75" data-reveal-item>
+                A high-velocity path from statistical primitives to novel applied
+                research, shipped as open-source packages.
+              </p>
+            </Reveal>
 
-              {/* the three phases page through one window: one phase per view.
-                  Below lg the window opens and the phases flow in reading order. */}
-              <div className="mt-8 md:h-[64vh] overflow-hidden rounded-sm border border-parchment-ink/25 bg-parchment shadow-[0_24px_60px_-30px_rgb(0_0_0/0.35)] max-md:overflow-visible max-md:shadow-none">
-                <div data-phase-stack className="will-change-transform max-md:transform-none">
-                  {PHASES.map((p) => (
-                    <div
-                      key={p.phase}
-                      className="flex md:h-[64vh] flex-col justify-center p-8 sm:p-10 max-md:h-auto"
-                    >
-                      <span className="tabular inline-flex items-center gap-2 rounded-full border border-wine-500/50 bg-wine-600/10 px-3 py-1 font-mono text-xs tracking-wide text-wine-600">
-                        <span className="h-1.5 w-1.5 rounded-full bg-wine-500" />
-                        {p.phase}
-                      </span>
-                      <h3 className="display mt-5 max-w-2xl text-2xl leading-snug text-parchment-ink">
-                        {p.title}
-                      </h3>
-                      <p className="mt-3.5 max-w-2xl text-[15px] leading-relaxed text-parchment-ink/75">
-                        {p.body}
-                      </p>
-                      <ul className="mt-6 flex flex-wrap gap-2">
-                        {p.tags.map((t) => (
-                          <li
-                            key={t}
-                            className="rounded-sm border border-parchment-ink/25 px-2.5 py-1 font-mono text-[11px] text-parchment-ink/80"
-                          >
-                            {t}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
-                </div>
+            {/* the open stage: three beats share one place, no frame */}
+            <div className="relative mt-8 min-h-0 flex-1 md:mt-10">
+              {/* vine rail draws past the chapter nodes */}
+              <div aria-hidden="true" className="absolute bottom-6 left-[19px] top-1 hidden w-px md:block">
+                <Animation target="[data-vine-rail]" start={2} end={88} fromTo={[{ scaleY: 0 }, { scaleY: 1, ease: 'power1.inOut' }]}>
+                  <span data-vine-rail className="block h-full w-full origin-top bg-parchment-ink/25" />
+                </Animation>
+                <svg viewBox="0 0 24 24" className="absolute -bottom-5 -left-[11px] h-5 w-5 text-parchment-ink/40" fill="none">
+                  <path d="M12 2 C11.4 7 13.5 10 17 11 M17 11 c3-.8 4.4 1.2 3.2 3 c-1 1.5-3.2 1-3.4-.8" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+                </svg>
               </div>
+              {[0, 1, 2].map((i) => (
+                <span
+                  key={i}
+                  data-vine-node={i}
+                  aria-hidden="true"
+                  style={{ top: `${14 + i * 30}%` }}
+                  className="absolute left-[14px] hidden h-[11px] w-[11px] rounded-full border-2 border-parchment-ink/40 bg-parchment transition-colors duration-300 md:block"
+                />
+              ))}
+              {[0, 1, 2].map((i) => (
+                <Waypoint
+                  key={i}
+                  at={i * 31 + 11}
+                  tween={{
+                    target: `[data-vine-node="${i}"]`,
+                    to: { backgroundColor: '#963a68', borderColor: '#963a68' },
+                    duration: 4,
+                  }}
+                />
+              ))}
 
-              {/* the method's three turns, lit as the pages turn */}
-              <div className="mt-6 flex items-center justify-center gap-3" aria-hidden="true">
+              {/* the reader's place: chapter numerals */}
+              <div aria-hidden="true" className="absolute right-0 top-1/2 hidden -translate-y-1/2 flex-col items-end gap-7 font-mono text-[13px] tracking-widest text-parchment-ink opacity-35 lg:flex">
                 {PHASES.map((p, i) => (
-                  <span
-                    key={p.phase}
-                    data-phase-dot={i + 1}
-                    className="h-2.5 w-2.5 rounded-full border border-parchment-ink/40 bg-transparent"
-                  />
+                  <span key={p.phase} data-rm-num={i}>{`0${i + 1}`}</span>
                 ))}
               </div>
-            </div>
-          </section>
-        </Pin>
+              {PHASES.map((_, i) => {
+                const s = i * 31
+                return (
+                  <Animation key={`num-in-${i}`} target={`[data-rm-num="${i}"]`} start={s + 6} end={s + 11} fromTo={[{ opacity: 0.35 }, { opacity: 1, color: '#963a68' }]} />
+                )
+              })}
+              {[0, 1].map((i) => (
+                <Animation key={`num-out-${i}`} target={`[data-rm-num="${i}"]`} start={i * 31 + 30} end={i * 31 + 35} fromTo={[{ opacity: 1, color: '#963a68' }, { opacity: 0.35, color: '#29190c', immediateRender: false }]} />
+              ))}
 
-        {/* the stack turns exactly two pages over the pin's own window */}
-        <Animation target="[data-phase-stack]" start={0} end={100} to={{ yPercent: -66.67 }} />
-        {PHASES.map((p, i) => (
-          <Waypoint
-            key={p.phase}
-            at={i * 50}
-            tween={{
-              target: `[data-phase-dot="${i + 1}"]`,
-              to: { backgroundColor: '#7c2c54', borderColor: '#7c2c54' },
-              duration: 8,
-            }}
-          />
-        ))}
+              {/* the beats themselves */}
+              <div className="grid h-full">
+                {PHASES.map((p, i) => {
+                  const s = i * 31
+                  return (
+                    <div
+                      key={p.phase}
+                      data-rm-beat={i}
+                      className="flex flex-col justify-center py-12 motion-safe:md:[grid-area:1/1] md:h-full md:py-0 md:pl-16 lg:pr-24"
+                    >
+                      <Animation target={`[data-rm-rule="${i}"]`} start={s} end={s + 8} fromTo={[{ scaleX: 0 }, { scaleX: 1, ease: 'power2.out' }]}>
+                        <span data-rm-rule={i} className="mb-6 block h-px w-16 origin-left bg-gold-leaf/80" />
+                      </Animation>
+                      <Animation
+                        target={`[data-rm-unit="${i}"]`}
+                        start={s + 2}
+                        end={s + 18}
+                        fromTo={[{ y: 48, opacity: 0 }, { y: 0, opacity: 1, ease: 'power2.out' }]}
+                      >
+                        <div data-rm-unit={i}>
+                          <span className="tabular inline-flex items-center gap-2 rounded-full border border-wine-500/50 bg-wine-600/10 px-3.5 py-1 font-mono text-xs tracking-wide text-wine-600">
+                            <span className="h-1.5 w-1.5 rounded-full bg-wine-500" />
+                            {p.phase}
+                          </span>
+                          <h3 className="display mt-6 max-w-3xl text-3xl leading-[1.08] text-parchment-ink md:text-4xl">
+                            {p.title}
+                          </h3>
+                          <p className="mt-5 max-w-[58ch] text-base leading-relaxed text-parchment-ink/75 md:text-lg">
+                            {p.body}
+                          </p>
+                          <ul className="mt-7 flex flex-wrap gap-2">
+                            {p.tags.map((t) => (
+                              <li
+                                key={t}
+                                className="rounded-sm border border-parchment-ink/25 px-2.5 py-1 font-mono text-[11px] text-parchment-ink/80"
+                              >
+                                {t}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </Animation>
+                      {i < 2 && (
+                        <Animation
+                          target={`[data-rm-unit="${i}"]`}
+                          start={s + 22}
+                          end={s + 29}
+                          fromTo={[{ y: 0, opacity: 1 }, { y: -26, opacity: 0, ease: 'power1.in', immediateRender: false }]}
+                        />
+                      )}
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          </div>
+        </Pin>
       </Root>
 
-      {/* after the pin: the quiet exit on the day-spread. It owns its own
-          parchment zone so the body holds paper until leadership arrives,
-          instead of leaking loam across the panel. */}
+      {/* the quiet exit on the day-spread. It owns its own parchment zone so
+          the body holds paper until the seal floods the page into night. */}
       <Root
         className="bg-parchment"
         field={{
@@ -129,7 +171,7 @@ export function Roadmap() {
           to: { bg: '#ece1c6', ink: '#29190c', soft: '#5c4a33', line: '#b9a67f' },
         }}
       >
-        {/* the exit rises as the pin releases, so the room's tail pays for itself */}
+        {/* the exit rises as it enters, so the room's tail pays for itself */}
         <Animation
           target="[data-exit-inner]"
           start={8}
@@ -139,17 +181,15 @@ export function Roadmap() {
         <div data-exit-inner className="mx-auto max-w-7xl px-4 pb-24 pt-16 sm:px-6 lg:px-8">
           <div className="flex flex-col items-start gap-5 rounded-sm border border-parchment-ink/25 bg-parchment p-7 sm:flex-row sm:items-center">
             <svg viewBox="0 0 40 40" className="h-11 w-11 shrink-0 text-gold-leaf" aria-hidden="true" fill="none">
-              <circle cx="20" cy="20" r="18.5" stroke="currentColor" strokeWidth="1.4" />
-              <path
-                d="M20 30 V13 M20 17 C17.5 14.5 14 14 11.5 15.5 M20 21 C22.5 18.5 26 18 28.5 19.5"
-                stroke="currentColor"
-                strokeWidth="1.8"
-                strokeLinecap="round"
-              />
+              <path d="M8 31 H32 M10 34 H30 M13 37 H27" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" opacity="0.55" />
+              <path d="M20 30 V12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+              <path d="M20 22 C16.5 19.5 13.5 19.5 11 21.5 C13.5 24 17 23.8 20 22 Z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
+              <path d="M20 17 C23.5 14.5 26.5 14.5 29 16.5 C26.5 19 23 18.8 20 17 Z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
+              <circle cx="20" cy="12" r="1.3" fill="currentColor" stroke="none" />
             </svg>
             <div>
               <h3 className="display text-lg text-parchment-ink">Small, fast-moving builder teams</h3>
-              <p className="mt-1.5 text-[15px] leading-relaxed text-parchment-ink/75">
+              <p className="mt-1.5 max-w-[68ch] text-[15px] leading-relaxed text-parchment-ink/75">
                 High-velocity cohorts working in pure code, shipping tested,
                 documented packages instead of notebooks.
               </p>

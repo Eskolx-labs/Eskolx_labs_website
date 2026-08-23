@@ -65,7 +65,7 @@ export function MarqueeBand() {
                                 '0%': { autoAlpha: 0, scale: 0.5 },
                                 '50%': { autoAlpha: 1, scale: 1 },
                                 '100%': { yPercent: 0 },
-                                easeEach: 'linear',
+                                easeEach: 'power1.out',
                               },
                               ease: 'linear',
                             },

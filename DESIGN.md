@@ -16,6 +16,7 @@ colors:
   wine-600: "#7c2c54"
   wine-700: "#5c1f3e"
   gold-leaf: "#b3946a"
+  gold-ink: "#6f542a"
   vermilion: "#bf3b2b"
   vermilion-deep: "#a8321c"
 typography:
@@ -64,12 +65,14 @@ spacing:
   lg: "64px"
 components:
   button-primary:
-    backgroundColor: "{colors.vermilion-deep}"
+    backgroundColor: "{colors.wine-600}"
     textColor: "{colors.cream-100}"
+    border: "1px solid rgb(236 225 198 / 0.75)"
     rounded: "{rounded.sm}"
     padding: "14px 26px"
   button-primary-hover:
-    backgroundColor: "{colors.vermilion}"
+    backgroundColor: "{colors.wine-500}"
+    borderColor: "{colors.cream-100}"
     textColor: "{colors.cream-100}"
   button-outline:
     backgroundColor: "transparent"
@@ -86,12 +89,12 @@ components:
 
 This is a statistical lab that writes its own libraries, presented as a grower's almanac: one book, two fields. The light field is the day-spread, the paper of the report sheet where findings are published. The dark field is the night-spread, the loam of the working soil where the lab builds. The page turns between them as the visitor scrolls, so the reading experience itself dramatizes the lab's cycle of digging and harvesting.
 
-Every surface belongs to the field it sits on. Chrome is minimal: hairline rules, corner ticks, a fixed print-tooth grain, and a brush-script wordmark sealed in vermilion — the template's logo lockup. The motion language is scrollytelling in the basement.studio register: sections pin, elements scrub against the scroll with eased settles, and every pinned room carries at least two resolving beats (the seal stamp, the page turn). Content sits on the spread; the animation is the turning of the spread.
+Every surface belongs to the field it sits on. Chrome is minimal: hairline rules, corner ticks, a fixed print-tooth grain, and a brush-script wordmark with the engraved seal-die — the logo lockup, recut in wine and field ink. The motion language is scrollytelling in the basement.studio register: sections pin, elements scrub against the scroll with eased settles, and every pinned room carries at least two resolving beats (the seal stamp, the page turn). Content sits on the spread; the animation is the turning of the spread.
 
 **Key Characteristics:**
 - Two animated fields (parchment day, loam night) carried on `body` via `--field-bg` / `--field-ink`, flipped by scrubbed ScrollTriggers between sections.
-- One brush-script wordmark sealed in vermilion: the brand mark on every spread (nav, footer).
-- One vermilion action on every spread; vermilion elsewhere is a violation.
+- One brush-script wordmark with the engraved seal-die: the brand mark on every spread (nav, footer).
+- Vermilion belongs to the seal alone (see the Seal Rule); buttons are plum.
 - Hairline rules, corner ticks, hatched shading, print grain: the letterpress register.
 - Scrollytelling: pinned scenes with long scroll rooms, scrubbed timelines normalized to 0-100.
 
@@ -117,8 +120,8 @@ The palette is two fields plus a fixed accent set. Fields are carried as CSS cus
 ### Named Rules
 **The Two-Field Rule.** Every surface carries the field of the section it belongs to. No mixed fields, no floating panels in an alien ground.
 **The One Vermilion Rule.** Vermilion is the single CTA on any spread. It appears nowhere else; a wine or gold button is a violation.
-**The Seal Rule.** The seal-mark (vermilion plate, cream cluster) always accompanies the script wordmark and stamps the primary action. No vine illustration ships until a commissioned engraving exists; grape presence comes from the seal, the wine palette, and the language.
-**The Signed Rule.** The seal-mark (vermilion plate with cream cluster) marks the brand and the primary action. It is never an icon in a list.
+**The Seal Rule.** The seal-mark is an engraved die, not a filled plate: a double hairline keyline stroked in `--field-ink` (so it presses dark into the day spread and cream into the night spread, always inverting against its field) with the grape cluster filled wine-500 — each berry carrying a small engraved crescent shine — and the vine wine-700: one stem escaping the top-right that coils into a tendril spiral and opens a single veined leaf. Vermilion is retired from the mark; the seal carries no filled background. The die/vine/fruit groups are addressable (`seal-die`, `seal-vine`, `seal-fruit`) so the flood can dissolve the stamp into its own harvest.
+**The Signed Rule.** The seal-die (double hairline pressed in field ink, wine cluster) marks the brand and the primary moment. It is never an icon in a list.
 
 ## Typography
 
@@ -148,9 +151,10 @@ One rhythm: tight groups, generous sections, more space above a heading than bel
 - Container: `max-w-7xl` with `px-4 sm:px-6 lg:px-8`.
 - Hero: single column, copy block `max-w-4xl` rising in on load; the seal stamps at the spread's right.
 - Tier rail: `lg:grid-cols-[0.9fr_1.1fr]`, stakes left, plate right.
-- Roadmap: three phases in one scrubbed window.
+- Roadmap: one pinned, frameless spread — the room holds while three phases rise onto the same open stage, one at a time (gold rule first, then the entry rises whole), releases with a breathing pause while the vine rail keeps drawing past chapter nodes that fill wine; quiet numerals mark the reader's place. Below md and under reduced motion the beats stack as an ordinary flowing section. Secondary/out tweens must set `immediateRender: false` so from-states never pre-light the stage.
 - Community: `md:grid-cols-3` for primary channels, `sm:grid-cols-5` for secondary.
-- The nav reading rule: a 2px gold hairline under the header filling left-to-right with document scroll.
+- The nav reading rule: a 2px gold hairline under the header filling left-to-right with document scroll. The grounded chrome tints with the field (`--field-bg`/`--field-ink`/`--field-line` via color-mix): warm light over day spreads, dark over night — never fixed loam.
+- Browser surfaces: slim wine scrollbar (7px / `thin`), wine selection, wine caret.
 
 ### Named Rules
 **The Pin Pays for Its Room.** A pin only buys a scroll room it then uses. 300vh of hero must earn it with the masked headline and the field flip; 420vh of tiers must advance the plate.
@@ -168,8 +172,8 @@ Radius is `6px` (`--radius-sm`). No large radii, no pill shapes except the one s
 
 ### Buttons
 - **Shape:** 6px, hairline border + inset.
-- **Primary:** vermilion-deep (#a8321c) with cream text and the double hairline, press translate 1px.
-- **Hover / Focus:** vermilion on hover, 1px up translate; focus ring `2px var(--wine-500)` at 3px offset.
+- **Primary:** wine-600 (#7c2c54) fill with cream text, cream hairline over the double plate border, press translate 1px.
+- **Hover / Focus:** wine-500 fill and solid cream border on hover, 1px up translate; focus ring `2px var(--wine-500)` at 3px offset.
 - **Outline:** transparent, ink text, hairline; 6% paper tint on hover.
 
 ### Chips
@@ -200,13 +204,15 @@ Every content block outside the pinned machines owns one scrubbed Reveal (`compo
 - **Field scrub** (`lib/field-controller.ts`): body colors are a pure function of scrollY — each section's from/to pair lerps continuously across its travel (minimal-goods pattern). No boundary flips, no tweens; reduced motion snaps at chapter midpoints.
 - **The dock** (hero): the giant script lockup lands pixel-aligned on the nav slot across the first 55% of the pin room; geometry is measured from a never-transformed wrapper so refreshes can't drift.
 - **Marquee band**: "FROM SEED TO HARVEST" travels the viewport with per-letter keyframed pop-ins (basement.studio register).
-- **Seal flood** (`components/seal-flood.tsx`): pinned interlude where the seal swells past the frame while loam floods in — our circle-grow.
+- **Seal flood** (`components/seal-flood.tsx`): pinned interlude where the seal swells past the frame while the day field holds steady — the stamp presses into parchment, and the night turn is reserved for the keepers seam right after (`leadership.tsx` carries `PARCHMENT → LOAM`).
 - **Living grain** (`components/living-grain.tsx`): fixed canvas of fibers blown by Lenis velocity; desktop, motion-permitting only.
-- **Differential drift** (community cards): three amplitudes (-18/-36/-54 yPercent) over one transit.
+- **Harvest table** (community cards): the three channel plates are ruled like ledger rows — identical padding, top-aligned chip/name/handle/desc, a bottom-anchored "Open channel" link row so all three baselines lock regardless of copy length. Because this chapter sits last before a short footer, its entrance beats are self-owned, viewport-relative ScrollTriggers (hero-dock pattern) that cascade threshold-by-threshold so the leftmost plate leads; the shared Root timeline only carries the heading drift.
+- **Type pipeline** (`app/layout.tsx`): the four faces (IM Fell English normal+italic, Source Serif 4 variable, JetBrains Mono variable, Kaushan Script) are self-hosted via `next/font/local` from `app/fonts/*.woff2`, keeping `--font-*` variables unchanged — builds no longer depend on reaching Google Fonts.
+- **Flow-chapter transit** (`lib/scrollytelling.tsx`): a non-pinned Root configured `"top bottom"/"bottom top"` resolves its end edge to exact pixels (`+= offsetHeight`); ScrollTrigger's string form landed one viewport past the true last-scroll position, which stretched beats into unreachable range on tail chapters.
 
 ### Wordmark & Seal (signature)
 
-The logo lockup from template 1: brush-script wordmark (`--font-script`, Kaushan Script) with the vermilion seal-mark stamped after it. Nav: script `1.5rem` + 28px seal; footer: script `3xl` + 44px seal with its own settle animation. No vine illustration ships — grape presence is the seal, the wine palette, and the language.
+The logo lockup from template 1, recut: brush-script wordmark (`--font-script`, Kaushan Script) with the engraved seal-die stamped after it — double hairline in `--field-ink`, cluster wine-500, vine wine-700. Nav: script `1.5rem` + 28px seal; footer: script `3xl` + 44px seal with its own settle animation. No vine illustration ships — grape presence is the die, the wine palette, and the language.
 
 ### Entrance & Scroll Beats
 
@@ -216,7 +222,7 @@ On load (all viewports, motion-permitting): the hero copy block rises in (y 44�
 
 ### Do:
 - Do use the two fields (parchment, loam) as the page's own paper and ground.
-- Do reserve vermilion for the one CTA on each spread.
+- Do keep vermilion out of active use; it remains only as a historical token.
 - Do use hairline 1px borders and `--radius-sm` 6px.
 - Do scrub every motion against the scroll: pinned, slowed, or masked.
 

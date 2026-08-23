@@ -28,7 +28,7 @@ export function SiteFooter() {
                 <SealMark label="Eskolx Labs seal" className="h-11 w-11 -rotate-4" data-seal />
               </a>
             </Animation>
-            <p className="display mt-5 text-xl italic leading-snug text-gold-leaf">
+            <p className="display mt-5 text-xl italic leading-snug text-gold-ink">
               Must Build, Not Just Learn.
             </p>
           </div>
@@ -44,7 +44,7 @@ export function SiteFooter() {
                   href={l.href}
                   target={l.href.startsWith('mailto') ? undefined : '_blank'}
                   rel={l.href.startsWith('mailto') ? undefined : 'noreferrer'}
-                  className="text-[15px] text-parchment-ink/80 underline-offset-4 transition-colors hover:text-parchment-ink hover:underline hover:decoration-gold-leaf/60"
+                  className="inline-block py-1 text-[15px] text-parchment-ink/80 underline-offset-4 transition-colors hover:text-parchment-ink hover:underline hover:decoration-gold-leaf/60"
                 >
                   {l.label}
                 </a>
@@ -56,7 +56,7 @@ export function SiteFooter() {
               </span>
               <a
                 href="mailto:eskolxlabs@gmail.com"
-                className="flex items-center gap-2.5 text-[15px] text-parchment-ink/80 transition-colors hover:text-parchment-ink"
+                className="flex items-center gap-2.5 py-1 text-[15px] text-parchment-ink/80 transition-colors hover:text-parchment-ink"
               >
                 <Mail className="h-4 w-4 text-wine-600" />
                 eskolxlabs@gmail.com
@@ -66,7 +66,7 @@ export function SiteFooter() {
               </p>
               <a
                 href="#top"
-                className="mt-3 inline-flex items-center gap-2 text-sm text-parchment-ink/80 transition-colors hover:text-parchment-ink"
+                className="mt-3 inline-flex items-center gap-2 py-1 text-sm text-parchment-ink/80 transition-colors hover:text-parchment-ink"
               >
                 <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" aria-hidden="true">
                   <path

@@ -102,19 +102,28 @@ function paint() {
   if (!zones.size) return
   const vh = window.innerHeight
   if (dirty) measure()
+  // the book-closing rule: the last painted pixel of the document belongs
+  // to parchment — the almanac always ends settled on the day field, even
+  // when the final section is too short for the reader's midpoint to
+  // formally pass into the footer's zone.
+  const docH = document.documentElement.scrollHeight
+  const closed = window.scrollY + vh >= docH - 2
   const sorted = Array.from(zones.values()).sort(
     (a, b) => a.top - b.top || b.height - a.height,
   )
   const zone = activeZone(sorted, window.scrollY + vh * 0.5)
 
-  if (reduced) {
+  if (reduced || closed) {
     // static contract: each chapter sits at the field its first half opens
     // on — so the hero cover reads parchment and the night chapters read
-    // loam, snapping only at each chapter's midpoint.
-    const [start, end] = turnWindow(zone, vh)
-    const p = Math.min(Math.max((window.scrollY - start) / Math.max(end - start, 1), 0), 1)
-    const f = p < 0.5 ? zone.from : zone.to
-    for (const k of KEYS) document.body.style.setProperty(VAR_NAMES[k], f[k])
+    // loam, snapping only at each chapter's midpoint. At the very end of
+    // the document the book simply closes onto parchment.
+    const pair = closed ? PARCHMENT : (() => {
+      const [start, end] = turnWindow(zone, vh)
+      const p = Math.min(Math.max((window.scrollY - start) / Math.max(end - start, 1), 0), 1)
+      return p < 0.5 ? zone.from : zone.to
+    })()
+    for (const k of KEYS) document.body.style.setProperty(VAR_NAMES[k], pair[k])
     lastStamp = ''
     return
   }

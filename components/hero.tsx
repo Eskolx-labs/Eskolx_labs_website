@@ -28,10 +28,9 @@ export function Hero() {
   const markRef = useRef<HTMLDivElement>(null)
   const copyRef = useRef<HTMLDivElement>(null)
 
-  // load-time arrival: the lockup settles and its seal stamps. The copy is
-  // deliberately NOT touched here — the lines, sub, and CTAs are owned by
-  // the scrubbed timeline (they arrive as you pull the cover away), so a
-  // time-based tween on them would fight the scrub every frame.
+  // load-time arrival: the lockup settles and its seal stamps. The mission
+  // copy stays owned by the scrubbed timeline — it rises as the reader
+  // pulls the cover, within the first breath of travel.
   useEffect(() => {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     if (reduced) return
@@ -107,43 +106,52 @@ export function Hero() {
     >
       <Pin height="300vh">
         <section className="relative flex h-full flex-col items-center justify-center gap-12 overflow-hidden px-4 sm:px-6 lg:gap-16">
-          <div ref={markRef} className="pointer-events-none z-10 flex items-center gap-[0.3em]">
-            <div data-hero-mark className="flex items-center gap-[0.3em]">
-              <span className="font-script field-ink text-[clamp(3.25rem,13vw,10rem)] leading-none">
+          <div ref={markRef} className="pointer-events-none z-10 flex items-center gap-[0.55em]">
+            <div data-hero-mark className="flex items-center gap-[0.85em] text-[clamp(3.25rem,13vw,10rem)]">
+              <span className="font-script field-ink leading-none">
                 Eskolx Labs
               </span>
               <SealMark
                 label="Eskolx Labs seal"
                 data-hero-lockseal
-                className="h-[0.62em] w-[0.62em] text-[clamp(3.25rem,13vw,10rem)]"
+                className="h-[0.62em] w-[0.62em] translate-y-[0.06em] text-[clamp(3.25rem,13vw,10rem)]"
               />
             </div>
           </div>
 
-          <div ref={copyRef} data-hero-copy className="z-10 max-w-3xl text-center">
-            <h1 className="display text-[clamp(2.4rem,5.6vw,4.6rem)] leading-[1.06] field-ink">
-              {LINES.map((line, i) => (
-                <span key={i} className="block overflow-hidden">
-                  <Animation
-                    target={`[data-hero-line="${i}"]`}
-                    start={26 + i * 7}
-                    end={26 + i * 7 + 17}
-                    fromTo={[{ yPercent: 118 }, { yPercent: 0 }]}
-                  >
-                    <span data-hero-line={i} className="block">
-                      {line.em ? (
-                        <em className="text-wine-500">{line.text}</em>
-                      ) : (
-                        line.text
-                      )}
-                      {line.tail ?? ''}
-                    </span>
-                  </Animation>
-                </span>
-              ))}
+          <div
+            ref={copyRef}
+            data-hero-copy
+            className="z-10 max-w-3xl px-4 text-center md:absolute md:bottom-[6%] md:left-0 md:right-0 md:mx-auto md:w-full"
+          >
+            <h1
+              className="display text-[clamp(2.4rem,5.6vw,4.6rem)] leading-[1.06] field-ink"
+              aria-label="Good soil. Great minds. Abundant impact."
+            >
+              <span aria-hidden="true" className="block">
+                {LINES.map((line, i) => (
+                  <span key={i} className="block overflow-hidden">
+                    <Animation
+                      target={`[data-hero-line="${i}"]`}
+                      start={6 + i * 5}
+                      end={6 + i * 5 + 15}
+                      fromTo={[{ yPercent: 118 }, { yPercent: 0 }]}
+                    >
+                      <span data-hero-line={i} className="block">
+                        {line.em ? (
+                          <em className="text-wine-500">{line.text}</em>
+                        ) : (
+                          line.text
+                        )}
+                        {line.tail ?? ''}
+                      </span>
+                    </Animation>
+                  </span>
+                ))}
+              </span>
             </h1>
 
-            <Animation target="[data-hero-sub]" start={46} end={66} fromTo={[{ y: 24, opacity: 0 }, { y: 0, opacity: 1 }]}>
+            <Animation target="[data-hero-sub]" start={22} end={38} fromTo={[{ y: 24, opacity: 0 }, { y: 0, opacity: 1 }]}>
               <p
                 data-hero-sub
                 className="mx-auto mt-7 max-w-xl text-lg leading-relaxed field-ink-soft"
@@ -154,7 +162,7 @@ export function Hero() {
               </p>
             </Animation>
 
-            <Animation target="[data-hero-cta]" start={52} end={68} fromTo={[{ y: 20, opacity: 0 }, { y: 0, opacity: 1 }]}>
+            <Animation target="[data-hero-cta]" start={26} end={40} fromTo={[{ y: 20, opacity: 0 }, { y: 0, opacity: 1 }]}>
               <div data-hero-cta className="mt-9 flex flex-col items-center justify-center gap-3.5 sm:flex-row">
                 <a
                   href="https://github.com/eskolx-labs"

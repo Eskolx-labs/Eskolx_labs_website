@@ -90,7 +90,7 @@ export function ConceptTiers() {
       scrub={true}
       field={{
         from: { bg: '#241407', ink: '#f0e4c8', soft: '#b8a284', line: '#5a4227' },
-        to: { bg: '#241407', ink: '#f0e4c8', soft: '#b8a284', line: '#5a4227' },
+        to: { bg: '#ece1c6', ink: '#29190c', soft: '#5c4a33', line: '#b9a67f' },
       }}
     >
       <Pin height="420vh">
@@ -139,13 +139,7 @@ export function ConceptTiers() {
                       >
                         {tier.name}
                       </span>
-                      <span
-                        data-stake-tier={tier.id}
-                        className="mt-0.5 block font-mono text-[11px] tracking-wide text-cream-200/50"
-                      >
-                        Tier {tier.id}
-                      </span>
-                     </span>
+                    </span>
                    </button>
                  ))}
                 </div>
@@ -165,7 +159,7 @@ export function ConceptTiers() {
                       <h3 className="display mt-5 text-2xl leading-snug text-cream-100">
                         {tier.name}
                       </h3>
-                      <p className="mt-3 leading-relaxed text-cream-200/80">{tier.goal}</p>
+                      <p className="mt-3 max-w-[65ch] leading-relaxed text-cream-200/80">{tier.goal}</p>
 
                       <ul className="mt-7 space-y-2.5">
                         {tier.concepts.map((c) => (

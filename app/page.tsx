@@ -8,11 +8,13 @@ import { Leadership } from '@/components/leadership'
 import { MarqueeBand } from '@/components/marquee-band'
 import { Community } from '@/components/community'
 import { SiteFooter } from '@/components/site-footer'
+import { InkPress } from '@/components/ink-press'
 
 export default function Page() {
   return (
     <div className="min-h-screen">
       <SiteNav />
+      <InkPress />
       <main>
         <Hero />
         <OriginStory />

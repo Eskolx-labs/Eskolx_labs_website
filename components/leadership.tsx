@@ -1,6 +1,7 @@
 'use client'
 
 import { Root, Animation } from '@/lib/scrollytelling'
+import { PARCHMENT, LOAM } from '@/lib/field-controller'
 import { Reveal } from '@/components/reveal'
 
 const LEADERS = [
@@ -26,8 +27,8 @@ export function Leadership() {
       id="leadership"
       className="relative overflow-hidden bg-loam-950 py-24"
       field={{
-        from: { bg: '#241407', ink: '#f0e4c8', soft: '#b8a284', line: '#5a4227' },
-        to: { bg: '#241407', ink: '#f0e4c8', soft: '#b8a284', line: '#5a4227' },
+        from: PARCHMENT,
+        to: LOAM,
       }}
     >
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -71,14 +72,16 @@ export function Leadership() {
 
         <div className="mt-6 flex flex-col items-start gap-5 rounded-sm border border-loam-700/80 bg-loam-900/70 p-7 sm:flex-row sm:items-center lg:max-w-4xl">
           <svg viewBox="0 0 40 40" className="h-10 w-10 shrink-0 text-gold-leaf" aria-hidden="true" fill="none">
-            <circle cx="14" cy="14" r="5" stroke="currentColor" strokeWidth="1.8" />
-            <circle cx="26" cy="14" r="5" stroke="currentColor" strokeWidth="1.8" />
-            <circle cx="20" cy="25" r="5" stroke="currentColor" strokeWidth="1.8" />
-            <path d="M20 30 C20 33 18 35 15 36 M20 30 C20 33 22 35 25 36" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+            <path d="M20 4 L26.5 15.5 C24.5 18.5 22.5 20 20 20 C17.5 20 15.5 18.5 13.5 15.5 Z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
+            <path d="M20 4 V13" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" opacity="0.6" />
+            <circle cx="20" cy="15.8" r="1.4" fill="currentColor" stroke="none" />
+            <path d="M20 20 V24" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+            <path d="M20 24 C20 28 16.5 29 14 32.5 M20 24 C20 28 23.5 29 26 32.5 M20 24 C19.4 28.5 20.6 30.5 20 34" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+            <path d="M14 32.5 C12.6 33.4 12 34.8 12.2 36.4 M26 32.5 C27.4 33.4 28 34.8 27.8 36.4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" opacity="0.7" />
           </svg>
           <div>
             <p className="font-serif text-[15px] font-medium text-cream-100">Core talent pipeline</p>
-            <p className="mt-1.5 text-[15px] leading-relaxed text-cream-200/80">
+            <p className="mt-1.5 max-w-[68ch] text-[15px] leading-relaxed text-cream-200/80">
               An internal engineering internship feeding an open-source
               maintainer pipeline, cultivating the next generation of builders.
             </p>
