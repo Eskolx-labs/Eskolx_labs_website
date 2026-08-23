@@ -1,0 +1,152 @@
+{
+  "title": "Eskolx Labs: choose the visual world",
+  "question": "The roll assigned the Illuminated Codex. Keep it, take one of the three alternates, or re-roll.",
+  "options": [
+    {
+      "id": "codex",
+      "label": "The Illuminated Codex",
+      "kicker": "THE ROLL",
+      "thesis": "One manuscript in two fields: a vellum folio and a night-loam binding, where every statistical tool is a rubricated entry and the 3-month cohort is a season of illumination.",
+      "palette": ["#e9dcc8", "#26214a", "#7a2d3b", "#c23a22", "#b3946a", "#2e2620"],
+      "materials": ["ge'ez manuscript margins", "red-lead rubrication", "gold-leaf illumination", "vine margin motifs", "cord and binding"],
+      "viewport": "An open folio on loam: the grapevine emblem grows up the left margin in ink, the mission set as a rubricated incipit in vermilion, the join as a seal at the foot.",
+      "risk": "Sacred-book art risks reading as church relic rather than a live lab; the cohort CTA and instrument registers must pull it into the present.",
+      "raised": [
+        { "from": "Rain-Garden", "raise": "One seed writes the whole codex: every leaf, chart, and margin is illuminated from a single generative grammar, so the page is visibly produced, not typeset." },
+        { "from": "Gallery Panel", "raise": "No empty folios: every margin, border, and cell is fully inked and authored." },
+        { "from": "Street Poster", "raise": "One rubric band: vermilion is held for the Join action alone on every leaf." }
+      ],
+      "wireframe": {
+        "cols": 12,
+        "rows": 10,
+        "regions": [
+          { "label": "folio spine", "x": 0, "y": 0, "w": 12, "h": 1 },
+          { "label": "margin vine", "x": 1, "y": 2, "w": 2, "h": 6, "accent": true },
+          { "label": "rubric text", "x": 4, "y": 2, "w": 6, "h": 4 },
+          { "label": "join seal", "x": 4, "y": 8, "w": 6, "h": 1, "accent": true }
+        ]
+      }
+    },
+    {
+      "id": "almanac",
+      "label": "The Observatory Almanac",
+      "kicker": "IMPECCABLE'S PICK",
+      "thesis": "One almanac in two fields, a parchment day-spread and a loam night-spread, where every statistic is a measured entry in a seasonal table and the 3-month cohort is the year turning.",
+      "lineage": "The grower's year is the codex's own calendar; closest to the field the brand already stands in, which is why it must not go unchallenged.",
+      "palette": ["#e5dcc8", "#2e2620", "#b3946a", "#8d586a", "#c23a22"],
+      "materials": ["paper almanacs", "longitude charts", "astrolabe engraving", "ink and parchment"],
+      "viewport": "A day-spread centered: an engraved vine emblem tops the left column, the mission set in ruled rows, and a vermilion seal on the one action, Join the cohort.",
+      "risk": "The grower's almanac is the familiar category standard for a botanical brand; the scrollytelling must push it past the expected cover.",
+      "wireframe": {
+        "cols": 12,
+        "rows": 10,
+        "regions": [
+          { "label": "nav rail", "x": 0, "y": 0, "w": 12, "h": 1, "accent": false },
+          { "label": "entry emblem", "x": 1, "y": 2, "w": 5, "h": 3, "accent": true },
+          { "label": "table of seasons", "x": 7, "y": 2, "w": 4, "h": 5 },
+          { "label": "join band", "x": 1, "y": 7, "w": 10, "h": 1, "accent": true }
+        ]
+      }
+    },
+    {
+      "id": "collider",
+      "label": "The Collider Event Display",
+      "verdict": "competitive",
+      "case": "Holds product clarity: tracing one event through detector rings is the no-black-box story told as a single instrument. Loses identification: the growth of a package over a cohort is not a flash of collision.",
+      "thesis": "Every statistical tool is a collision event you trace from the beamline through detector rings into calorimeter wedges; each method is a track, each test a bar.",
+      "palette": ["#14171f", "#e5dcc8", "#7a8ea0", "#e8c648", "#2fb3b7", "#c23a22"],
+      "materials": ["instrument readouts", "beamline tracks", "detector ring schematics", "calorimeter wedges"],
+      "viewport": "A vertical dark slice fills the viewport: the beamline at the left edge, one event blooming as the vine, the mission as a steel-blue plate, a vermilion bar for Join.",
+      "board": "https://impeccable.style/worlds/cards/scientific-notation-particle-detector-event-display.webp",
+      "hero": "https://impeccable.style/worlds/cards/scientific-notation-particle-detector-event-display-hero.webp",
+      "risk": "Instrument readouts read as generic dark-tech; the vine and the report sheet must keep the field rooted.",
+      "wireframe": {
+        "cols": 12,
+        "rows": 10,
+        "regions": [
+          { "label": "beamline nav", "x": 0, "y": 0, "w": 12, "h": 1, "accent": false },
+          { "label": "event rings", "x": 1, "y": 2, "w": 6, "h": 6, "accent": true },
+          { "label": "report sheet", "x": 8, "y": 2, "w": 3, "h": 6 },
+          { "label": "join bar", "x": 1, "y": 9, "w": 10, "h": 1, "accent": true }
+        ]
+      }
+    },
+    {
+      "id": "ribbon",
+      "label": "The Provenance Ribbon",
+      "verdict": "competitive",
+      "case": "Holds product clarity: lineage is the proof claim, a ribbon of where every line came from. Loses identification: builders do not see themselves in a museum register.",
+      "thesis": "Every tool wears one continuous ribbon of its history: the paper it came from, the code that grew it, the tests that vetted it, the thread left unresolved.",
+      "palette": ["#e6dcc4", "#262b1b", "#b63b2c", "#8a8377"],
+      "materials": ["archival ledgers", "folded ribbon", "dated stamps", "unwoven thread"],
+      "viewport": "A buff sheet, a red ribbon folding from the emblem, each fold dated and set, the join as the final un-woven weave.",
+      "board": "https://impeccable.style/worlds/cards/exhibition-museum-curation-provenance-ribbon.webp",
+      "hero": "https://impeccable.style/worlds/cards/exhibition-museum-curation-provenance-ribbon-hero.webp",
+      "risk": "Reads as an archive rather than a working lab; the cohort call-to-action must stay live.",
+      "wireframe": {
+        "cols": 12,
+        "rows": 10,
+        "regions": [
+          { "label": "ribbon top", "x": 0, "y": 0, "w": 12, "h": 1, "accent": true },
+          { "label": "fold notes", "x": 1, "y": 2, "w": 7, "h": 5 },
+          { "label": "seal stamp", "x": 9, "y": 4, "w": 2, "h": 3, "accent": true },
+          { "label": "join thread", "x": 1, "y": 8, "w": 10, "h": 1 }
+        ]
+      }
+    },
+    {
+      "id": "desktop",
+      "label": "The One-Bit Desktop",
+      "verdict": "competitive",
+      "case": "Holds identification: builders know the desktop in their hands, and the two-ink dither holds the two fields. Loses clarity: the black-box story does not fit the chrome.",
+      "thesis": "A desktop in two inks: parchment and loam, every tone dithered, windows over windows, the lab as a machine you operate with keys and ants.",
+      "palette": ["#e7dcc3", "#2a2118", "#8d5866"],
+      "materials": ["dither patterns", "window chrome", "32-pixel icons", "marching ants"],
+      "viewport": "A parchment desktop, two windows stacked, the mission window on top, a folder for each tool, the dock sealing the brand.",
+      "board": "https://impeccable.style/worlds/cards/medium-native-one-bit-desktop.webp",
+      "hero": "https://impeccable.style/worlds/cards/medium-native-one-bit-desktop-hero.webp",
+      "risk": "Retro-UI is a loved rut with a low ceiling; the fields and the cohort must keep it out of the toy register.",
+      "wireframe": {
+        "cols": 12,
+        "rows": 10,
+        "regions": [
+          { "label": "menu rail", "x": 0, "y": 0, "w": 12, "h": 1 },
+          { "label": "mission window", "x": 1, "y": 2, "w": 7, "h": 4, "accent": true },
+          { "label": "tool window", "x": 5, "y": 5, "w": 6, "h": 4 },
+          { "label": "dock", "x": 1, "y": 9, "w": 10, "h": 1 }
+        ]
+      }
+    },
+    {
+      "id": "rain-garden",
+      "label": "The Rain-Garden",
+      "verdict": "declined",
+      "thesis": "An impossible garden where every number falls to its own gravity and the cohort is a season of planting.",
+      "kept": "One law writes the whole page: a single generative rule produces every leaf and chart.",
+      "risk": "Poetry over instrument; the mechanism invisible.",
+      "palette": ["#7c8a7a", "#b3946a", "#6c2a4b", "#e5dcc8"]
+    },
+    {
+      "id": "gallery-panel",
+      "label": "The Lowbrow Gallery Panel",
+      "verdict": "declined",
+      "thesis": "A crowded airbrushed tableau, every element outlined in black and lacquered; the lab as a hot-rod mural.",
+      "kept": "No empty fields: every cell of the page is fully inked and outlined.",
+      "risk": "The register fights the careful-craft story.",
+      "palette": ["#c23a22", "#e8c648", "#14171c", "#6c2a4b"]
+    },
+    {
+      "id": "street-poster",
+      "label": "The Street Poster",
+      "verdict": "declined",
+      "thesis": "A wall of shouting wood-type; the whole site is one architectural poster and the join is the one red band.",
+      "kept": "One action band: vermilion held for the single CTA on every leaf.",
+      "risk": "The shout sells the wrong promise for careful study materials.",
+      "palette": ["#e8d348", "#14171c", "#e5dcc8", "#c23a22"]
+    }
+  ],
+  "reroll": { "registers": ["safer", "bolder"] },
+  "canon": true,
+  "steer": true,
+  "buildPath": { "value": "code", "toggle": false }
+}
