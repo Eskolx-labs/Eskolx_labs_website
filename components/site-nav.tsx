@@ -12,6 +12,7 @@ const NAV_LINKS = [
   { label: 'Method', href: '#roadmap' },
   { label: 'Keepers', href: '#leadership' },
   { label: 'Harvest', href: '#community' },
+  { label: 'Guide', href: '#fieldguide' },
 ]
 
 export function SiteNav() {

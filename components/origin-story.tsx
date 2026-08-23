@@ -68,7 +68,7 @@ const CARDS = [
   {
     icon: IconSoil,
     title: 'Dark Earth Foundation',
-    body: 'Eskolx grows in dark earth. The deep brown ground stands for mathematical rigor and the fertile soil that reproducible research grows from. No decoration, no bloat, just fertile ground for pure code.',
+    body: 'Eskolx grows in dark earth: the deep brown ground of mathematical rigor that reproducible research comes from. Every published function starts down here, as formulas turned into tested code, long before anything shows above the surface.',
   },
 ]
 

@@ -7,6 +7,7 @@ import { SealFlood } from '@/components/seal-flood'
 import { Leadership } from '@/components/leadership'
 import { MarqueeBand } from '@/components/marquee-band'
 import { Community } from '@/components/community'
+import { FieldGuide } from '@/components/field-guide'
 import { SiteFooter } from '@/components/site-footer'
 import { InkPress } from '@/components/ink-press'
 
@@ -24,6 +25,7 @@ export default function Page() {
         <Leadership />
         <MarqueeBand />
         <Community />
+        <FieldGuide />
       </main>
       <SiteFooter />
     </div>

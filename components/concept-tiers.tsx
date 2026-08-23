@@ -7,8 +7,8 @@ const TIERS = [
   {
     id: 1,
     name: 'Foundational Statistics & Probability',
-    concepts: ['Descriptive statistics', 'Distribution fitting', 'Probability pipelines'],
-    goal: 'Rebuild the statistical primitives from first principles. Means, moments, and distributions with zero black-box dependencies.',
+    concepts: ['Descriptive statistics', 'Elementary probability distributions', 'Hypothesis testing'],
+    goal: 'The first three months. Rebuild the statistical basics from first principles — means, moments, distributions, tests — with zero black-box dependencies.',
     code: [
       'from eskolx.stats import describe',
       '',
@@ -19,9 +19,9 @@ const TIERS = [
   },
   {
     id: 2,
-    name: 'Core Modeling & Inference',
-    concepts: ['Automated hypothesis tests', 'Feature diagnostics', 'Statsmodels execution'],
-    goal: 'Automate the inference workflow. Assumption checks, test selection, and correction wired end to end.',
+    name: 'Modeling & Classical Machine Learning',
+    concepts: ['Automated hypothesis testing', 'Classical ML models', 'Feature diagnostics'],
+    goal: 'Automate the inference workflow and move into modeling. Assumption checks, test selection, and correction wired end to end.',
     code: [
       'from eskolx.model import AutoOLS',
       '',
@@ -45,9 +45,9 @@ const TIERS = [
   },
   {
     id: 4,
-    name: 'Enterprise AI & Spatial',
-    concepts: ['Spatial stats automation', 'Synthetic data generation', 'ML deployment pipelines'],
-    goal: 'Scale to production. Spatial autocorrelation, synthetic generators, deployable ML services.',
+    name: 'Toward Automated Data Science',
+    concepts: ['Neural networks & modern architectures', 'Spatial statistics', 'Analysis automation'],
+    goal: 'The long game. Libraries and knowledge bases good enough that data science starts automating itself — built by people who rebuilt the basics first.',
     code: [
       'from eskolx.deploy import Pipeline',
       '',
@@ -101,8 +101,9 @@ export function ConceptTiers() {
                 The four-tier trellis
               </h2>
               <p className="mt-4 max-w-xl text-lg leading-relaxed text-cream-200/80">
-                A modular development ladder. Each tier trains on the last, from
-                statistical primitives to enterprise-grade deployment.
+                Build order, not marketing tiers. Each rung trains on the last:
+                statistical primitives, then modeling, then advanced methods,
+                until the libraries can carry real research.
               </p>
             </Reveal>
 
@@ -182,7 +183,7 @@ export function ConceptTiers() {
                       <div className="mt-7 overflow-hidden rounded-sm border border-loam-800 bg-loam-950">
                         <div className="hatch flex items-center justify-between border-b border-loam-800 px-4 py-2.5">
                           <span className="font-mono text-[11px] tracking-wide text-cream-200/90">
-                            example.py
+                            planned API · sketch
                           </span>
                           <span className="flex gap-1.5" aria-hidden="true">
                             <span className="h-2 w-2 rounded-full bg-wine-500" />

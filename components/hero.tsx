@@ -9,9 +9,9 @@ import { SealMark } from '@/components/botanical/seal-mark'
 import { GithubIcon, TelegramIcon } from '@/components/brand-icons'
 
 const LINES = [
-  { text: 'Good soil.' },
-  { text: 'Great minds.' },
-  { text: 'Abundant', em: true, tail: ' impact.' },
+  { text: 'The only way' },
+  { text: 'to understand a thing' },
+  { text: 'is to ', accent: 'build it.' },
 ]
 
 /*
@@ -126,7 +126,7 @@ export function Hero() {
           >
             <h1
               className="display text-[clamp(2.4rem,5.6vw,4.6rem)] leading-[1.06] field-ink"
-              aria-label="Good soil. Great minds. Abundant impact."
+              aria-label="The only way to understand a thing is to build it."
             >
               <span aria-hidden="true" className="block">
                 {LINES.map((line, i) => (
@@ -138,12 +138,14 @@ export function Hero() {
                       fromTo={[{ yPercent: 118 }, { yPercent: 0 }]}
                     >
                       <span data-hero-line={i} className="block">
-                        {line.em ? (
-                          <em className="text-wine-500">{line.text}</em>
+                        {line.accent ? (
+                          <>
+                            {line.text}
+                            <em className="text-wine-500">{line.accent}</em>
+                          </>
                         ) : (
                           line.text
                         )}
-                        {line.tail ?? ''}
                       </span>
                     </Animation>
                   </span>
@@ -156,9 +158,11 @@ export function Hero() {
                 data-hero-sub
                 className="mx-auto mt-7 max-w-xl text-lg leading-relaxed field-ink-soft"
               >
-                We translate theoretical mathematical formulas into modular,
-                open-source Python automation tools built from scratch. Every
-                function implemented, tested, and understood.
+                We solve the problem AI is causing in education: learning has
+                started to look pointless, so we hand anyone interested real,
+                difficult, highly technical problems instead. You rebuild the
+                statistical libraries everyone takes for granted, then point
+                them at questions nobody has answered.
               </p>
             </Animation>
 
@@ -183,6 +187,9 @@ export function Hero() {
                   Join the Community
                 </a>
               </div>
+              <p className="mt-5 font-mono text-xs tracking-[0.14em] field-ink-soft">
+                OPEN SOURCE · MIT LICENSE · EVERYTHING PUBLIC
+              </p>
             </Animation>
           </div>
 

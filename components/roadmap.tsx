@@ -6,21 +6,21 @@ import { Reveal } from '@/components/reveal'
 const PHASES = [
   {
     phase: 'Phase 1',
-    title: 'Basic Statistical Packages from Scratch',
-    body: 'Descriptive statistics, probability distributions, and hypothesis-testing engines written as pure Python. No black boxes, every formula implemented and tested.',
-    tags: ['Descriptive Stats', 'Distributions', 'Hypothesis Testing'],
+    title: 'Basic statistical packages, from scratch',
+    body: 'Descriptive statistics, elementary probability distributions, and hypothesis testing, written as pure Python with no black boxes. At the end of the three months, participants turn their own packages loose on novel research.',
+    tags: ['Descriptive stats', 'Distributions', 'Hypothesis testing', 'Optimization'],
   },
   {
     phase: 'Phase 2',
-    title: 'Literature & Research Driven Code',
-    body: 'Academic papers and textbooks translated into reproducible Python libraries. Dense methodology becomes clean, documented, importable modules.',
-    tags: ['Paper → Code', 'Reproducibility', 'Peer Review'],
+    title: 'Books and papers before every function',
+    body: 'Every function starts as reading. We work through the books and papers behind each method, record what we learn in an open Obsidian vault, then implement. Participants learn how research is done by doing it.',
+    tags: ['Paper → code', 'Open notes', 'Reference comparison'],
   },
   {
     phase: 'Phase 3',
-    title: 'Novel Real-World Research & Application',
-    body: 'Custom-built packages deployed on unsolved real-world datasets, validating the ecosystem against problems with no off-the-shelf solution.',
-    tags: ['Applied Research', 'Deployment', 'Open Datasets'],
+    title: 'Use what you build',
+    body: 'Every milestone ends with real work: packages carried to previously unsolved problems, from the boring grind of collecting data to the final polish of a finished paper. If you cannot explain it, you have not finished it.',
+    tags: ['Real datasets', 'Novel research', 'Teach it forward'],
   },
 ]
 
@@ -47,11 +47,11 @@ export function Roadmap() {
           <div className="mx-auto flex h-full max-w-7xl flex-col justify-center px-4 pb-10 pt-20 sm:px-6 lg:px-8">
             <Reveal className="max-w-3xl">
               <h2 className="display text-[clamp(2rem,3.8vw,3.2rem)] leading-tight text-parchment-ink" data-reveal-item>
-                A three-month growing method
+                The growing method
               </h2>
               <p className="mt-4 max-w-xl text-lg leading-relaxed text-parchment-ink/75" data-reveal-item>
-                A high-velocity path from statistical primitives to novel applied
-                research, shipped as open-source packages.
+                Three months to statistical packages built from scratch, then
+                research with your own tools. The plan, unedited.
               </p>
             </Reveal>
 
@@ -190,8 +190,8 @@ export function Roadmap() {
             <div>
               <h3 className="display text-lg text-parchment-ink">Small, fast-moving builder teams</h3>
               <p className="mt-1.5 max-w-[68ch] text-[15px] leading-relaxed text-parchment-ink/75">
-                High-velocity cohorts working in pure code, shipping tested,
-                documented packages instead of notebooks.
+                Few people, fast cycles. Cohorts work in pure code and ship
+                tested, documented packages instead of notebooks.
               </p>
             </div>
           </div>

@@ -8,6 +8,7 @@ import { Mail } from 'lucide-react'
 const LINKS = [
   { label: 'Open-Source Code', href: 'https://github.com/eskolx-labs' },
   { label: 'Builder Chat', href: 'https://t.me/eskolx_labs' },
+  { label: 'Field Guide', href: '#fieldguide' },
 ]
 
 export function SiteFooter() {
@@ -62,7 +63,7 @@ export function SiteFooter() {
                 eskolxlabs@gmail.com
               </a>
               <p className="mt-2 max-w-[26ch] font-serif text-sm leading-relaxed text-parchment-ink/75">
-                Open-source statistical infrastructure.
+                Statistical libraries, rebuilt from scratch, in the open.
               </p>
               <a
                 href="#top"
