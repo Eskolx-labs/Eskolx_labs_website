@@ -1,6 +1,6 @@
 'use client'
 
-import { Root } from '@/lib/scrollytelling'
+import { Root, Animation } from '@/lib/scrollytelling'
 import { PARCHMENT } from '@/lib/field-controller'
 import { Reveal } from '@/components/reveal'
 import { SealMark } from '@/components/botanical/seal-mark'
@@ -13,10 +13,18 @@ const DOES = [
 ]
 
 const DONTs = [
-  'Wrap existing libraries and call the result ours',
-  'Hand out certificates or video courses',
-  'Confuse watching tutorials with learning',
-  'Gate participation behind credentials',
+  {
+    t: 'Serve as your first Python tutorial',
+    d: 'Arrive knowing the basics. We start at real problems, not at print statements.',
+  },
+  {
+    t: 'Promise financial reward',
+    d: 'Maybe someday, not today. What you leave with is skill, shipped work, and your name on public commits.',
+  },
+  {
+    t: 'Ban AI',
+    d: 'Build with it if you like. You will explain every line and understand everything you shipped.',
+  },
 ]
 
 const REQUIREMENTS = [
@@ -89,10 +97,13 @@ const FAQ = [
  */
 export function FieldGuide() {
   return (
-    <Root id="fieldguide" className="relative bg-parchment py-24" field={{ from: PARCHMENT, to: PARCHMENT }}>
+    <Root id="fieldguide" className="relative bg-parchment py-24" start="top bottom" end="bottom top" field={{ from: PARCHMENT, to: PARCHMENT }}>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* the header rides the room while the seal presses in */}
+        <Animation target="[data-fg-head]" start={2} end={62} to={{ y: -26 }} />
+        <Animation target="[data-fg-seal]" start={3} end={9} fromTo={[{ scale: 1.8, rotate: -16, opacity: 0 }, { scale: 1, rotate: -6, opacity: 1, ease: 'power4.in' }]} />
         <Reveal className="flex flex-wrap items-end justify-between gap-6">
-          <div className="max-w-2xl">
+          <div className="max-w-2xl" data-fg-head>
             <p className="font-mono text-xs uppercase tracking-[0.22em] text-wine-600" data-reveal-item>
               The field guide
             </p>
@@ -104,12 +115,14 @@ export function FieldGuide() {
               just the answers.
             </p>
           </div>
-          <SealMark label="Eskolx Labs seal" className="h-14 w-14 shrink-0 -rotate-6 sm:h-16 sm:w-16" />
+          <SealMark label="Eskolx Labs seal" data-fg-seal className="h-14 w-14 shrink-0 -rotate-6 sm:h-16 sm:w-16" />
         </Reveal>
 
-        {/* do / don't */}
+        {/* do / don't: the two plates wipe in one after the other */}
+        <Animation target='[data-fg-wipe="0"]' start={12} end={24} fromTo={[{ clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', ease: 'power2.inOut' }]} />
+        <Animation target='[data-fg-wipe="1"]' start={22} end={34} fromTo={[{ clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', ease: 'power2.inOut' }]} />
         <Reveal className="mt-14 grid gap-px overflow-hidden rounded-sm border border-parchment-ink/20 bg-parchment-ink/15 md:grid-cols-2" y={24}>
-          <div className="bg-parchment p-7 sm:p-9" data-reveal-item>
+          <div data-fg-wipe="0" className="bg-parchment p-7 sm:p-9" data-reveal-item>
             <h3 className="display text-xl text-parchment-ink">What we do</h3>
             <ul className="mt-6 space-y-4">
               {DOES.map((d) => (
@@ -122,15 +135,18 @@ export function FieldGuide() {
               ))}
             </ul>
           </div>
-          <div className="bg-parchment p-7 sm:p-9" data-reveal-item>
+          <div data-fg-wipe="1" className="bg-parchment p-7 sm:p-9" data-reveal-item>
             <h3 className="display text-xl text-parchment-ink">What we don&apos;t</h3>
-            <ul className="mt-6 space-y-4">
+            <ul className="mt-6 space-y-5">
               {DONTs.map((d) => (
-                <li key={d} className="flex gap-3.5 text-[15px] leading-relaxed text-parchment-ink/70">
-                  <svg viewBox="0 0 14 14" className="mt-1 h-3.5 w-3.5 shrink-0 text-parchment-ink/50" aria-hidden="true">
+                <li key={d.t} className="flex gap-3.5">
+                  <svg viewBox="0 0 14 14" className="mt-1 h-3.5 w-3.5 shrink-0 text-wine-600" aria-hidden="true">
                     <path d="M3 3 L11 11 M11 3 L3 11" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                   </svg>
-                  {d}
+                  <span>
+                    <span className="block text-[15px] font-medium leading-relaxed text-parchment-ink/85">{d.t}</span>
+                    <span className="mt-1 block max-w-[52ch] text-[15px] leading-relaxed text-parchment-ink/70">{d.d}</span>
+                  </span>
                 </li>
               ))}
             </ul>
@@ -144,30 +160,40 @@ export function FieldGuide() {
             <p className="mt-3 max-w-[62ch] text-[15px] leading-relaxed text-parchment-ink/75" data-reveal-item>
               The mission sets the bar. Here it is, plainly:
             </p>
-            <ol className="mt-7 space-y-6">
-              {REQUIREMENTS.map((r) => (
-                <li key={r.n} className="grid grid-cols-[2.6rem_1fr] gap-x-4" data-reveal-item>
-                  <span className="tabular font-mono text-sm leading-7 text-gold-ink">{r.n}</span>
-                  <span>
-                    <span className="display block text-lg text-parchment-ink">{r.title}</span>
-                    <span className="mt-1.5 block max-w-[58ch] text-[15px] leading-relaxed text-parchment-ink/75">{r.body}</span>
-                  </span>
-                </li>
+            <div className="mt-7 space-y-6">
+              {REQUIREMENTS.map((r, j) => (
+                <Animation
+                  key={r.n}
+                  target={`[data-req="${j}"]`}
+                  start={38 + j * 4}
+                  end={44 + j * 4}
+                  fromTo={[{ y: 26, opacity: 0 }, { y: 0, opacity: 1, ease: 'power2.out' }]}
+                >
+                  <div className="grid grid-cols-[2.6rem_1fr] gap-x-4" data-req={j}>
+                    <span className="tabular font-mono text-sm leading-7 text-gold-ink">{r.n}</span>
+                    <span>
+                      <span className="display block text-lg text-parchment-ink">{r.title}</span>
+                      <span className="mt-1.5 block max-w-[58ch] text-[15px] leading-relaxed text-parchment-ink/75">{r.body}</span>
+                    </span>
+                  </div>
+                </Animation>
               ))}
-            </ol>
+            </div>
             <div className="mt-8 border-t border-dashed border-parchment-ink/30 pt-6" data-reveal-item>
-              <p className="text-[15px] leading-relaxed text-parchment-ink/80">
-                <span className="font-mono text-xs tracking-wide text-wine-600">HACKTIVATION ENERGY</span>
-                <span className="mt-2 block max-w-[64ch]">
-                  The effort a newcomer spends before their first useful commit.
-                  Lower is better, so we grind it down: clone a repo, run the
-                  tests, ship a fix. Setup should never be the hard part.
-                </span>
-              </p>
+              <Animation target="[data-fg-hack]" start={52} end={57} fromTo={[{ scale: 1.5, rotate: -7, opacity: 0 }, { scale: 1, rotate: 0, opacity: 1, ease: 'power4.in' }]}>
+                <p className="text-[15px] leading-relaxed text-parchment-ink/80">
+                  <span data-fg-hack className="inline-block font-mono text-xs tracking-wide text-wine-600">HACKTIVATION ENERGY</span>
+                  <span className="mt-2 block max-w-[64ch]">
+                    The effort a newcomer spends before their first useful commit.
+                    Lower is better, so we grind it down: clone a repo, run the
+                    tests, ship a fix. Setup should never be the hard part.
+                  </span>
+                </p>
+              </Animation>
             </div>
           </Reveal>
 
-          {/* status ledger */}
+          {/* status ledger: each row's rule draws itself left to right */}
           <Reveal className="rounded-sm border border-parchment-ink/20 bg-parchment p-7 sm:p-9" y={24}>
             <h3 className="display text-xl text-parchment-ink" data-reveal-item>Where the project stands</h3>
             <dl className="mt-7 space-y-0">
@@ -175,8 +201,13 @@ export function FieldGuide() {
                 <div
                   key={row.k}
                   data-reveal-item
-                  className={`grid gap-1 py-4 sm:grid-cols-[8.5rem_1fr] sm:gap-4 ${i > 0 ? 'border-t border-parchment-ink/15' : ''}`}
+                  className={`relative grid gap-1 py-4 sm:grid-cols-[8.5rem_1fr] sm:gap-4 ${i > 0 ? '' : ''}`}
                 >
+                  {i > 0 && (
+                    <Animation target={`[data-status-rule="${i}"]`} start={62 + i * 5} end={68 + i * 5} fromTo={[{ scaleX: 0 }, { scaleX: 1, ease: 'power1.inOut' }]}>
+                      <span data-status-rule={i} aria-hidden="true" className="absolute left-0 top-0 block h-px w-full origin-left bg-parchment-ink/20" />
+                    </Animation>
+                  )}
                   <dt className="font-mono text-xs uppercase tracking-[0.16em] text-parchment-ink/60 sm:pt-1">{row.k}</dt>
                   <dd className="text-[15px] leading-relaxed text-parchment-ink/85">{row.v}</dd>
                 </div>
@@ -186,7 +217,7 @@ export function FieldGuide() {
               href="https://github.com/eskolx-labs"
               target="_blank"
               rel="noreferrer"
-              className="mt-7 inline-flex items-center gap-2 border-t border-parchment-ink/15 pt-5 text-sm font-medium text-wine-700 underline-offset-4 transition-colors hover:text-wine-600 hover:underline hover:decoration-wine-500/50"
+              className="mt-7 inline-flex items-center gap-2 border-t border-parchment-ink/15 pt-5 text-sm font-medium text-wine-600 underline-offset-4 transition-colors hover:text-wine-600 hover:underline hover:decoration-wine-500/50"
               data-reveal-item
             >
               Watch the repos
@@ -205,7 +236,7 @@ export function FieldGuide() {
               <details key={item.q} className={`group ${i > 0 ? 'border-t border-parchment-ink/15' : ''}`} data-reveal-item>
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-6 px-6 py-5 transition-colors hover:bg-parchment-ink/[0.04] sm:px-8 [&::-webkit-details-marker]:hidden">
                   <span className="font-serif text-[16px] font-medium text-parchment-ink sm:text-lg">{item.q}</span>
-                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-parchment-ink/30 text-parchment-ink/70 transition-transform duration-300 group-open:rotate-45">
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-parchment-ink/30 text-parchment-ink/65 transition-transform duration-300 group-open:rotate-45">
                     <svg viewBox="0 0 12 12" className="h-3 w-3" aria-hidden="true">
                       <path d="M6 1 V11 M1 6 H11" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
                     </svg>
@@ -219,11 +250,11 @@ export function FieldGuide() {
           </div>
           <p className="mt-5 text-sm text-parchment-ink/65" data-reveal-item>
             Something unanswered?{' '}
-            <a href="https://t.me/eskolx_labs" target="_blank" rel="noreferrer" className="text-wine-700 underline-offset-4 transition-colors hover:text-wine-600 hover:underline">
+            <a href="https://t.me/eskolx_labs" target="_blank" rel="noreferrer" className="text-wine-600 underline-offset-4 transition-colors hover:text-wine-600 hover:underline">
               Telegram
             </a>{' '}
             or{' '}
-            <a href="mailto:eskolxlabs@gmail.com" className="text-wine-700 underline-offset-4 transition-colors hover:text-wine-600 hover:underline">
+            <a href="mailto:eskolxlabs@gmail.com" className="text-wine-600 underline-offset-4 transition-colors hover:text-wine-600 hover:underline">
               eskolxlabs@gmail.com
             </a>
             .

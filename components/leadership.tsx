@@ -8,15 +8,11 @@ const LEADERS = [
   {
     name: 'Barkilign Mulatu',
     role: 'Founder & CEO',
-    focus: 'Corporate Strategy, Vision & Ecosystem Growth',
-    detail: 'Former ALX, 10 Academy, iCog Labs Intern Alumni',
     initials: 'BM',
   },
   {
     name: 'Natnael Getahun',
-    role: 'Co-Founder & CTO',
-    focus: 'Technical Architecture, Open-Source Automation Engines & Core Research Lead',
-    detail: 'Leads the core engineering and research direction',
+    role: 'Co-Founder and Member of Technical Staff',
     initials: 'NG',
   },
 ]
@@ -25,6 +21,8 @@ export function Leadership() {
   return (
     <Root
       id="leadership"
+      start="top bottom"
+      end="bottom top"
       className="relative overflow-hidden bg-loam-950 py-24"
       field={{
         from: PARCHMENT,
@@ -60,10 +58,6 @@ export function Leadership() {
                   </span>
                   <h3 className="display mt-5 text-2xl leading-snug text-cream-100">{leader.name}</h3>
                   <p className="mt-1 font-serif font-medium text-wine-300">{leader.role}</p>
-                  <p className="mt-3.5 text-[15px] leading-relaxed text-cream-200/80">{leader.focus}</p>
-                  <p className="mt-4 border-t border-loam-800 pt-3.5 text-sm text-cream-200/90">
-                    {leader.detail}
-                  </p>
                 </div>
               </Animation>
             </article>

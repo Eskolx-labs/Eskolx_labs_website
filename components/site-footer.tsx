@@ -1,6 +1,7 @@
 'use client'
 
 import { Root, Animation } from '@/lib/scrollytelling'
+import { PARCHMENT } from '@/lib/field-controller'
 import { Reveal } from '@/components/reveal'
 import { SealMark } from '@/components/botanical/seal-mark'
 import { Mail } from 'lucide-react'
@@ -16,8 +17,8 @@ export function SiteFooter() {
     <Root
       className="relative overflow-hidden border-t border-parchment-ink/20 bg-parchment"
       field={{
-        from: { bg: '#ece1c6', ink: '#29190c', soft: '#5c4a33', line: '#b9a67f' },
-        to: { bg: '#ece1c6', ink: '#29190c', soft: '#5c4a33', line: '#b9a67f' },
+        from: PARCHMENT,
+        to: PARCHMENT,
       }}
     >
       <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">

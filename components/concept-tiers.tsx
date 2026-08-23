@@ -1,12 +1,13 @@
 'use client'
 
 import { Root, Pin, Animation, Waypoint } from '@/lib/scrollytelling'
+import { LOAM } from '@/lib/field-controller'
 import { Reveal } from '@/components/reveal'
 
 const TIERS = [
   {
     id: 1,
-    name: 'Foundational Statistics & Probability',
+    name: 'Foundational Statistics & Probability (from scratch)',
     concepts: ['Descriptive statistics', 'Elementary probability distributions', 'Hypothesis testing'],
     goal: 'The first three months. Rebuild the statistical basics from first principles — means, moments, distributions, tests — with zero black-box dependencies.',
     code: [
@@ -19,7 +20,7 @@ const TIERS = [
   },
   {
     id: 2,
-    name: 'Modeling & Classical Machine Learning',
+    name: 'Modeling & Classical Machine Learning (from scratch)',
     concepts: ['Automated hypothesis testing', 'Classical ML models', 'Feature diagnostics'],
     goal: 'Automate the inference workflow and move into modeling. Assumption checks, test selection, and correction wired end to end.',
     code: [
@@ -32,7 +33,7 @@ const TIERS = [
   },
   {
     id: 3,
-    name: 'Advanced Applied Methods',
+    name: 'Advanced Applied Machine Learning (from scratch)',
     concepts: ['Time series stationarity', 'Design of Experiments', 'Econometrics'],
     goal: 'Package advanced methodology into reproducible pipelines, from ADF tests to factorial DOE layouts.',
     code: [
@@ -45,7 +46,7 @@ const TIERS = [
   },
   {
     id: 4,
-    name: 'Toward Automated Data Science',
+    name: 'Toward Automated Data Science (from scratch)',
     concepts: ['Neural networks & modern architectures', 'Spatial statistics', 'Analysis automation'],
     goal: 'The long game. Libraries and knowledge bases good enough that data science starts automating itself — built by people who rebuilt the basics first.',
     code: [
@@ -89,8 +90,8 @@ export function ConceptTiers() {
       className="relative bg-loam-950"
       scrub={true}
       field={{
-        from: { bg: '#241407', ink: '#f0e4c8', soft: '#b8a284', line: '#5a4227' },
-        to: { bg: '#ece1c6', ink: '#29190c', soft: '#5c4a33', line: '#b9a67f' },
+        from: LOAM,
+        to: LOAM,
       }}
     >
       <Pin height="420vh">

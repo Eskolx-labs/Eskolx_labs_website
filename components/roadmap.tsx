@@ -1,6 +1,7 @@
 'use client'
 
 import { Root, Animation, Waypoint, Pin } from '@/lib/scrollytelling'
+import { PARCHMENT, LOAM } from '@/lib/field-controller'
 import { Reveal } from '@/components/reveal'
 
 const PHASES = [
@@ -35,6 +36,25 @@ const PHASES = [
 export function Roadmap() {
   return (
     <>
+      {/* the dawn turn: the trellis chapter holds night to the end; this
+          short seam carries the field back to day so the method opens on
+          paper without ever bleaching the tiers mid-read */}
+      <Root
+        className="relative flex h-[55vh] items-center justify-center bg-loam-950"
+        start="top bottom"
+        end="bottom top"
+        field={{
+          from: LOAM,
+          to: PARCHMENT,
+        }}
+      >
+        <div className="flex items-center gap-3" aria-hidden="true">
+          <span className="h-1 w-1 rounded-full bg-gold-leaf/70" />
+          <span className="h-1.5 w-1.5 rounded-full bg-wine-500/80" />
+          <span className="h-1 w-1 rounded-full bg-gold-leaf/70" />
+        </div>
+      </Root>
+
       <Root
         id="roadmap"
         className="relative bg-parchment"

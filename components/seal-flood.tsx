@@ -44,10 +44,11 @@ export function SealFlood() {
             </div>
           </Animation>
 
-          {/* the stamp dissolves into its own harvest: die first, then vine,
-              until only the fruit floods the page */}
-          <Animation target="[data-flood-seal] .seal-die" start={36} end={54} to={{ opacity: 0 }} />
-          <Animation target="[data-flood-seal] .seal-vine" start={48} end={66} to={{ opacity: 0 }} />
+          {/* the stamp dissolves into its own harvest early, while the room
+              is still day-lit: die first, then vine, until only the fruit
+              floods the page — nothing near-black ever covers the spread */}
+          <Animation target="[data-flood-seal] .seal-die" start={20} end={32} to={{ opacity: 0 }} />
+          <Animation target="[data-flood-seal] .seal-vine" start={44} end={60} to={{ opacity: 0 }} />
 
           {/* the label lifts away as the stamp presses home */}
           <Animation target="[data-flood-label]" start={30} end={48} to={{ y: -40, opacity: 0 }} />
