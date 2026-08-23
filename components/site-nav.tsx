@@ -7,12 +7,12 @@ import { GithubIcon, TelegramIcon } from '@/components/brand-icons'
 import { SealMark } from '@/components/botanical/seal-mark'
 
 const NAV_LINKS = [
-  { label: 'Eshcol', href: '#ecosystem' },
-  { label: 'Trellis', href: '#tiers' },
-  { label: 'Method', href: '#roadmap' },
-  { label: 'Keepers', href: '#leadership' },
-  { label: 'Harvest', href: '#community' },
-  { label: 'Guide', href: '#fieldguide' },
+  { label: 'Eshcol', gloss: 'Name & roots', href: '#ecosystem' },
+  { label: 'Trellis', gloss: 'Curriculum', href: '#tiers' },
+  { label: 'Method', gloss: 'The plan', href: '#roadmap' },
+  { label: 'Keepers', gloss: 'The team', href: '#leadership' },
+  { label: 'Harvest', gloss: 'Community', href: '#community' },
+  { label: 'Guide', gloss: 'Joining & FAQ', href: '#fieldguide' },
 ]
 
 export function SiteNav() {
@@ -27,14 +27,45 @@ export function SiteNav() {
   const markerRef = useRef<HTMLSpanElement>(null)
   const linkRefs = useRef<Record<string, HTMLAnchorElement | null>>({})
 
-  // Esc closes the mobile menu and returns focus to the toggle
+  // Esc closes the menu, focus stays inside the header while it's open
+  // (trap), the page behind doesn't scroll, and focus returns to the toggle.
+  const headerRef = useRef<HTMLElement>(null)
+  const toggleRef = useRef<HTMLButtonElement>(null)
   useEffect(() => {
     if (!open) return
+    const scope = headerRef.current
+    if (!scope) return
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    const focusables = () =>
+      Array.from(scope.querySelectorAll<HTMLElement>('a[href], button:not([disabled])')).filter(
+        el => el.offsetParent !== null,
+      )
+    focusables()[0]?.focus()
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setOpen(false)
+      if (e.key === 'Escape') {
+        setOpen(false)
+        return
+      }
+      if (e.key !== 'Tab') return
+      const items = focusables()
+      if (items.length === 0) return
+      const firstEl = items[0]
+      const lastEl = items[items.length - 1]
+      if (e.shiftKey && document.activeElement === firstEl) {
+        e.preventDefault()
+        lastEl.focus()
+      } else if (!e.shiftKey && document.activeElement === lastEl) {
+        e.preventDefault()
+        firstEl.focus()
+      }
     }
     window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
+    return () => {
+      document.body.style.overflow = prevOverflow
+      window.removeEventListener('keydown', onKey)
+      toggleRef.current?.focus()
+    }
   }, [open])
 
   useEffect(() => {
@@ -146,6 +177,7 @@ export function SiteNav() {
 
   return (
     <header
+      ref={headerRef}
       className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
         grounded
           ? 'border-b border-[color-mix(in_srgb,var(--field-line)_35%,transparent)] bg-[color-mix(in_srgb,var(--field-bg)_86%,transparent)] backdrop-blur-md'
@@ -170,7 +202,7 @@ export function SiteNav() {
           </span>
         </a>
 
-        <nav className="relative hidden items-center gap-7 lg:flex">
+        <nav className="relative hidden items-center gap-6 lg:flex">
           {NAV_LINKS.map((link) => {
             const id = link.href.slice(1)
             const active = activeId === id
@@ -180,17 +212,26 @@ export function SiteNav() {
                 href={link.href}
                 ref={el => { linkRefs.current[id] = el }}
                 aria-current={active ? 'true' : undefined}
-                className={`py-0.5 font-serif text-[15px] underline-offset-8 transition-colors hover:underline hover:decoration-gold-leaf/70 ${
+                className={`group block py-0.5 text-center transition-colors ${
                   grounded
                     ? active
                       ? 'text-[color:var(--field-ink)]'
-                      : 'text-[color:var(--field-soft)] hover:text-[color:var(--field-ink)]'
+                      : 'text-[color:var(--field-ink-soft)] hover:text-[color:var(--field-ink)]'
                     : active
                       ? 'text-parchment-ink'
                       : 'text-parchment-ink/75 hover:text-parchment-ink'
                 }`}
               >
-                {link.label}
+                <span className="block font-serif text-[15px] leading-tight underline-offset-8 group-hover:underline group-hover:decoration-gold-leaf/70">
+                  {link.label}
+                </span>
+                <span
+                  className={`mt-0.5 block font-mono text-[11px] leading-none uppercase tracking-[0.12em] ${
+                    active ? 'opacity-80' : 'opacity-45'
+                  }`}
+                >
+                  {link.gloss}
+                </span>
               </a>
             )
           })}
@@ -203,13 +244,13 @@ export function SiteNav() {
           />
         </nav>
 
-        <div className="hidden items-center gap-3 lg:flex">
+        <div className="flex items-center gap-2 sm:gap-3 lg:flex">
           <a
             href="https://t.me/eskolx_labs"
             target="_blank"
             rel="noreferrer"
             aria-label="Join the Telegram community"
-            className={`flex h-10 w-10 items-center justify-center rounded-sm border transition-colors ${
+            className={`flex h-9 w-9 items-center justify-center rounded-sm border transition-colors sm:h-10 sm:w-10 ${
               grounded
                 ? 'border-[color-mix(in_srgb,var(--field-ink)_30%,transparent)] text-[color:var(--field-ink)] hover:border-[color:var(--field-ink)]'
                 : 'border-parchment-ink/30 text-parchment-ink hover:border-parchment-ink'
@@ -222,7 +263,7 @@ export function SiteNav() {
             href="https://github.com/eskolx-labs"
             target="_blank"
             rel="noreferrer"
-            className="btn-plate btn-wine !px-5 !py-2.5 text-[15px]"
+            className="btn-plate btn-wine hidden !px-5 !py-2.5 text-[15px] sm:inline-flex"
           >
             <GithubIcon className="h-4 w-4" />
             Explore GitHub
@@ -231,6 +272,7 @@ export function SiteNav() {
 
         <button
           type="button"
+          ref={toggleRef}
           onClick={() => setOpen((v) => !v)}
           className={`inline-flex h-10 w-10 flex-col items-center justify-center gap-[5px] rounded-sm ${
             grounded ? 'text-[color:var(--field-ink)]' : 'text-parchment-ink'
@@ -258,9 +300,10 @@ export function SiteNav() {
                 key={link.label}
                 href={link.href}
                 onClick={() => setOpen(false)}
-                className="border-b border-[color-mix(in_srgb,var(--field-line)_30%,transparent)] py-3 font-serif text-[color:var(--field-ink)] last:border-0 hover:opacity-75"
+                className="flex items-baseline justify-between border-b border-[color-mix(in_srgb,var(--field-line)_30%,transparent)] py-3 font-serif text-[color:var(--field-ink)] last:border-0 hover:opacity-75"
               >
-                {link.label}
+                <span>{link.label}</span>
+                <span className="font-mono text-[11px] uppercase tracking-[0.12em] opacity-50">{link.gloss}</span>
               </a>
             ))}
             <div className="mt-4 flex flex-col gap-3 pb-2">

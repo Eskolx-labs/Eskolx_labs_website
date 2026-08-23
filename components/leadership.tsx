@@ -64,6 +64,20 @@ export function Leadership() {
           ))}
         </div>
 
+        <div className="mt-6 lg:max-w-4xl">
+          <a
+            href="https://github.com/eskolx-labs"
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-2 font-serif text-[15px] text-cream-200/85 underline-offset-4 transition-colors hover:text-cream-100 hover:underline hover:decoration-gold-leaf/60"
+          >
+            Find us in the commit log
+            <svg viewBox="0 0 14 14" className="h-3 w-3" aria-hidden="true">
+              <path d="M2 7 H12 M8 3 L12 7 L8 11" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </a>
+        </div>
+
         <div className="mt-6 flex flex-col items-start gap-5 rounded-sm border border-loam-700/80 bg-loam-900/70 p-7 sm:flex-row sm:items-center lg:max-w-4xl">
           <svg viewBox="0 0 40 40" className="h-10 w-10 shrink-0 text-gold-leaf" aria-hidden="true" fill="none">
             <path d="M20 4 L26.5 15.5 C24.5 18.5 22.5 20 20 20 C17.5 20 15.5 18.5 13.5 15.5 Z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />

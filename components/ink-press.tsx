@@ -50,8 +50,6 @@ export function InkPress() {
       () => {
         if (typeof window === 'undefined') return
         gsap.registerPlugin(ScrollTrigger)
-        const flag = window as unknown as { __inkInit?: string[] }
-        flag.__inkInit = []
         // a streaming/hydrating document can lag one beat behind the effect
         // that owns this layer — wait until every plate exists, then build
         let tries = 0
@@ -67,7 +65,7 @@ export function InkPress() {
               document.querySelector(`#${t.id}-disp`),
           )
           if (!ready) {
-            flag.__inkInit!.push(`wait:${++tries}`)
+            tries += 1
             if (tries < 120) requestAnimationFrame(setup)
             return
           }
@@ -104,7 +102,6 @@ export function InkPress() {
                 .to(disp, { attr: { scale: t.rest }, duration: 0.38, ease: 'power2.out' }, 0.52)
                 .to(root, { opacity: 0, duration: 0.16 }, 0.9)
             }
-            flag.__inkInit!.push('ready')
           })
         }
         setup()

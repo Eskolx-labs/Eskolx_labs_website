@@ -52,6 +52,7 @@ const REQUIREMENTS = [
 
 const STATUS = [
   { k: 'Status', v: 'Actively maintained.' },
+  { k: 'Code', v: 'github.com/eskolx-labs', href: 'https://github.com/eskolx-labs' },
   {
     k: 'Current goal',
     v: 'Three months, basic statistical packages: descriptive statistics, elementary probability distributions, hypothesis testing, and the optimization of each.',
@@ -209,7 +210,15 @@ export function FieldGuide() {
                     </Animation>
                   )}
                   <dt className="font-mono text-xs uppercase tracking-[0.16em] text-parchment-ink/60 sm:pt-1">{row.k}</dt>
-                  <dd className="text-[15px] leading-relaxed text-parchment-ink/85">{row.v}</dd>
+                  <dd className="text-[15px] leading-relaxed text-parchment-ink/85">
+                    {row.href ? (
+                      <a href={row.href} target="_blank" rel="noreferrer" className="underline decoration-parchment-ink/30 underline-offset-4 transition-colors hover:text-wine-600 hover:decoration-wine-500/50">
+                        {row.v}
+                      </a>
+                    ) : (
+                      row.v
+                    )}
+                  </dd>
                 </div>
               ))}
             </dl>

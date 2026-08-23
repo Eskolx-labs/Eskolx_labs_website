@@ -1,5 +1,8 @@
 'use client'
 
+import { useEffect } from 'react'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { Root, Pin, Animation } from '@/lib/scrollytelling'
 import { Reveal } from '@/components/reveal'
 import { SealMark } from '@/components/botanical/seal-mark'
@@ -72,38 +75,29 @@ const IDENTITIES = [
   },
 ]
 
-/* Hand-typed text: each unit blinks onto the page inside its own tiny
-   window, so scrubbing the pin literally writes the line — fast forward
-   types faster, slow down and it spells. Words for prose, chars for
-   titles; everything is plain text to screen readers and static below md. */
+/* Hand-typed text: units blink onto the plate one by one from a
+   time-based timeline, so a reader who stops scrolling still watches the
+   sentence finish — pausing never leaves a word half-written. Plain text
+   to screen readers; static and fully visible under reduced motion. */
 function Typed({
+  id,
   text,
   unit,
-  t0,
-  span,
   className,
 }: {
+  id: string
   text: string
   unit: 'char' | 'word'
-  t0: number
-  span: number
   className?: string
 }) {
   const parts = unit === 'char' ? Array.from(text) : text.split(' ')
-  const step = span / parts.length
   return (
     <span aria-label={text} className={className}>
       <span aria-hidden="true">
         {parts.map((p, j) => (
-          <Animation
-            key={j}
-            start={t0 + j * step}
-            end={t0 + j * step + Math.min(step * 0.55, 0.5)}
-            fromTo={[{ opacity: 0 }, { opacity: 1, ease: 'none' }]}
-            className="inline-block"
-          >
-            <span className="inline-block">{unit === 'word' && j < parts.length - 1 ? `${p}\u00A0` : p}</span>
-          </Animation>
+          <span key={j} data-tw={`${id}-${j}`} className="inline-block motion-safe:opacity-0">
+            {unit === 'word' && j < parts.length - 1 ? `${p}\u00A0` : p}
+          </span>
         ))}
       </span>
     </span>
@@ -117,6 +111,39 @@ function Typed({
  * away for the next. Below md the plates stack as ordinary flow.
  */
 export function OriginStory() {
+  // the hand-typing engine: one paused timeline per identity, played the
+  // moment that beat's stake of the pin arrives — independent of scroll
+  // velocity, reversible on the way back up.
+  useEffect(() => {
+    const mm = gsap.matchMedia()
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+      gsap.registerPlugin(ScrollTrigger)
+      const ctx = gsap.context(() => {
+        const room = () => {
+          const pin = document.querySelector('#ecosystem [data-pin]') as HTMLElement | null
+          return Math.max((pin?.offsetHeight ?? window.innerHeight * 3.4) - window.innerHeight, 1)
+        }
+        IDENTITIES.forEach((_, i) => {
+          const titleEls = gsap.utils.toArray<HTMLElement>(`[data-tw^="i${i}t-"]`)
+          const bodyEls = gsap.utils.toArray<HTMLElement>(`[data-tw^="i${i}b-"]`)
+          if (!titleEls.length && !bodyEls.length) return
+          const tl = gsap.timeline({ paused: true, defaults: { ease: 'none' } })
+          if (titleEls.length) tl.fromTo(titleEls, { opacity: 0 }, { opacity: 1, duration: 0.05, stagger: 0.026 })
+          if (bodyEls.length) tl.fromTo(bodyEls, { opacity: 0 }, { opacity: 1, duration: 0.04, stagger: 0.011 }, '>-0.01')
+          ScrollTrigger.create({
+            trigger: '#ecosystem [data-pin]',
+            start: () => `top+=${room() * (i * 0.32 + 0.02)} top`,
+            end: () => `top+=${room() * (i * 0.32 + 0.05)} top`,
+            onEnter: () => tl.play(),
+            onLeaveBack: () => tl.reverse(),
+          })
+        })
+      })
+      return () => ctx.revert()
+    })
+    return () => mm.revert()
+  }, [])
+
   return (
     <Root
       id="ecosystem"
@@ -177,11 +204,11 @@ export function OriginStory() {
                       </Animation>
 
                       <h3 className="display mt-4 min-h-[2.6em] text-[clamp(1.6rem,2.8vw,2.3rem)] leading-[1.12]" >
-                        <Typed text={card.title} unit="char" t0={s + 7} span={9} />
+                        <Typed id={`i${i}t`} text={card.title} unit="char" />
                       </h3>
 
                       <p className="mt-4 max-w-[62ch] font-serif text-base leading-relaxed text-parchment-ink/80 sm:text-lg">
-                        <Typed text={card.body} unit="word" t0={s + 13} span={11} />
+                        <Typed id={`i${i}b`} text={card.body} unit="word" />
                       </p>
 
                       {/* the wax dot presses once the plate is written */}

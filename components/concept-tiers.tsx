@@ -183,9 +183,14 @@ export function ConceptTiers() {
 
                       <div className="mt-7 overflow-hidden rounded-sm border border-loam-800 bg-loam-950">
                         <div className="hatch flex items-center justify-between border-b border-loam-800 px-4 py-2.5">
-                          <span className="font-mono text-[11px] tracking-wide text-cream-200/90">
-                            planned API · sketch
-                          </span>
+                          <a
+                            href="https://github.com/eskolx-labs"
+                            target="_blank"
+                            rel="noreferrer"
+                            className="font-mono text-[11px] tracking-wide text-cream-200/90 underline-offset-4 transition-colors hover:text-gold-leaf hover:underline"
+                          >
+                            planned API · see the work
+                          </a>
                           <span className="flex gap-1.5" aria-hidden="true">
                             <span className="h-2 w-2 rounded-full bg-wine-500" />
                             <span className="h-2 w-2 rounded-full bg-gold-leaf/70" />

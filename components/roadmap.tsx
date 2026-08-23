@@ -40,7 +40,7 @@ export function Roadmap() {
           short seam carries the field back to day so the method opens on
           paper without ever bleaching the tiers mid-read */}
       <Root
-        className="relative flex h-[55vh] items-center justify-center bg-loam-950"
+        className="relative flex h-[28vh] items-center justify-center bg-loam-950 md:h-[55vh]"
         start="top bottom"
         end="bottom top"
         field={{

@@ -9,7 +9,7 @@ import { Mail } from 'lucide-react'
 const LINKS = [
   { label: 'Open-Source Code', href: 'https://github.com/eskolx-labs' },
   { label: 'Builder Chat', href: 'https://t.me/eskolx_labs' },
-  { label: 'Field Guide', href: '#fieldguide' },
+  { label: 'Guide', href: '#fieldguide' },
 ]
 
 export function SiteFooter() {
