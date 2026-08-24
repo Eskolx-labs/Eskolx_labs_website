@@ -46,10 +46,13 @@ export function Leadership() {
               key={leader.name}
               className="rounded-sm border border-loam-700/80 bg-loam-900 p-7"
             >
+              {/* both keepers land in the first fifth of the crossing, so
+                  the pair is always settled together by the time it's read —
+                  a half-arrived card reads as broken, not cinematic */}
               <Animation
                 target={`[data-keeper="${i}"]`}
-                start={i * 20}
-                end={i * 20 + 40}
+                start={4 + i * 4}
+                end={16 + i * 4}
                 fromTo={[{ y: 36, opacity: 0 }, { y: 0, opacity: 1 }]}
               >
                 <div data-keeper={i}>

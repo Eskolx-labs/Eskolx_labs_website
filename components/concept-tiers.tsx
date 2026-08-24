@@ -1,5 +1,8 @@
 'use client'
 
+import { useEffect } from 'react'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { Root, Pin, Animation, Waypoint } from '@/lib/scrollytelling'
 import { LOAM } from '@/lib/field-controller'
 import { Reveal } from '@/components/reveal'
@@ -8,54 +11,26 @@ const TIERS = [
   {
     id: 1,
     name: 'Foundational Statistics & Probability (from scratch)',
-    concepts: ['Descriptive statistics', 'Elementary probability distributions', 'Hypothesis testing'],
-    goal: 'The first three months. Rebuild the statistical basics from first principles — means, moments, distributions, tests — with zero black-box dependencies.',
-    code: [
-      'from eskolx.stats import describe',
-      '',
-      'summary = describe(data)',
-      'summary.moments(order=4)',
-      'summary.fit("normal", "lognormal")',
-    ],
+    concepts: ['Descriptive statistics', 'Elementary probability distributions', 'Hypothesis testing', 'Optimization of every routine'],
+    goal: 'The first season. Descriptive statistics, elementary probability distributions, and hypothesis testing, written as pure Python with no black boxes. At the end of the three months, participants turn their own packages loose on novel research.',
   },
   {
     id: 2,
     name: 'Modeling & Classical Machine Learning (from scratch)',
-    concepts: ['Automated hypothesis testing', 'Classical ML models', 'Feature diagnostics'],
-    goal: 'Automate the inference workflow and move into modeling. Assumption checks, test selection, and correction wired end to end.',
-    code: [
-      'from eskolx.model import AutoOLS',
-      '',
-      'm = AutoOLS(X, y)',
-      'm.check_vif().check_residuals()',
-      'm.fit().diagnostics()',
-    ],
+    concepts: ['Modeling on our own primitives', 'Automated hypothesis testing', 'Feature diagnostics', 'Reference comparison against the famous implementations'],
+    goal: 'After the basics, modeling and classical machine learning built on what we grew ourselves. Assumption checks and test selection wired end to end, every method backed by the paper it came from.',
   },
   {
     id: 3,
     name: 'Advanced Applied Machine Learning (from scratch)',
-    concepts: ['Time series stationarity', 'Design of Experiments', 'Econometrics'],
-    goal: 'Package advanced methodology into reproducible pipelines, from ADF tests to factorial DOE layouts.',
-    code: [
-      'from eskolx.ts import stationarity',
-      '',
-      'report = stationarity(series)',
-      'report.adf().kpss()',
-      'report.suggest_diff()',
-    ],
+    concepts: ['Neural networks', 'Modern architectures', 'Time series & stationarity', 'Design of Experiments'],
+    goal: 'Advanced data science next, still from scratch. Dense methodology enters as reading and leaves as tested, documented code that participants can explain line by line.',
   },
   {
     id: 4,
     name: 'Toward Automated Data Science (from scratch)',
-    concepts: ['Neural networks & modern architectures', 'Spatial statistics', 'Analysis automation'],
-    goal: 'The long game. Libraries and knowledge bases good enough that data science starts automating itself — built by people who rebuilt the basics first.',
-    code: [
-      'from eskolx.deploy import Pipeline',
-      '',
-      'pipe = Pipeline("spatial-risk")',
-      'pipe.add(morans_i).add(model)',
-      'pipe.serve(port=8080)',
-    ],
+    concepts: ['Analysis pipelines', 'Spatial statistics', 'Knowledge-base-driven methods'],
+    goal: 'The long game. Libraries and an open knowledge base good enough that data science starts automating itself, built by people who rebuilt the basics first.',
   },
 ]
 
@@ -84,6 +59,45 @@ function jumpToTier(index: number) {
 }
 
 export function ConceptTiers() {
+  // the stack travels exactly its own scrollable height, measured — so the
+  // fourth tier lands framed no matter how tall the plates run.
+  useEffect(() => {
+    const mm = gsap.matchMedia()
+    mm.add('(prefers-reduced-motion: no-preference) and (min-width: 768px)', () => {
+      gsap.registerPlugin(ScrollTrigger)
+      const stack = document.querySelector<HTMLElement>('#tiers [data-tier-stack]')
+      const frame = stack?.parentElement as HTMLElement | null
+      const first = stack?.children[0] as HTMLElement | undefined
+      if (!stack || !frame || !first) return
+      // the window fits one plate exactly, so a third of the travel lands
+      // each subsequent tier dead-center — at any viewport size
+      const fit = () => {
+        frame.style.height = `${Math.min(first.offsetHeight + 2, Math.round(window.innerHeight * 0.66))}px`
+      }
+      fit()
+      ScrollTrigger.addEventListener('refreshInit', fit)
+      const ctx = gsap.context(() => {
+        gsap.fromTo(stack, { y: 0 }, {
+          y: () => -Math.max(stack.scrollHeight - frame.clientHeight, 0),
+          ease: 'none',
+          scrollTrigger: {
+            trigger: '#tiers [data-pin]',
+            start: 'top top',
+            end: () => `+=${Math.max((document.querySelector('#tiers [data-pin]') as HTMLElement).offsetHeight - window.innerHeight, 1)}`,
+            scrub: true,
+            invalidateOnRefresh: true,
+          },
+        })
+      })
+      ScrollTrigger.refresh()
+      return () => {
+        ScrollTrigger.removeEventListener('refreshInit', fit)
+        ctx.revert()
+      }
+    })
+    return () => mm.revert()
+  }, [])
+
   return (
     <Root
       id="tiers"
@@ -181,32 +195,6 @@ export function ConceptTiers() {
                         ))}
                       </ul>
 
-                      <div className="mt-7 overflow-hidden rounded-sm border border-loam-800 bg-loam-950">
-                        <div className="hatch flex items-center justify-between border-b border-loam-800 px-4 py-2.5">
-                          <a
-                            href="https://github.com/eskolx-labs"
-                            target="_blank"
-                            rel="noreferrer"
-                            className="font-mono text-[11px] tracking-wide text-cream-200/90 underline-offset-4 transition-colors hover:text-gold-leaf hover:underline"
-                          >
-                            planned API · see the work
-                          </a>
-                          <span className="flex gap-1.5" aria-hidden="true">
-                            <span className="h-2 w-2 rounded-full bg-wine-500" />
-                            <span className="h-2 w-2 rounded-full bg-gold-leaf/70" />
-                          </span>
-                        </div>
-                        <pre className="overflow-x-auto p-4 font-mono text-[13px] leading-6 text-cream-100/90">
-                          {tier.code.map((line, i) => (
-                            <div key={i} className="tabular flex gap-4">
-                              <span className="w-4 select-none text-right text-cream-400/40">
-                                {line ? i + 1 : ''}
-                              </span>
-                              <code>{line || '\u00A0'}</code>
-                            </div>
-                          ))}
-                        </pre>
-                      </div>
                     </div>
                   ))}
                 </div>
@@ -216,13 +204,6 @@ export function ConceptTiers() {
         </section>
       </Pin>
 
-      {/* the stack scrubs through its window as the pin plays */}
-      <Animation
-        target="[data-tier-stack]"
-        start={0}
-        end={100}
-        to={{ yPercent: -75 }}
-      />
 
       {/* each tier lights its stake as it arrives */}
       {TIERS.map((tier, i) => (

@@ -143,6 +143,10 @@ export function Root({
         scrub,
       },
     })
+    // the beat contract is a 0-100 band: pin the timeline's duration there
+    // even when children end early, or a section whose last tween stops at
+    // 20 compresses every window fivefold (keepers arrived half-faded)
+    tl.set({}, {}, 100)
     setTimeline(tl)
     return () => {
       tl.revert()

@@ -11,29 +11,19 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
  * rises and settles across the same scroll window the field controller is
  * turning underneath, then releases once the real page has caught up.
  *
- * Two pressings only (one authored moment per turn): the flood presses
- * night into the day spread; the tiers' tail presses the dawn back. Below
- * md, under reduced motion, or without the filter the page keeps today's
- * smooth lerp — this layer is pure enhancement and sits silent otherwise.
+ * One pressing, one authored moment: the dawn seam presses daylight back
+ * over the night field as the method chapter opens. Anchored to the seam's
+ * own crossing (it has no pin), so it can never drift into the chapters
+ * around it. Below md, under reduced motion, or without the filter the
+ * page keeps today's smooth lerp — this layer is pure enhancement.
  */
 
 const TURNS = [
   {
-    id: 'press-flood',
-    section: '#seal-flood',
-    color: '#241407',
-    from: 0,
-    to: 1,
-    bf: '0.013 0.09',
-    peak: 92,
-    rest: 28,
-    seed: 7,
-  },
-  {
     id: 'press-dawn',
-    section: '#tiers',
+    section: '#dawn-seam',
     color: '#ece1c6',
-    from: 0.62,
+    from: 0,
     to: 1,
     bf: '0.015 0.105',
     peak: 74,
@@ -60,7 +50,7 @@ export function InkPress() {
           if (cancelled) return
           const ready = TURNS.every(
             (t) =>
-              document.querySelector(`${t.section} [data-pin]`) &&
+              document.querySelector(t.section) &&
               document.querySelector(`[data-ink="${t.id}"]`) &&
               document.querySelector(`#${t.id}-disp`),
           )
@@ -71,7 +61,10 @@ export function InkPress() {
           }
           ctx = gsap.context(() => {
             for (const t of TURNS) {
-              const pin = document.querySelector(`${t.section} [data-pin]`)
+              // the dawn seam is a flow section: the press rides its own
+              // crossing into the viewport, not a pin room
+              const section = document.querySelector(t.section)
+              const pin = section?.querySelector('[data-pin]') ?? section
               const root = document.querySelector(`[data-ink="${t.id}"]`) as HTMLElement
               const plate = root.querySelector<HTMLElement>('[data-ink-plate]')
               const disp = document.querySelector(`#${t.id}-disp`)
@@ -79,13 +72,11 @@ export function InkPress() {
               // the filtered layer sits hidden whenever its pressing isn't
               // mid-bite, so an idle plate never costs a paint
               root.style.visibility = 'hidden'
-              const dist = () =>
-                Math.max((pin as HTMLElement).offsetHeight - window.innerHeight, 1)
               const tl = gsap.timeline({
                 scrollTrigger: {
                   trigger: pin,
-                  start: () => `top+=${dist() * t.from} top`,
-                  end: () => `top+=${dist() * t.to} top`,
+                  start: 'top 78%',
+                  end: 'bottom 30%',
                   scrub: true,
                   invalidateOnRefresh: true,
                   onUpdate: (self) => {

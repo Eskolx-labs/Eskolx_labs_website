@@ -61,17 +61,17 @@ const IDENTITIES = [
   {
     icon: IconEshcol,
     title: 'The Hebrew Root (Eshcol)',
-    body: 'Eshcol means a rich cluster of grapes. Abundance bound to a single stem. Eskolx Labs binds statistical concepts into one integrated ecosystem where every module draws from a shared, well-tended root.',
+    body: 'Eshcol is Hebrew for a rich cluster of grapes: many fruit, one stem. Our libraries grow the same way. Every function hangs on the same root, the books and papers behind it, and ripens alongside everything else in the cluster.',
   },
   {
     icon: IconTrellisX,
     title: "The 'X' Factor",
-    body: 'The name carries three promises. Execution & Automation turns theory into running code. eXploration probes datasets and methods without bloat. Scale builds tools that grow from a single script to enterprise pipelines.',
+    body: 'The name carries three promises. Execution: theory becomes running code. eXploration: datasets and methods probed without bloat. Scale: tools that start as a single script and grow into full research pipelines.',
   },
   {
     icon: IconSoil,
     title: 'Dark Earth Foundation',
-    body: 'Eskolx grows in dark earth: the deep brown ground of mathematical rigor that reproducible research comes from. Every published function starts down here, as formulas turned into tested code, long before anything shows above the surface.',
+    body: 'Dark earth is where the work happens before anything shows above ground. A function starts as a question and a paper, becomes naive code, gets tested against the famous implementations, and improves until it earns its place in the library.',
   },
 ]
 
