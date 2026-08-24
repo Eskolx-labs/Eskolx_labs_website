@@ -1,7 +1,0 @@
-{
-  "files": ["app/layout.tsx"],
-  "exclude": [],
-  "insertBefore": "</body>",
-  "commentSyntax": "jsx",
-  "cspChecked": true
-}

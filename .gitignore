@@ -5,3 +5,8 @@ out/
 *.log
 .DS_Store
 .vercel
+
+# internal design QA artifacts + build metadata
+.impeccable/
+tsconfig.tsbuildinfo
+*.tsbuildinfo
