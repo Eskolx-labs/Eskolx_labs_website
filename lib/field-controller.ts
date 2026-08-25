@@ -141,9 +141,8 @@ function paint() {
     // static contract: each chapter sits at the field its first half opens
     // on — so the hero cover reads parchment and the night chapters read
     // loam, snapping only at each chapter's midpoint. At the very end of
-    // the document the book closes onto night: the almanac ends where it
-    // began, the lab still working by lamplight.
-    const pair = closed ? LOAM : (() => {
+    // the document the book simply closes onto parchment.
+    const pair = closed ? PARCHMENT : (() => {
       const [start, end] = turnWindow(zone, vh)
       const p = Math.min(Math.max((window.scrollY - start) / Math.max(end - start, 1), 0), 1)
       return p < 0.5 ? zone.from : zone.to
