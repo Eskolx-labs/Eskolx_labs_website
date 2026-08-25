@@ -49,14 +49,14 @@ export function SealFlood() {
     >
       <Pin height="260vh">
         <section className="relative flex h-full items-center justify-center overflow-hidden">
-          <Animation target="[data-flood-label]" start={4} end={22} fromTo={[{ y: 18, opacity: 0 }, { y: 0, opacity: 1 }]}>
-            <p
-              data-flood-label
-              className="absolute top-[18%] font-mono text-[11px] uppercase tracking-[0.35em] field-ink-soft"
-            >
-              The seal of the lab · est. in open source
-            </p>
-          </Animation>
+          {/* the label is on stage at progress 0 — the room opens with its
+              caption already set, and lifts away as the stamp presses home */}
+          <p
+            data-flood-label
+            className="absolute top-[18%] font-mono text-[11px] uppercase tracking-[0.35em] field-ink-soft"
+          >
+            The seal of the lab · est. in open source
+          </p>
 
           <Animation
             target="[data-flood-seal]"

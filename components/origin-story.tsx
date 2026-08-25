@@ -177,8 +177,11 @@ export function OriginStory() {
               const s = i * 32
               return (
                 <div key={card.title} className="py-10 md:py-0 motion-safe:[@media(min-width:768px)_and_(min-height:700px)]:[grid-area:1/1] [@media(min-width:768px)_and_(min-height:700px)]:h-full">
-                  {/* plate entrance */}
-                  <Animation target={`[data-id-plate="${i}"]`} start={s} end={s + 4} fromTo={[{ y: 44, opacity: 0 }, { y: 0, opacity: 1, ease: 'power2.out' }]}>
+                  {/* plate entrance — the first plate is already on stage at
+                      progress 0, so the room never opens on a blank spread */}
+                  {i > 0 && (
+                    <Animation target={`[data-id-plate="${i}"]`} start={s} end={s + 4} fromTo={[{ y: 44, opacity: 0 }, { y: 0, opacity: 1, ease: 'power2.out' }]} />
+                  )}
                     <article data-id-plate={i} className="plate-frame hatch relative mx-auto max-w-3xl border border-parchment-ink/20 bg-parchment p-8 text-parchment-ink shadow-[0_24px_60px_-30px_rgb(0_0_0/0.45)] sm:p-10 lg:p-12">
                       {/* index numeral */}
                       <Animation target={`[data-id-num="${i}"]`} start={s + 2} end={s + 5} fromTo={[{ opacity: 0 }, { opacity: 1 }]}>
@@ -219,9 +222,8 @@ export function OriginStory() {
                         <span data-id-stamp={i} aria-hidden="true" className="absolute bottom-8 right-8 block h-2 w-2 rounded-full bg-wine-600/80" />
                       </Animation>
                     </article>
-                  </Animation>
 
-                  {/* the plate lifts away for the next one */}
+                    {/* the plate lifts away for the next one */}
                   {i < IDENTITIES.length - 1 && (
                     <Animation target={`[data-id-plate="${i}"]`} start={s + 28} end={s + 32} fromTo={[{ y: 0, opacity: 1 }, { y: -36, opacity: 0, ease: 'power1.in', immediateRender: false }]} />
                   )}

@@ -134,38 +134,45 @@ export function Roadmap() {
                       data-rm-beat={i}
                       className="flex flex-col justify-center py-12 md:pl-16 lg:pr-24 motion-safe:[@media(min-width:768px)_and_(min-height:700px)]:[grid-area:1/1] [@media(min-width:768px)_and_(min-height:700px)]:h-full [@media(min-width:768px)_and_(min-height:700px)]:py-0"
                     >
-                      <Animation target={`[data-rm-rule="${i}"]`} start={s} end={s + 8} fromTo={[{ scaleX: 0 }, { scaleX: 1, ease: 'power2.out' }]}>
+                      {/* phase 1 is on stage at progress 0 — the room never
+                          opens on a blank spread */}
+                      {i > 0 ? (
+                        <Animation target={`[data-rm-rule="${i}"]`} start={s} end={s + 8} fromTo={[{ scaleX: 0 }, { scaleX: 1, ease: 'power2.out' }]}>
+                          <span data-rm-rule={i} className="mb-6 block h-px w-16 origin-left bg-gold-leaf/80" />
+                        </Animation>
+                      ) : (
                         <span data-rm-rule={i} className="mb-6 block h-px w-16 origin-left bg-gold-leaf/80" />
-                      </Animation>
-                      <Animation
-                        target={`[data-rm-unit="${i}"]`}
-                        start={s + 2}
-                        end={s + 18}
-                        fromTo={[{ y: 48, opacity: 0 }, { y: 0, opacity: 1, ease: 'power2.out' }]}
-                      >
-                        <div data-rm-unit={i}>
-                          <span className="tabular inline-flex items-center gap-2 rounded-full border border-wine-500/50 bg-wine-600/10 px-3.5 py-1 font-mono text-xs tracking-wide text-wine-600">
-                            <span className="h-1.5 w-1.5 rounded-full bg-wine-500" />
-                            {p.phase}
-                          </span>
-                          <h3 className="display mt-6 max-w-3xl text-3xl leading-[1.08] text-parchment-ink md:text-4xl">
-                            {p.title}
-                          </h3>
-                          <p className="mt-5 max-w-[58ch] text-base leading-relaxed text-parchment-ink/75 md:text-lg">
-                            {p.body}
-                          </p>
-                          <ul className="mt-7 flex flex-wrap gap-2">
-                            {p.tags.map((t) => (
-                              <li
-                                key={t}
-                                className="rounded-sm border border-parchment-ink/25 px-2.5 py-1 font-mono text-[11px] text-parchment-ink/80"
-                              >
-                                {t}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      </Animation>
+                      )}
+                      {i > 0 && (
+                        <Animation
+                          target={`[data-rm-unit="${i}"]`}
+                          start={s + 2}
+                          end={s + 18}
+                          fromTo={[{ y: 48, opacity: 0 }, { y: 0, opacity: 1, ease: 'power2.out' }]}
+                        />
+                      )}
+                      <div data-rm-unit={i}>
+                        <span className="tabular inline-flex items-center gap-2 rounded-full border border-wine-500/50 bg-wine-600/10 px-3.5 py-1 font-mono text-xs tracking-wide text-wine-600">
+                          <span className="h-1.5 w-1.5 rounded-full bg-wine-500" />
+                          {p.phase}
+                        </span>
+                        <h3 className="display mt-6 max-w-3xl text-3xl leading-[1.08] text-parchment-ink md:text-4xl">
+                          {p.title}
+                        </h3>
+                        <p className="mt-5 max-w-[58ch] text-base leading-relaxed text-parchment-ink/75 md:text-lg">
+                          {p.body}
+                        </p>
+                        <ul className="mt-7 flex flex-wrap gap-2">
+                          {p.tags.map((t) => (
+                            <li
+                              key={t}
+                              className="rounded-sm border border-parchment-ink/25 px-2.5 py-1 font-mono text-[11px] text-parchment-ink/80"
+                            >
+                              {t}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                       {i < 2 && (
                         <Animation
                           target={`[data-rm-unit="${i}"]`}

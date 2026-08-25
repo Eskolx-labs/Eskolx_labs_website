@@ -261,7 +261,7 @@ export function SiteNav() {
             className="btn-plate btn-wine hidden !px-5 !py-2.5 text-[15px] sm:inline-flex"
           >
             <GithubIcon className="h-4 w-4" />
-            Explore GitHub
+            Eskolx on GitHub
           </a>
         </div>
 
@@ -307,7 +307,7 @@ export function SiteNav() {
                 className="btn-plate btn-wine"
               >
                 <GithubIcon className="h-4 w-4" />
-                Explore GitHub
+                Eskolx on GitHub
               </a>
               <a
                 href="https://t.me/eskolx_labs"
