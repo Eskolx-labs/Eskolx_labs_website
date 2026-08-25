@@ -35,7 +35,7 @@ export function MarqueeBand() {
       end="bottom top"
       scrub={true}
       field={{ from: LOAM, to: LOAM }}
-      className="overflow-hidden py-14 sm:py-20"
+      className="relative overflow-hidden py-14 sm:py-20"
     >
       <Animation
         target="[data-marquee-track]"

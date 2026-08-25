@@ -160,7 +160,7 @@ export function FieldGuide() {
       >
         <div className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
           <Animation target="[data-fg-head]" start={2} end={62} to={{ y: -26 }} />
-          <Animation target="[data-fg-seal]" start={3} end={9} fromTo={[{ scale: 1.8, rotate: -16, opacity: 0 }, { scale: 1, rotate: -6, opacity: 1, ease: 'power4.in' }]} />
+          <Animation target="[data-fg-seal]" start={3} end={9} fromTo={[{ scale: 1.35, rotate: -12, opacity: 0, transformOrigin: '50% 50%' }, { scale: 1, rotate: -6, opacity: 1, ease: 'power4.in' }]} />
           <Reveal className="flex flex-wrap items-end justify-between gap-6">
             <div className="max-w-2xl" data-fg-head>
               <p className="font-mono text-xs uppercase tracking-[0.22em] text-wine-600" data-reveal-item>
@@ -174,7 +174,12 @@ export function FieldGuide() {
                 just the answers.
               </p>
             </div>
-            <SealMark label="Eskolx Labs seal" data-fg-seal className="h-14 w-14 shrink-0 -rotate-6 sm:h-16 sm:w-16" />
+            {/* the wrapper reserves the layout box so the seal's entrance
+                swell (scale 1.8) grows symmetrically instead of pushing the
+                document edge out by 15px on tablet widths */}
+            <span className="grid h-14 w-14 shrink-0 place-items-center sm:h-16 sm:w-16">
+              <SealMark label="Eskolx Labs seal" data-fg-seal className="h-14 w-14 -rotate-6 sm:h-16 sm:w-16" />
+            </span>
           </Reveal>
 
           <Animation target='[data-fg-wipe="0"]' start={12} end={24} fromTo={[{ clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', ease: 'power2.inOut' }]} />
