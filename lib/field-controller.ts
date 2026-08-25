@@ -51,7 +51,21 @@ let initialized = false
 let reduced = false
 let dirty = true
 let lastStamp = ''
+let lastValues = ''
 let raf = 0
+let lastWriteAt = 0
+// the per-frame sort is pure overhead between registrations: cached and
+// invalidated only when zones or their measured geometry change
+let sortedCache: Zone[] | null = null
+
+function sortedZones(): Zone[] {
+  if (!sortedCache) {
+    sortedCache = Array.from(zones.values()).sort(
+      (a, b) => a.top - b.top || b.height - a.height,
+    )
+  }
+  return sortedCache
+}
 
 function rgb(hex: string): [number, number, number] {
   const n = parseInt(hex.slice(1), 16)
@@ -76,6 +90,7 @@ function measure() {
     z.height = z.el.offsetHeight || window.innerHeight
   }
   dirty = false
+  sortedCache = null
 }
 
 // pinned rooms turn across their exact pin duration; ordinary sections turn
@@ -98,6 +113,17 @@ function activeZone(sorted: Zone[], center: number): Zone {
   return zone
 }
 
+// one writer for the four body vars: identical frames write nothing, so a
+// settled page costs zero style recalc
+function writeValues(values: string[]) {
+  const joined = values.join('|')
+  if (joined === lastValues) return
+  lastValues = joined
+  for (let i = 0; i < KEYS.length; i++) {
+    document.body.style.setProperty(VAR_NAMES[KEYS[i]], values[i])
+  }
+}
+
 function paint() {
   raf = 0
   if (!zones.size) return
@@ -109,10 +135,7 @@ function paint() {
   // formally pass into the footer's zone.
   const docH = document.documentElement.scrollHeight
   const closed = window.scrollY + vh >= docH - 2
-  const sorted = Array.from(zones.values()).sort(
-    (a, b) => a.top - b.top || b.height - a.height,
-  )
-  const zone = activeZone(sorted, window.scrollY + vh * 0.5)
+  const zone = activeZone(sortedZones(), window.scrollY + vh * 0.5)
 
   if (reduced || closed) {
     // static contract: each chapter sits at the field its first half opens
@@ -124,20 +147,31 @@ function paint() {
       const p = Math.min(Math.max((window.scrollY - start) / Math.max(end - start, 1), 0), 1)
       return p < 0.5 ? zone.from : zone.to
     })()
-    for (const k of KEYS) document.body.style.setProperty(VAR_NAMES[k], pair[k])
+    writeValues(KEYS.map((k) => pair[k]))
     lastStamp = ''
     return
   }
 
   const [start, end] = turnWindow(zone, vh)
   const p = Math.min(Math.max((window.scrollY - start) / Math.max(end - start, 1), 0), 1)
-  const stamp = `${zone.id}:${p.toFixed(4)}`
+  // 8-bit channels resolve ~2 rgb steps per 1/128 of a turn anyway; snapping
+  // here keeps sub-perceptual scroll jitter from repainting the document
+  const q = Math.round(p * 128) / 128
+  const stamp = `${zone.id}:${q}`
   if (stamp === lastStamp) return
-  lastStamp = stamp
-  const values = lerpPair(zone.from, zone.to, p)
-  for (let i = 0; i < KEYS.length; i++) {
-    document.body.style.setProperty(VAR_NAMES[KEYS[i]], values[i])
+  // a var write on body re-resolves style for the whole document: cadence is
+  // capped at ~12Hz — color ramps that slow are indistinguishable from
+  // per-frame, and the frame budget stays with the scrubbed chapters. The
+  // self-reschedule guarantees the final step still lands after the wheel
+  // stops, so a turn can never end on a stale color.
+  const now = performance.now()
+  if (now - lastWriteAt < 80) {
+    if (!raf) raf = requestAnimationFrame(paint)
+    return
   }
+  lastWriteAt = now
+  lastStamp = stamp
+  writeValues(lerpPair(zone.from, zone.to, q))
 }
 
 function schedule() {
@@ -171,12 +205,14 @@ export function registerZone(zone: Omit<Zone, 'top' | 'height'>) {
   ensureListeners()
   zones.set(zone.id, { ...zone, top: 0, height: 0 } as Zone)
   dirty = true
+  sortedCache = null
   schedule()
 }
 
 export function removeZone(id: string) {
   zones.delete(id)
   dirty = true
+  sortedCache = null
   lastStamp = ''
   schedule()
 }

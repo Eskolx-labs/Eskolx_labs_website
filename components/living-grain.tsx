@@ -54,10 +54,15 @@ export function LivingGrain() {
     let h = 0
     let raf = 0
     let running = true
+    let lastDraw = 0
     let inkCache = ''
     let inkAt = 0
+    // one style string per fiber, rebuilt only when the field's ink turns —
+    // not 110 template allocations every frame
+    const styles = new Array<string>(COUNT)
     const fibers: Fiber[] = []
-    const dpr = Math.min(window.devicePixelRatio || 1, 2)
+    // grain fibers are soft weather; retina precision buys nothing here
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.5)
 
     const resize = () => {
       w = window.innerWidth
@@ -97,17 +102,29 @@ export function LivingGrain() {
       inkCache = v
       const m = v.match(/(\d+),\s*(\d+),\s*(\d+)/)
       if (m) inkRGB = [+m[1], +m[2], +m[3]]
+      for (let i = 0; i < COUNT; i++) {
+        styles[i] = `rgba(${inkRGB[0]}, ${inkRGB[1]}, ${inkRGB[2]}, ${fibers[i].alpha})`
+      }
     }
+    sampleInk(0)
 
     const tick = () => {
       if (!running) return
+      raf = requestAnimationFrame(tick)
       const t = performance.now()
       sampleInk(t)
       const lenis = (window as unknown as { __lenis?: { velocity: number } }).__lenis
       const vel = lenis ? lenis.velocity : 0
+      // the fibers drift slowly enough that a capped frame rate reads
+      // identically: ~30fps under the scroll's wind, a lazy 20 at rest,
+      // leaving the display's full frame budget to the scrubbed chapters
+      const interval = Math.abs(vel) > 0.05 ? 33 : 50
+      if (t - lastDraw < interval) return
+      lastDraw = t
       const boost = Math.max(-14, Math.min(14, vel * 0.55))
       ctx2d.clearRect(0, 0, w, h)
-      for (const f of fibers) {
+      for (let i = 0; i < COUNT; i++) {
+        const f = fibers[i]
         f.phase += 0.008
         f.x += f.vx + Math.sin(f.phase) * 0.18 + boost * 0.045
         f.y += f.vy + boost * 0.22
@@ -116,10 +133,9 @@ export function LivingGrain() {
         if (f.x < -4) f.x = w + 4
         if (f.x > w + 4) f.x = -4
         const stretch = 1 + Math.min(Math.abs(boost) * 0.16, 2.6)
-        ctx2d.fillStyle = `rgba(${inkRGB[0]}, ${inkRGB[1]}, ${inkRGB[2]}, ${f.alpha})`
+        ctx2d.fillStyle = styles[i]
         ctx2d.fillRect(f.x, f.y, f.s * stretch, f.s)
       }
-      raf = requestAnimationFrame(tick)
     }
     raf = requestAnimationFrame(tick)
 

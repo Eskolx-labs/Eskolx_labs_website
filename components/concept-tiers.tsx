@@ -67,21 +67,26 @@ export function ConceptTiers() {
   // rebuilding every Waypoint tween exactly when the stakes should light.
   useEffect(() => {
     let raf = 0
+    // nodes are cached: the per-frame work is arithmetic and attribute
+    // writes only, never a query
+    const el = document.getElementById('tiers')
+    const pin = el?.querySelector<HTMLElement>('[data-pin]') ?? null
+    const stakes = el ? Array.from(el.querySelectorAll<HTMLButtonElement>('[data-stake]')) : []
+    let lastCurrent = -1
     const onScroll = () => {
       if (raf) return
       raf = requestAnimationFrame(() => {
         raf = 0
-        const el = document.getElementById('tiers')
         if (!el) return
-        const pin = el.querySelector<HTMLElement>('[data-pin]')
         const room = pin ? pin.offsetHeight - window.innerHeight : 1
         const progress = Math.min(Math.max(-el.getBoundingClientRect().top / Math.max(room, 1), 0), 1)
         const current = Math.min(TIERS.length, Math.floor(progress * TIERS.length) + 1)
-        el.querySelectorAll<HTMLButtonElement>('[data-stake]').forEach((btn) => {
-          const id = Number(btn.getAttribute('data-stake'))
-          if (id === current) btn.setAttribute('aria-current', 'true')
+        if (current === lastCurrent) return
+        lastCurrent = current
+        for (const btn of stakes) {
+          if (Number(btn.getAttribute('data-stake')) === current) btn.setAttribute('aria-current', 'true')
           else btn.removeAttribute('aria-current')
-        })
+        }
       })
     }
     onScroll()

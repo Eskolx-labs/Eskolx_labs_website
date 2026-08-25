@@ -119,7 +119,9 @@ export function InkPress() {
               height="130%"
               colorInterpolationFilters="sRGB"
             >
-              <feTurbulence type="fractalNoise" baseFrequency={t.bf} numOctaves="2" seed={t.seed} result="grain" />
+              {/* one octave: the displaced edge reads the same, the noise
+                  primitive costs half as much per rasterization */}
+              <feTurbulence type="fractalNoise" baseFrequency={t.bf} numOctaves="1" seed={t.seed} result="grain" />
               <feDisplacementMap id={`${t.id}-disp`} in="SourceGraphic" in2="grain" scale="0" xChannelSelector="R" yChannelSelector="G" />
             </filter>
           ))}
