@@ -104,7 +104,7 @@ export function Hero() {
       field={{ from: LOAM, to: PARCHMENT }}
     >
       <Pin height="300vh">
-        <section className="relative flex h-full flex-col items-center justify-center gap-12 overflow-hidden px-4 pt-24 pb-20 sm:px-6 md:py-0 lg:gap-16">
+        <section className="relative flex h-full flex-col items-center justify-center gap-12 overflow-hidden px-4 pt-24 pb-20 sm:px-6 [@media(min-width:768px)_and_(max-height:899px)]:gap-8 [@media(min-width:768px)_and_(max-height:899px)]:pb-10 [@media(min-width:768px)_and_(max-height:899px)]:pt-16 [@media(min-width:768px)_and_(min-height:900px)]:gap-16 [@media(min-width:768px)_and_(min-height:900px)]:py-0">
           <div ref={markRef} className="pointer-events-none z-10 flex items-center gap-[0.55em]">
             <div data-hero-mark className="flex items-center gap-[0.85em] text-[clamp(3.25rem,13vw,10rem)]">
               <span className="font-script field-ink leading-none">
@@ -121,7 +121,7 @@ export function Hero() {
           <div
             ref={copyRef}
             data-hero-copy
-            className="z-10 max-w-3xl px-4 text-center md:absolute md:bottom-[6%] md:left-0 md:right-0 md:mx-auto md:w-full"
+            className="z-10 max-w-3xl px-4 text-center md:mx-auto md:w-full [@media(min-width:768px)_and_(min-height:900px)]:absolute [@media(min-width:768px)_and_(min-height:900px)]:bottom-[6%] [@media(min-width:768px)_and_(min-height:900px)]:left-0 [@media(min-width:768px)_and_(min-height:900px)]:right-0"
           >
             <h1
               className="display text-[clamp(2.4rem,5.6vw,4.6rem)] leading-[1.06] field-ink"
@@ -199,7 +199,7 @@ export function Hero() {
             <a
               data-hero-cue
               href="#ecosystem"
-              className="absolute bottom-7 left-1/2 z-10 flex -translate-x-1/2 items-center gap-3 text-sm field-ink-soft transition-colors hover:field-ink max-md:static max-md:left-auto max-md:translate-x-0 max-md:mt-10"
+              className="relative z-10 mt-10 flex items-center justify-center gap-3 text-sm field-ink-soft transition-colors hover:field-ink md:mx-auto md:w-fit [@media(min-width:768px)_and_(min-height:900px)]:absolute [@media(min-width:768px)_and_(min-height:900px)]:bottom-7 [@media(min-width:768px)_and_(min-height:900px)]:left-1/2 [@media(min-width:768px)_and_(min-height:900px)]:mt-0 [@media(min-width:768px)_and_(min-height:900px)]:-translate-x-1/2"
             >
               <span>Scroll to open the almanac</span>
               <svg viewBox="0 0 16 20" className="h-4 w-4" aria-hidden="true">

@@ -96,7 +96,7 @@ export function ConceptTiers() {
   // fourth tier lands framed no matter how tall the plates run.
   useEffect(() => {
     const mm = gsap.matchMedia()
-    mm.add('(prefers-reduced-motion: no-preference) and (min-height: 500px)', () => {
+    mm.add('(prefers-reduced-motion: no-preference) and (min-height: 700px)', () => {
       gsap.registerPlugin(ScrollTrigger)
       const stack = document.querySelector<HTMLElement>('#tiers [data-tier-stack]')
       const frame = stack?.parentElement as HTMLElement | null

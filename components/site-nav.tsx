@@ -114,7 +114,9 @@ export function SiteNav() {
   // then crossfades in pixel-aligned. The seal turns slowly with the read.
   useEffect(() => {
     const mm = gsap.matchMedia()
-    mm.add('(prefers-reduced-motion: no-preference) and (min-width: 768px)', () => {
+    // the dock needs a tall pinned hero to dock within; short windows read
+    // the flow layout, where the logo simply stays visible in the rail
+    mm.add('(prefers-reduced-motion: no-preference) and (min-width: 768px) and (min-height: 700px)', () => {
       gsap.registerPlugin(ScrollTrigger)
       const ctx = gsap.context(() => {
         gsap.set(logoRef.current, { autoAlpha: 0 })

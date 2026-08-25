@@ -87,7 +87,7 @@ export function Root({
     // guard keeps landscape phones and short windows in flow everywhere.
     const reducedNow = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     const portraitMobileNow = window.matchMedia('(max-width: 767px)').matches
-    const shortViewportNow = window.matchMedia('(max-height: 499px)').matches
+    const shortViewportNow = window.matchMedia('(max-height: 699px)').matches
 
     // the field is owned by the field controller: this section's zone scrubs
     // the page colors continuously across the section's travel. It registers

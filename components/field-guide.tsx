@@ -131,7 +131,7 @@ export function FieldGuide() {
   // window, measured — the tiers-stack grammar, one room later in the book
   useEffect(() => {
     const mm = gsap.matchMedia()
-    mm.add('(prefers-reduced-motion: no-preference) and (min-height: 500px)', () => {
+    mm.add('(prefers-reduced-motion: no-preference) and (min-height: 700px)', () => {
       gsap.registerPlugin(ScrollTrigger)
       const stack = document.querySelector<HTMLElement>('#guide-bar [data-bar-stack]')
       const frame = stack?.parentElement as HTMLElement | null
