@@ -31,7 +31,9 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
     let lenis: Lenis | null = null
     if (!reduced) {
       lenis = new Lenis({
-        duration: 1.1,
+        // the long glide: wheel flicks settle over ~1.25s so the book turns
+        // like water rather than snapping between spreads
+        duration: 1.25,
         easing: (t) => 1 - Math.pow(2, -10 * t),
         smoothWheel: true,
         anchors: true,

@@ -161,16 +161,21 @@
 }
 
 @layer components {
-  /* print-tooth grain over the whole page, one fixed layer */
+  /* print-tooth grain over the whole page, one fixed layer. The turbulence
+     is converted to dark-ink speckles inside the SVG itself (feColorMatrix
+     maps noise luminance to alpha over a near-black ink), so the layer needs
+     no mix-blend-mode — a full-page blend recomposited on every produced
+     frame was measurably one of the heaviest things on the compositor while
+     scrolling. Visually it keeps the multiply character: tooth presses on
+     parchment and stays quiet on loam. */
   .grain::before {
     content: '';
     position: fixed;
     inset: 0;
     z-index: 60;
     pointer-events: none;
-    opacity: 0.05;
-    mix-blend-mode: multiply;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.14;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.078 0 0 0 0 0.055 0 0 0 0 0.027 0.47 0.47 0.47 0 -0.55'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
   /* field utilities: every surface tints from the current field */
