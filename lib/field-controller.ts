@@ -29,6 +29,20 @@ export const LOAM: FieldPair = {
 }
 
 const KEYS = ['bg', 'ink', 'soft', 'line'] as const
+
+// the ink snap: the background lerps the whole turn, but text colors hold
+// their from-field until the background passes the luminance crossover
+// (~55% of the turn), then re-ink to the to-field in one step. Reason: a
+// lerped ink crosses the background's midpoint luminance — dark ink on
+// lightening tan reads ~4:1, cream on mid-tan ~2:1, and a gradual ink
+// passes straight through the crossover, sitting near-invisible for half
+// of every turn. Held-then-snapped keeps both sides of the flip at 3.3:1
+// or better; the one-step re-ink reads as the spread being re-pressed.
+const INK_FLIP_AT = 0.55
+
+function inkProgress(t: number): number {
+  return t < INK_FLIP_AT ? 0 : 1
+}
 const VAR_NAMES: Record<(typeof KEYS)[number], string> = {
   bg: '--field-bg',
   ink: '--field-ink',
@@ -59,11 +73,13 @@ function rgb(hex: string): [number, number, number] {
 }
 
 function lerpPair(a: FieldPair, b: FieldPair, t: number): string[] {
+  const inkT = inkProgress(t)
   const out: string[] = []
   for (const k of KEYS) {
+    const p = k === 'bg' ? t : inkT
     const ca = rgb(a[k])
     const cb = rgb(b[k])
-    const c = ca.map((v, i) => Math.round(v + (cb[i] - v) * t))
+    const c = ca.map((v, i) => Math.round(v + (cb[i] - v) * p))
     out.push(`rgb(${c[0]}, ${c[1]}, ${c[2]})`)
   }
   return out

@@ -92,7 +92,7 @@ This is a statistical lab that writes its own libraries, presented as a grower's
 Every surface belongs to the field it sits on. Chrome is minimal: hairline rules, corner ticks, a fixed print-tooth grain, and a brush-script wordmark with the engraved seal-die — the logo lockup, recut in wine and field ink. The motion language is scrollytelling in the basement.studio register: sections pin, elements scrub against the scroll with eased settles, and every pinned room carries at least two resolving beats (the seal stamp, the page turn). Content sits on the spread; the animation is the turning of the spread.
 
 **Key Characteristics:**
-- Two animated fields (parchment day, loam night) carried on `body` via `--field-bg` / `--field-ink`, flipped by scrubbed ScrollTriggers between sections.
+- Two animated fields (parchment day, loam night) carried on `body` via `--field-bg` / `--field-ink`, flipped by scrubbed ScrollTriggers between sections. The turn's ink snaps, it does not lerp: the background eases the full turn, but text holds its from-field ink until the background passes the luminance crossover (~55% of the turn), then re-inks in one step. A lerped ink crosses the background's midpoint luminance and sits near-invisible (~1.1:1) for half of every turn; held-then-snapped keeps both sides of the flip at 3.3:1 or better and reads as the spread being re-pressed.
 - One brush-script wordmark with the engraved seal-die: the brand mark on every spread (nav, footer).
 - Vermilion belongs to the seal alone (see the Seal Rule); buttons are plum.
 - Hairline rules, corner ticks, hatched shading, print grain: the letterpress register.
