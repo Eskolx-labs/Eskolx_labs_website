@@ -141,7 +141,7 @@ export function FieldGuide() {
         // the window prefers one plate exactly, capped at 62vh so the plate
         // never clips against the sticky shell — on phones the cap does the
         // work, on desktop the plate height usually does
-        frame.style.height = `${Math.min(first.offsetHeight + 2, Math.round(window.innerHeight * (window.innerHeight < 700 ? 0.52 : 0.62)))}px`
+        frame.style.height = `${Math.min(first.offsetHeight + 2, Math.round(window.innerHeight * (window.innerHeight < 700 ? 0.48 : 0.62)))}px`
       }
       fit()
       ScrollTrigger.addEventListener('refreshInit', fit)
@@ -266,17 +266,21 @@ export function FieldGuide() {
         mobilePins
       >
         <Pin height="300vh" mobileHeight="220vh" pinMobile>
-          <section className="relative flex h-full flex-col justify-center overflow-hidden">
+          <section className="relative flex h-full flex-col justify-center overflow-hidden px-0 pt-20">
             <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-              <Reveal className="max-w-3xl" y={26}>
-                <h2 className="display text-[clamp(2rem,3.8vw,3.2rem)] leading-tight field-ink" data-reveal-item>
-                  What it takes to join
-                </h2>
-                <p className="mt-4 max-w-xl text-lg leading-relaxed field-ink-soft" data-reveal-item>
-                  The mission sets the bar. Here it is, plainly — four things,
-                  no hidden fifth.
-                </p>
-              </Reveal>
+          {/* room furniture: static, never a viewport Reveal — a Reveal
+              measured inside a sticky shell bakes in whatever position the
+              shell was stuck at during the last refresh, and the heading's
+              reveal window lands at the pin's end */}
+          <div className="max-w-3xl">
+            <h2 className="display text-[clamp(2rem,3.8vw,3.2rem)] leading-tight field-ink">
+              What it takes to join
+            </h2>
+            <p className="mt-4 max-w-xl text-lg leading-relaxed field-ink-soft">
+              The mission sets the bar. Here it is, plainly — four things,
+              no hidden fifth.
+            </p>
+          </div>
 
               <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_0.9fr] lg:items-center">
                 {/* the stack: one plate fills the window at a time */}
@@ -289,7 +293,7 @@ export function FieldGuide() {
                       <article
                         key={r.n}
                         data-bar-plate={r.n}
-                        className={`flex min-h-[280px] flex-col justify-center p-8 sm:p-10 ${FIELD_PLATE}`}
+                        className={`flex min-h-[280px] flex-col justify-center p-8 sm:p-10 ${FIELD_PLATE} [@media(min-width:768px)_and_(max-height:699px)]:min-h-0 [@media(min-width:768px)_and_(max-height:699px)]:p-6`}
                       >
                         <span
                           data-bar-num={r.n}

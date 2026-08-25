@@ -2,7 +2,6 @@
 
 import { Root, Animation, Waypoint, Pin } from '@/lib/scrollytelling'
 import { PARCHMENT, LOAM } from '@/lib/field-controller'
-import { Reveal } from '@/components/reveal'
 
 const PHASES = [
   {
@@ -66,15 +65,17 @@ export function Roadmap() {
       >
         <Pin height="320vh">
           <div className="mx-auto flex h-full max-w-7xl flex-col justify-center px-4 pb-10 pt-20 sm:px-6 lg:px-8">
-            <Reveal className="max-w-3xl">
-              <h2 className="display text-[clamp(2rem,3.8vw,3.2rem)] leading-tight text-parchment-ink" data-reveal-item>
+            {/* room furniture: static inside the pinned shell (a viewport
+                Reveal measured in a sticky room scrambles on resize) */}
+            <div className="max-w-3xl">
+              <h2 className="display text-[clamp(2rem,3.8vw,3.2rem)] leading-tight text-parchment-ink">
                 The growing method
               </h2>
-              <p className="mt-4 max-w-xl text-lg leading-relaxed text-parchment-ink/75" data-reveal-item>
+              <p className="mt-4 max-w-xl text-lg leading-relaxed text-parchment-ink/75">
                 Three months to statistical packages built from scratch, then
                 research with your own tools. The plan, unedited.
               </p>
-            </Reveal>
+            </div>
 
             {/* the open stage: three beats share one place, no frame */}
             <div className="relative mt-8 min-h-0 flex-1 md:mt-10">

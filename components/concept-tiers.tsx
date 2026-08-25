@@ -5,7 +5,6 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { Root, Pin, Animation, Waypoint } from '@/lib/scrollytelling'
 import { LOAM } from '@/lib/field-controller'
-import { Reveal } from '@/components/reveal'
 
 const TIERS = [
   {
@@ -166,8 +165,10 @@ export function ConceptTiers() {
       <Pin height="420vh" mobileHeight="240vh" pinMobile>
         <section className="relative flex h-full flex-col overflow-hidden">
           <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center px-4 pt-16 sm:px-6 lg:px-8">
-            <Reveal className="relative max-w-3xl" y={26}>
-              <h2 className="display text-[clamp(2rem,3.8vw,3.2rem)] leading-tight text-cream-100" data-reveal-item>
+            {/* room furniture: static inside the pinned shell (see the
+                guide-bar note — viewport Reveals scramble in sticky rooms) */}
+            <div className="relative max-w-3xl">
+              <h2 className="display text-[clamp(2rem,3.8vw,3.2rem)] leading-tight text-cream-100">
                 The four-tier trellis
               </h2>
               <p className="mt-4 max-w-xl text-lg leading-relaxed text-cream-200/80">
@@ -175,7 +176,7 @@ export function ConceptTiers() {
                 statistical primitives, then modeling, then advanced methods,
                 until the libraries can carry real research.
               </p>
-            </Reveal>
+            </div>
 
             <div className="mt-12 grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
               {/* rail of tier stakes; the active one lights as scroll advances,
