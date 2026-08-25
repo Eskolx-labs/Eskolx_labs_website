@@ -96,7 +96,7 @@ export function ConceptTiers() {
   // fourth tier lands framed no matter how tall the plates run.
   useEffect(() => {
     const mm = gsap.matchMedia()
-    mm.add('(prefers-reduced-motion: no-preference) and (min-height: 700px)', () => {
+    mm.add('(prefers-reduced-motion: no-preference) and (min-height: 500px)', () => {
       gsap.registerPlugin(ScrollTrigger)
       const stack = document.querySelector<HTMLElement>('#tiers [data-tier-stack]')
       const frame = stack?.parentElement as HTMLElement | null
@@ -108,7 +108,7 @@ export function ConceptTiers() {
         // the window prefers one plate exactly, but a plate taller than ~78vh
         // would clip against the sticky shell — the cap trades a little of the
         // stage for never cutting copy off
-        frame.style.height = `${Math.min(first.offsetHeight + 2, Math.round(window.innerHeight * 0.78))}px`
+        frame.style.height = `${Math.min(first.offsetHeight + 2, Math.round(window.innerHeight * (window.innerHeight < 700 ? 0.55 : 0.78)))}px`
       }
       fit()
       ScrollTrigger.addEventListener('refreshInit', fit)

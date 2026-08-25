@@ -173,11 +173,23 @@
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
-  /* landscape phones, quarter-sized windows, and any viewport under 700px
-     of height never pin: a 100vh sticky shell clips every room's content.
-     This collapses all pins to flow — the JS gates in scrollytelling.tsx
-     read the same media query so no scrubbed timeline is built there. */
+  /* Viewports under 500px of height (landscape phones, slivers) never pin:
+     a 100vh sticky shell clips every room. Non-tier pins also collapse on
+     500-699px heights (short desktop windows) — their content cannot fit a
+     100vh shell. Tier scenes carry data-pin-mobile and keep their shortened
+     rooms there; the JS gates in scrollytelling.tsx read the same queries. */
   @media (max-height: 699px) {
+    [data-pin]:not([data-pin-mobile]),
+    [data-pin]:not([data-pin-mobile]) > div {
+      height: auto !important;
+    }
+    [data-pin]:not([data-pin-mobile]) > div > div {
+      position: static !important;
+      height: auto !important;
+      overflow: visible !important;
+    }
+  }
+  @media (max-height: 499px) {
     [data-pin],
     [data-pin] > div {
       height: auto !important;

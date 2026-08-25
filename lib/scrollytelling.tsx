@@ -83,11 +83,14 @@ export function Root({
 
     // reduced-motion, phones, and short viewports are read synchronously so
     // a from-state never renders before the async matchMedia flip lands.
-    // mobilePins scenes opt back in on phones (portrait only) — the height
-    // guard keeps landscape phones and short windows in flow everywhere.
+    // mobilePins scenes opt back in on portrait phones AND on short desktop
+    // windows (their shortened rooms fit those shells); flow chapters keep
+    // their timelines everywhere (a viewport-crossing scrub needs no shell
+    // height), and pinned non-tier scenes stay flow under 700px of height.
     const reducedNow = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     const portraitMobileNow = window.matchMedia('(max-width: 767px)').matches
-    const shortViewportNow = window.matchMedia('(max-height: 699px)').matches
+    const tinyNow = window.matchMedia('(max-height: 499px)').matches
+    const shortDesktopNow = window.matchMedia('(min-width: 768px) and (max-height: 699px)').matches
 
     // the field is owned by the field controller: this section's zone scrubs
     // the page colors continuously across the section's travel. It registers
@@ -108,7 +111,14 @@ export function Root({
     // below lg the pins are ordinary stacked sections: no scrubbed timeline,
     // so nothing moves against the scroll and no scroll tax applies — except
     // scenes that explicitly opt into the mobile pin tier.
-    if (reducedNow || reduced || shortViewportNow || (portraitMobileNow && !mobilePins)) {
+    const pinnedNow = !!el.querySelector('[data-pin]')
+    if (
+      reducedNow ||
+      reduced ||
+      tinyNow ||
+      (portraitMobileNow && !mobilePins) ||
+      (shortDesktopNow && pinnedNow && !mobilePins)
+    ) {
       return () => {
         if (zoneId) removeZone(zoneId)
       }
@@ -280,11 +290,12 @@ export function Pin({ height, mobileHeight, pinMobile = false, children, classNa
   // the spacer collapses to auto and the sticky shell becomes a plain flow
   // wrapper: the Mobile Pin Rule (DESIGN.md) says content that cannot fit in
   // 100vh gets an ordinary section, not a pin. Scenes in the mobile pin tier
-  // keep a shorter room and the sticky shell on portrait phones; the
-  // globals.css short-viewport rule collapses every pin on landscape phones
-  // and short windows regardless.
+  // keep a shorter room and the sticky shell on portrait phones AND on short
+  // desktop windows (500-699px of height) — the tier scenes fit those shells;
+  // the globals.css guard collapses everything below 500px and every
+  // non-tier pin under 700px.
   const spacer = pinMobile
-    ? 'max-md:[height:var(--pin-height-mobile,auto)] [height:var(--pin-height)]'
+    ? 'max-md:[height:var(--pin-height-mobile,auto)] [@media(min-width:768px)_and_(max-height:699px)]:[height:var(--pin-height-mobile,auto)] [height:var(--pin-height)]'
     : '[height:var(--pin-height)] max-md:h-auto'
   const shell = pinMobile
     ? 'sticky top-0 h-screen overflow-hidden'
@@ -293,6 +304,7 @@ export function Pin({ height, mobileHeight, pinMobile = false, children, classNa
     <div
       className={className}
       data-pin
+      data-pin-mobile={pinMobile ? '' : undefined}
       style={
         {
           '--pin-height': height,

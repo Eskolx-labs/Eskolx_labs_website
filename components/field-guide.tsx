@@ -131,7 +131,7 @@ export function FieldGuide() {
   // window, measured — the tiers-stack grammar, one room later in the book
   useEffect(() => {
     const mm = gsap.matchMedia()
-    mm.add('(prefers-reduced-motion: no-preference) and (min-height: 700px)', () => {
+    mm.add('(prefers-reduced-motion: no-preference) and (min-height: 500px)', () => {
       gsap.registerPlugin(ScrollTrigger)
       const stack = document.querySelector<HTMLElement>('#guide-bar [data-bar-stack]')
       const frame = stack?.parentElement as HTMLElement | null
@@ -141,7 +141,7 @@ export function FieldGuide() {
         // the window prefers one plate exactly, capped at 62vh so the plate
         // never clips against the sticky shell — on phones the cap does the
         // work, on desktop the plate height usually does
-        frame.style.height = `${Math.min(first.offsetHeight + 2, Math.round(window.innerHeight * 0.62))}px`
+        frame.style.height = `${Math.min(first.offsetHeight + 2, Math.round(window.innerHeight * (window.innerHeight < 700 ? 0.52 : 0.62)))}px`
       }
       fit()
       ScrollTrigger.addEventListener('refreshInit', fit)

@@ -46,8 +46,9 @@ export function SealFlood() {
       end="bottom bottom"
       scrub={true}
       field={{ from: PARCHMENT, to: PARCHMENT }}
+      mobilePins
     >
-      <Pin height="260vh">
+      <Pin height="260vh" mobileHeight="180vh" pinMobile>
         <section className="relative flex h-full items-center justify-center overflow-hidden">
           {/* the label is on stage at progress 0 — the room opens with its
               caption already set, and lifts away as the stamp presses home */}
