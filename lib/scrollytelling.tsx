@@ -51,6 +51,7 @@ type RootProps = {
   field?: Field
   className?: string
   id?: string
+  mobilePins?: boolean
 }
 
 export function Root({
@@ -61,6 +62,7 @@ export function Root({
   field,
   className,
   id,
+  mobilePins = false,
 }: RootProps) {
   const ref = useRef<HTMLDivElement>(null)
   const [timeline, setTimeline] = useState<gsap.core.Timeline | null>(null)
@@ -79,10 +81,13 @@ export function Root({
     const el = ref.current
     if (!el) return
 
-    // reduced-motion and mobile are read synchronously so a from-state never
-    // renders before the async matchMedia flip lands.
+    // reduced-motion, phones, and short viewports are read synchronously so
+    // a from-state never renders before the async matchMedia flip lands.
+    // mobilePins scenes opt back in on phones (portrait only) — the height
+    // guard keeps landscape phones and short windows in flow everywhere.
     const reducedNow = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    const mobileNow = window.matchMedia('(max-width: 767px)').matches
+    const portraitMobileNow = window.matchMedia('(max-width: 767px)').matches
+    const shortViewportNow = window.matchMedia('(max-height: 499px)').matches
 
     // the field is owned by the field controller: this section's zone scrubs
     // the page colors continuously across the section's travel. It registers
@@ -101,8 +106,9 @@ export function Root({
     }
 
     // below lg the pins are ordinary stacked sections: no scrubbed timeline,
-    // so nothing moves against the scroll and no scroll tax applies.
-    if (reducedNow || reduced || mobileNow) {
+    // so nothing moves against the scroll and no scroll tax applies — except
+    // scenes that explicitly opt into the mobile pin tier.
+    if (reducedNow || reduced || shortViewportNow || (portraitMobileNow && !mobilePins)) {
       return () => {
         if (zoneId) removeZone(zoneId)
       }
@@ -260,26 +266,42 @@ export function Waypoint({ at, tween, children }: WaypointProps) {
 
 type PinProps = {
   height: string
+  /** shorter room for phones; only meaningful with pinMobile */
+  mobileHeight?: string
+  /** keep the pin alive on portrait phones (mobile pin tier) */
+  pinMobile?: boolean
   children: ReactNode
   className?: string
 }
 
-export function Pin({ height, children, className }: PinProps) {
-  // The pin room is driven by a CSS variable so the mobile collapse needs no
-  // client-side window check (no hydration mismatch). Below lg the spacer
-  // height collapses to auto and the sticky shell becomes a plain flow
+export function Pin({ height, mobileHeight, pinMobile = false, children, className }: PinProps) {
+  // The pin room is driven by CSS variables so the mobile collapse needs no
+  // client-side window check (no hydration mismatch). By default below md
+  // the spacer collapses to auto and the sticky shell becomes a plain flow
   // wrapper: the Mobile Pin Rule (DESIGN.md) says content that cannot fit in
-  // 100vh gets an ordinary section, not a pin.
+  // 100vh gets an ordinary section, not a pin. Scenes in the mobile pin tier
+  // keep a shorter room and the sticky shell on portrait phones; the
+  // globals.css short-viewport rule collapses every pin on landscape phones
+  // and short windows regardless.
+  const spacer = pinMobile
+    ? 'max-md:[height:var(--pin-height-mobile,auto)] [height:var(--pin-height)]'
+    : '[height:var(--pin-height)] max-md:h-auto'
+  const shell = pinMobile
+    ? 'sticky top-0 h-screen overflow-hidden'
+    : 'sticky top-0 h-screen overflow-hidden max-md:static max-md:h-auto max-md:overflow-visible'
   return (
     <div
       className={className}
       data-pin
-      style={{ '--pin-height': height } as React.CSSProperties}
+      style={
+        {
+          '--pin-height': height,
+          '--pin-height-mobile': mobileHeight ?? 'auto',
+        } as React.CSSProperties
+      }
     >
-      <div className="[height:var(--pin-height)] max-md:h-auto">
-        <div className="sticky top-0 h-screen overflow-hidden max-md:static max-md:h-auto max-md:overflow-visible">
-          {children}
-        </div>
+      <div className={spacer}>
+        <div className={shell}>{children}</div>
       </div>
     </div>
   )

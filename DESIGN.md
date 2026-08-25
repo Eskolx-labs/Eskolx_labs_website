@@ -158,7 +158,7 @@ One rhythm: tight groups, generous sections, more space above a heading than bel
 
 ### Named Rules
 **The Pin Pays for Its Room.** A pin only buys a scroll room it then uses. 300vh of hero must earn it with the masked headline and the field flip; 420vh of tiers must advance the plate.
-**The Mobile Pin Rule.** Pins hold `height:100vh` on mobile too; content that cannot fit in 100vh gets its own ordinary section, not a pin.
+**The Mobile Pin Rule.** By default pins collapse below `md`: the spacer drops to auto and the sticky shell becomes flow, and the Root builds no scrubbed timeline. Two scenes opt into the **mobile pin tier** (`pinMobile` + `mobilePins`): the four-tier trellis (240vh) and the guide's bar (220vh) pin on portrait phones with shorter rooms — their plate stacks fit a 100vh shell at any width. A height guard collapses *every* pin (CSS rule plus the same media query in the JS gates) under 500px of viewport height, so landscape phones and short windows always read flow. Mobile waypoints light exactly like desktop now that the two rooms build timelines there; the seal flood keeps its one-shot stage and releases the stamp fully so no cropped fruit bleeds into the keepers heading.
 
 ## Elevation & Depth
 

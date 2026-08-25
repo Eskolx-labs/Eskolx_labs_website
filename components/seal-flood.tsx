@@ -30,6 +30,9 @@ export function SealFlood() {
           .fromTo('[data-flood-label]', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.6 })
           .fromTo('[data-flood-seal]', { scale: 1, rotate: -6 }, { scale: 2.6, rotate: 2, duration: 1.4, ease: 'power2.inOut' }, 0.25)
           .to('#seal-flood .seal-die', { opacity: 0, duration: 0.45 }, 0.75)
+          // the stamp releases fully: an oversized fruit lingering at the
+          // section's edge read as broken against the keepers heading below
+          .to('[data-flood-seal]', { opacity: 0, scale: 3.1, duration: 0.6 }, '>0.2')
       })
       return () => ctx.revert()
     })

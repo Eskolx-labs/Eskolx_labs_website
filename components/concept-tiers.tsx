@@ -96,7 +96,7 @@ export function ConceptTiers() {
   // fourth tier lands framed no matter how tall the plates run.
   useEffect(() => {
     const mm = gsap.matchMedia()
-    mm.add('(prefers-reduced-motion: no-preference) and (min-width: 768px)', () => {
+    mm.add('(prefers-reduced-motion: no-preference) and (min-height: 500px)', () => {
       gsap.registerPlugin(ScrollTrigger)
       const stack = document.querySelector<HTMLElement>('#tiers [data-tier-stack]')
       const frame = stack?.parentElement as HTMLElement | null
@@ -161,10 +161,11 @@ export function ConceptTiers() {
         className="relative bg-loam-950"
         scrub={true}
         field={TIERS_FIELD}
+        mobilePins
       >
-      <Pin height="420vh">
+      <Pin height="420vh" mobileHeight="240vh" pinMobile>
         <section className="relative flex h-full flex-col overflow-hidden">
-          <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center px-4 pt-16 sm:px-6 lg:px-8">
             <Reveal className="relative max-w-3xl" y={26}>
               <h2 className="display text-[clamp(2rem,3.8vw,3.2rem)] leading-tight text-cream-100" data-reveal-item>
                 The four-tier trellis
@@ -179,9 +180,11 @@ export function ConceptTiers() {
             <div className="mt-12 grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
               {/* rail of tier stakes; the active one lights as scroll advances,
                   and each stake is a real button that jumps the pin to its tier.
-                  The rail drifts at its own slower speed against the plate. */}
+                  The rail drifts at its own slower speed against the plate.
+                  Below lg it would stack above the window and push the plates
+                  down the page, so it yields to the plates themselves. */}
               <div
-                className="flex flex-col gap-2.5"
+                className="hidden flex-col gap-2.5 lg:flex"
                 role="group"
                 aria-label="Concept tiers"
               >
@@ -217,7 +220,7 @@ export function ConceptTiers() {
 
               {/* detail plate: all four bodies stacked, scrubbed through a window.
                   Below lg the window opens and the plates flow in reading order. */}
-              <div className="plate-frame overflow-hidden rounded-sm border border-loam-700/80 bg-loam-900 max-md:overflow-visible">
+              <div className="plate-frame overflow-hidden rounded-sm border border-loam-700/80 bg-loam-900">
                 <div data-tier-stack className="will-change-transform max-md:transform-none">
                   {TIERS.map((tier) => (
                     <div key={tier.id} className="p-7 sm:p-9">

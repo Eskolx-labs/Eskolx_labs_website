@@ -173,6 +173,22 @@
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
+  /* landscape phones and short windows never pin: a 100vh sticky shell in
+     ~400px of height clips every room. This collapses all pins to flow —
+     the JS gates in scrollytelling.tsx read the same media query so no
+     scrubbed timeline is built there either. */
+  @media (max-height: 499px) {
+    [data-pin],
+    [data-pin] > div {
+      height: auto !important;
+    }
+    [data-pin] > div > div {
+      position: static !important;
+      height: auto !important;
+      overflow: visible !important;
+    }
+  }
+
   /* field utilities: every surface tints from the current field */
   .field-bg {
     background-color: var(--field-bg);

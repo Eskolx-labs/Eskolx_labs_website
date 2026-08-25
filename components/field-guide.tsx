@@ -112,20 +112,16 @@ export function FieldGuide() {
   // window, measured — the tiers-stack grammar, one room later in the book
   useEffect(() => {
     const mm = gsap.matchMedia()
-    mm.add('(prefers-reduced-motion: no-preference) and (min-width: 768px)', () => {
+    mm.add('(prefers-reduced-motion: no-preference) and (min-height: 500px)', () => {
       gsap.registerPlugin(ScrollTrigger)
       const stack = document.querySelector<HTMLElement>('#guide-bar [data-bar-stack]')
       const frame = stack?.parentElement as HTMLElement | null
       const first = stack?.children[0] as HTMLElement | undefined
       if (!stack || !frame || !first) return
       const fit = () => {
-        // below md the pin collapses and plates flow in reading order: the
-        // frame must not keep a desktop window height (it would border only
-        // the first plate and leave the rest floating outside it)
-        if (window.matchMedia('(max-width: 767px)').matches) {
-          frame.style.height = ''
-          return
-        }
+        // the window prefers one plate exactly, capped at 62vh so the plate
+        // never clips against the sticky shell — on phones the cap does the
+        // work, on desktop the plate height usually does
         frame.style.height = `${Math.min(first.offsetHeight + 2, Math.round(window.innerHeight * 0.62))}px`
       }
       fit()
@@ -243,8 +239,9 @@ export function FieldGuide() {
         start="top top"
         end="bottom bottom"
         field={{ from: LOAM, to: LOAM }}
+        mobilePins
       >
-        <Pin height="300vh">
+        <Pin height="300vh" mobileHeight="220vh" pinMobile>
           <section className="relative flex h-full flex-col justify-center overflow-hidden">
             <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
               <Reveal className="max-w-3xl" y={26}>
@@ -261,14 +258,14 @@ export function FieldGuide() {
                 {/* the stack: one plate fills the window at a time */}
                 <div
                   data-bar-frame
-                  className="plate-frame overflow-hidden rounded-sm border border-[color-mix(in_srgb,var(--field-line)_70%,transparent)] max-md:overflow-visible"
+                  className="plate-frame overflow-hidden rounded-sm border border-[color-mix(in_srgb,var(--field-line)_70%,transparent)]"
                 >
                   <div data-bar-stack>
                     {REQUIREMENTS.map((r) => (
                       <article
                         key={r.n}
                         data-bar-plate={r.n}
-                        className={`flex min-h-[280px] flex-col justify-center p-8 sm:p-10 ${FIELD_PLATE} max-md:mb-4 max-md:min-h-0`}
+                        className={`flex min-h-[280px] flex-col justify-center p-8 sm:p-10 ${FIELD_PLATE}`}
                       >
                         <span
                           data-bar-num={r.n}
