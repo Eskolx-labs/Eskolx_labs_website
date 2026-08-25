@@ -23,7 +23,7 @@ export function Leadership() {
       id="leadership"
       start="top bottom"
       end="bottom top"
-      className="relative overflow-hidden bg-loam-950 py-24"
+      className="relative overflow-hidden py-24"
       field={{
         from: PARCHMENT,
         to: LOAM,
@@ -94,7 +94,7 @@ export function Leadership() {
             <p className="font-serif text-[15px] font-medium text-cream-100">Core talent pipeline</p>
             <p className="mt-1.5 max-w-[68ch] text-[15px] leading-relaxed text-cream-200/80">
               An internal engineering internship feeding an open-source
-              maintainer pipeline, cultivating the next generation of builders.
+              maintainer pipeline.
             </p>
           </div>
         </div>

@@ -21,8 +21,12 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
     // trigger; refresh once the faces land so pins and docks stay true.
     document.fonts?.ready.then(() => ScrollTrigger.refresh())
 
-    ;(window as Window & { __getST?: () => unknown[] }).__getST = () =>
-      ScrollTrigger.getAll()
+    // the debug HUD's data source; exposed only when the HUD is on so the
+    // global never ships to ordinary visitors
+    if (window.location.search.includes('debug=1')) {
+      ;(window as Window & { __getST?: () => unknown[] }).__getST = () =>
+        ScrollTrigger.getAll()
+    }
 
     let lenis: Lenis | null = null
     if (!reduced) {
@@ -30,6 +34,7 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
         duration: 1.1,
         easing: (t) => 1 - Math.pow(2, -10 * t),
         smoothWheel: true,
+        anchors: true,
       })
       ;(window as Window & { __lenis?: Lenis }).__lenis = lenis
       lenis.on('scroll', ScrollTrigger.update)

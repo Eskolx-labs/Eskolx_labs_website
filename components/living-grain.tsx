@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useSyncExternalStore } from 'react'
 
 /*
  * The living field: a fixed canvas of drifting fibers that answers the
@@ -22,17 +22,30 @@ type Fiber = {
 
 const COUNT = 110
 
+// live media query as external store: SSR snapshot is false, the client
+// flips after hydration, and a mid-session change (preference toggle,
+// crossing the breakpoint) retires the canvas without a reload
+function useMatches(query: string) {
+  const subscribe = (onChange: () => void) => {
+    const mq = window.matchMedia(query)
+    mq.addEventListener('change', onChange)
+    return () => mq.removeEventListener('change', onChange)
+  }
+  return useSyncExternalStore(
+    subscribe,
+    () => window.matchMedia(query).matches,
+    () => false,
+  )
+}
+
 export function LivingGrain() {
   const ref = useRef<HTMLCanvasElement>(null)
-  const [retire, setRetire] = useState(false)
+  const reduced = useMatches('(prefers-reduced-motion: reduce)')
+  const small = useMatches('(max-width: 767px)')
+  const retired = reduced || small
 
   useEffect(() => {
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    const small = window.matchMedia('(max-width: 767px)').matches
-    if (reduced || small) {
-      setRetire(true)
-      return
-    }
+    if (retired) return
     const canvas = ref.current
     const ctx2d = canvas?.getContext('2d')
     if (!canvas || !ctx2d) return
@@ -123,9 +136,9 @@ export function LivingGrain() {
       window.removeEventListener('resize', resize)
       document.removeEventListener('visibilitychange', onVis)
     }
-  }, [])
+  }, [retired])
 
-  if (retire) return null
+  if (retired) return null
   return (
     <canvas
       ref={ref}

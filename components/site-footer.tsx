@@ -4,7 +4,6 @@ import { Root, Animation } from '@/lib/scrollytelling'
 import { PARCHMENT } from '@/lib/field-controller'
 import { Reveal } from '@/components/reveal'
 import { SealMark } from '@/components/botanical/seal-mark'
-import { Mail } from 'lucide-react'
 
 const LINKS = [
   { label: 'Open-Source Code', href: 'https://github.com/eskolx-labs' },
@@ -16,6 +15,8 @@ export function SiteFooter() {
   return (
     <Root
       className="relative overflow-hidden border-t border-parchment-ink/20 bg-parchment"
+      start="top bottom"
+      end="bottom top"
       field={{
         from: PARCHMENT,
         to: PARCHMENT,
@@ -40,17 +41,20 @@ export function SiteFooter() {
               <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-parchment-ink/70">
                 Resources
               </span>
-              {LINKS.map((l) => (
-                <a
-                  key={l.label}
-                  href={l.href}
-                  target={l.href.startsWith('mailto') ? undefined : '_blank'}
-                  rel={l.href.startsWith('mailto') ? undefined : 'noreferrer'}
-                  className="inline-block py-1 text-[15px] text-parchment-ink/80 underline-offset-4 transition-colors hover:text-parchment-ink hover:underline hover:decoration-gold-leaf/60"
-                >
-                  {l.label}
-                </a>
-              ))}
+              {LINKS.map((l) => {
+                const external = l.href.startsWith('http')
+                return (
+                  <a
+                    key={l.label}
+                    href={l.href}
+                    target={external ? '_blank' : undefined}
+                    rel={external ? 'noreferrer' : undefined}
+                    className="inline-block py-1 text-[15px] text-parchment-ink/80 underline-offset-4 transition-colors hover:text-parchment-ink hover:underline hover:decoration-gold-leaf/60"
+                  >
+                    {l.label}
+                  </a>
+                )
+              })}
             </nav>
             <div className="flex flex-col gap-3">
               <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-parchment-ink/70">
@@ -60,7 +64,10 @@ export function SiteFooter() {
                 href="mailto:eskolxlabs@gmail.com"
                 className="flex items-center gap-2.5 py-1 text-[15px] text-parchment-ink/80 transition-colors hover:text-parchment-ink"
               >
-                <Mail className="h-4 w-4 text-wine-600" />
+                <svg viewBox="0 0 16 16" className="h-4 w-4 text-wine-600" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden="true">
+                  <rect x="1.5" y="3" width="13" height="10" rx="1.5" />
+                  <path d="M2 4.5 L8 9 L14 4.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
                 eskolxlabs@gmail.com
               </a>
               <p className="mt-2 max-w-[26ch] font-serif text-sm leading-relaxed text-parchment-ink/75">
@@ -86,7 +93,7 @@ export function SiteFooter() {
         </Reveal>
 
         <div className="rule-ornament mt-14 !text-gold-leaf/60 before:!opacity-40 after:!opacity-40">
-          <p className="whitespace-nowrap px-2 font-mono text-xs tabular text-parchment-ink/80">
+          <p suppressHydrationWarning className="whitespace-nowrap px-2 font-mono text-xs tabular text-parchment-ink/80">
             © {new Date().getFullYear()} Eskolx Labs · MIT License
           </p>
         </div>

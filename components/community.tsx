@@ -133,7 +133,7 @@ export function Community() {
       id="community"
       start="top bottom"
       end="bottom top"
-      className="relative bg-parchment py-24"
+      className="relative py-24"
       field={{
         from: { bg: '#241407', ink: '#f0e4c8', soft: '#b8a284', line: '#5a4227' },
         to: { bg: '#ece1c6', ink: '#29190c', soft: '#5c4a33', line: '#b9a67f' },

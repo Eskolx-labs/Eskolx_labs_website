@@ -214,7 +214,7 @@ export function Animation({
     return () => {
       tween.kill()
     }
-  }, [timeline, start, end, to, fromTo, target, getSpace])
+  }, [timeline, start, end, to, fromTo, target, scoped, getSpace])
 
   if (children) {
     if (target) return <>{children}</>

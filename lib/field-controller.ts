@@ -80,10 +80,11 @@ function measure() {
 
 // pinned rooms turn across their exact pin duration; ordinary sections turn
 // across their passage into the viewport, which keeps short chapters from
-// snapping while still reading as a continuous turn.
+// snapping while still reading as a continuous turn. The start clamps at the
+// page top so the first section opens settled, never half-turned.
 function turnWindow(z: Zone, vh: number): [number, number] {
-  if (z.pinned && z.height > vh) return [z.top, z.top + z.height - vh]
-  return [z.top - vh * 0.72, z.top + z.height - vh * 0.3]
+  if (z.pinned && z.height > vh) return [Math.max(z.top, 0), z.top + z.height - vh]
+  return [Math.max(z.top - vh * 0.72, 0), z.top + z.height - vh * 0.3]
 }
 
 function activeZone(sorted: Zone[], center: number): Zone {
@@ -149,6 +150,17 @@ function ensureListeners() {
   reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
   window.addEventListener('scroll', schedule, { passive: true })
   window.addEventListener('resize', () => {
+    dirty = true
+    schedule()
+  })
+  // zone geometry is measured once, so late shifts must invalidate it: web
+  // fonts swap in and resize every text block, and the load event settles
+  // pin spacers and images. Without this the turns run on stale positions.
+  window.addEventListener('load', () => {
+    dirty = true
+    schedule()
+  })
+  document.fonts?.ready.then(() => {
     dirty = true
     schedule()
   })

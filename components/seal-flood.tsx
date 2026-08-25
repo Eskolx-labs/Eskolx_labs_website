@@ -62,7 +62,7 @@ export function SealFlood() {
             fromTo={[{ scale: 1, rotate: -6 }, { scale: 16, rotate: 2, ease: 'power1.inOut' }]}
           >
             <div data-flood-seal>
-              <SealMark label="The Eskolx Labs seal floods the page" className="h-32 w-32" />
+              <SealMark label="Eskolx Labs seal" className="h-32 w-32" />
             </div>
           </Animation>
 

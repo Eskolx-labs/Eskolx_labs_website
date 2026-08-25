@@ -37,6 +37,7 @@ export function SiteNav() {
     if (!scope) return
     const prevOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
+    const toggle = toggleRef.current
     const focusables = () =>
       Array.from(scope.querySelectorAll<HTMLElement>('a[href], button:not([disabled])')).filter(
         el => el.offsetParent !== null,
@@ -64,7 +65,7 @@ export function SiteNav() {
     return () => {
       document.body.style.overflow = prevOverflow
       window.removeEventListener('keydown', onKey)
-      toggleRef.current?.focus()
+      toggle?.focus()
     }
   }, [open])
 
@@ -190,11 +191,7 @@ export function SiteNav() {
           href="#top"
           className="group flex origin-left items-center gap-2.5"
         >
-          <span
-            className={`font-script text-[1.5rem] leading-none ${
-              grounded ? 'text-[color:var(--field-ink)]' : 'text-parchment-ink'
-            }`}
-          >
+          <span className="font-script text-[1.5rem] leading-none text-[color:var(--field-ink)]">
             Eskolx Labs
           </span>
           <span ref={sealRef} className="inline-flex shrink-0">
@@ -213,13 +210,9 @@ export function SiteNav() {
                 ref={el => { linkRefs.current[id] = el }}
                 aria-current={active ? 'true' : undefined}
                 className={`group block py-0.5 text-center transition-colors ${
-                  grounded
-                    ? active
-                      ? 'text-[color:var(--field-ink)]'
-                      : 'text-[color:var(--field-ink-soft)] hover:text-[color:var(--field-ink)]'
-                    : active
-                      ? 'text-parchment-ink'
-                      : 'text-parchment-ink/75 hover:text-parchment-ink'
+                  active
+                    ? 'text-[color:var(--field-ink)]'
+                    : 'text-[color:var(--field-ink-soft)] hover:text-[color:var(--field-ink)]'
                 }`}
               >
                 <span className="block font-serif text-[15px] leading-tight underline-offset-8 group-hover:underline group-hover:decoration-gold-leaf/70">
@@ -253,7 +246,7 @@ export function SiteNav() {
             className={`flex h-9 w-9 items-center justify-center rounded-sm border transition-colors sm:h-10 sm:w-10 ${
               grounded
                 ? 'border-[color-mix(in_srgb,var(--field-ink)_30%,transparent)] text-[color:var(--field-ink)] hover:border-[color:var(--field-ink)]'
-                : 'border-parchment-ink/30 text-parchment-ink hover:border-parchment-ink'
+                : 'border-[color-mix(in_srgb,var(--field-ink)_30%,transparent)] text-[color:var(--field-ink)] hover:border-[color:var(--field-ink)]'
             }`}
           >
             <TelegramIcon className="h-4 w-4" />
@@ -274,9 +267,7 @@ export function SiteNav() {
           type="button"
           ref={toggleRef}
           onClick={() => setOpen((v) => !v)}
-          className={`inline-flex h-10 w-10 flex-col items-center justify-center gap-[5px] rounded-sm ${
-            grounded ? 'text-[color:var(--field-ink)]' : 'text-parchment-ink'
-          } lg:hidden`}
+            className={`inline-flex h-10 w-10 flex-col items-center justify-center gap-[5px] rounded-sm text-[color:var(--field-ink)] lg:hidden`}
           aria-label={open ? 'Close menu' : 'Open menu'}
           aria-expanded={open}
         >

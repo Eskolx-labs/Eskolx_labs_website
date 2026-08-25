@@ -1,8 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  typescript: {
-    ignoreBuildErrors: true,
-  },
+  // the site is fully prerendered (no server features), so builds emit a
+  // plain static site into out/ — served by Cloudflare Pages as-is
+  output: 'export',
   images: {
     unoptimized: true,
   },

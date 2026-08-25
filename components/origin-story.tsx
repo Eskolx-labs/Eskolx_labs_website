@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { Root, Pin, Animation } from '@/lib/scrollytelling'
+import { PARCHMENT } from '@/lib/field-controller'
 import { Reveal } from '@/components/reveal'
 import { SealMark } from '@/components/botanical/seal-mark'
 
@@ -92,11 +93,16 @@ function Typed({
 }) {
   const parts = unit === 'char' ? Array.from(text) : text.split(' ')
   return (
-    <span aria-label={text} className={className}>
+    <span className={className}>
+      <span className="sr-only">{text}</span>
       <span aria-hidden="true">
         {parts.map((p, j) => (
-          <span key={j} data-tw={`${id}-${j}`} className="inline-block motion-safe:opacity-0">
-            {unit === 'word' && j < parts.length - 1 ? `${p}\u00A0` : p}
+          <span
+            key={j}
+            data-tw={`${id}-${j}`}
+            className={`inline-block motion-safe:opacity-0 ${p === ' ' ? 'whitespace-pre' : ''}`}
+          >
+            {unit === 'word' && j < parts.length - 1 ? `${p}\u00A0` : p === ' ' ? ' ' : p}
           </span>
         ))}
       </span>
@@ -149,20 +155,17 @@ export function OriginStory() {
       id="ecosystem"
       start="top top"
       end="bottom bottom"
-      field={{
-        from: { bg: '#241407', ink: '#f0e4c8', soft: '#b8a284', line: '#5a4227' },
-        to: { bg: '#241407', ink: '#f0e4c8', soft: '#b8a284', line: '#5a4227' },
-      }}
+      field={{ from: PARCHMENT, to: PARCHMENT }}
     >
       <Pin height="340vh">
-        <div className="mx-auto flex h-full max-w-7xl flex-col justify-center px-4 py-16 sm:px-6 lg:px-8">
+        <div className="mx-auto flex h-full max-w-7xl flex-col justify-center px-4 pt-28 pb-16 sm:px-6 lg:px-8">
           <Reveal className="flex items-start justify-between gap-6">
             <div data-reveal-item>
-              <p className="font-mono text-xs uppercase tracking-[0.22em] text-gold-leaf">The name</p>
-              <h2 className="display mt-4 max-w-xl text-[clamp(2rem,3.6vw,3rem)] leading-tight text-cream-100">
+              <p className="font-mono text-xs uppercase tracking-[0.22em] text-wine-600">The name</p>
+              <h2 className="display mt-4 max-w-xl text-[clamp(2rem,3.6vw,3rem)] leading-tight text-parchment-ink">
                 The Eshcol Identity
               </h2>
-              <p className="mt-4 max-w-2xl font-serif text-lg leading-relaxed text-cream-200/80">
+              <p className="mt-4 max-w-2xl font-serif text-lg leading-relaxed text-parchment-ink/75">
                 Abundance &amp; interconnected execution. Three facts of the soil this lab grows in.
               </p>
             </div>

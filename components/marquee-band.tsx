@@ -47,12 +47,13 @@ export function MarqueeBand() {
           data-marquee-track
           className="flex w-max items-baseline whitespace-nowrap will-change-transform"
         >
+          <span className="sr-only">From seed to harvest</span>
           {[0, 1].map((rep) => (
-            <span key={rep} className="display flex items-baseline" aria-hidden={rep === 1}>
+            <div key={rep} className="display flex items-baseline" aria-hidden="true">
               {WORDS.map((word, wi) => {
                 const harvest = word === 'HARVEST'
                 return (
-                  <span key={word} className="flex items-baseline">
+                  <div key={word} className="flex items-baseline">
                     {word.split('').map((ch, i) => {
                       const gi = PREFIX[wi] + i
                       const charStart = charDuration * gi * 0.7
@@ -92,10 +93,10 @@ export function MarqueeBand() {
                     >
                       ❋
                     </span>
-                  </span>
+                  </div>
                 )
               })}
-            </span>
+            </div>
           ))}
         </div>
       </Animation>

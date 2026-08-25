@@ -46,7 +46,7 @@ const REQUIREMENTS = [
   {
     n: '04',
     title: 'Teaching instinct',
-    body: 'The loop ends when you can explain what you built. Explanations worth publishing go into Eskolx-Open.',
+    body: 'The loop ends when you can explain what you built. Explanations worth publishing go into the open study vault.',
   },
 ]
 
@@ -120,10 +120,13 @@ export function FieldGuide() {
         </Reveal>
 
         {/* do / don't: the two plates wipe in one after the other */}
+        {/* the plates are Root-beat targets (the wipes), so per the
+            Come-and-Go Rule they carry no data-reveal-item; the grid box
+            itself still rises in via its own Reveal */}
         <Animation target='[data-fg-wipe="0"]' start={12} end={24} fromTo={[{ clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', ease: 'power2.inOut' }]} />
         <Animation target='[data-fg-wipe="1"]' start={22} end={34} fromTo={[{ clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', ease: 'power2.inOut' }]} />
         <Reveal className="mt-14 grid gap-px overflow-hidden rounded-sm border border-parchment-ink/20 bg-parchment-ink/15 md:grid-cols-2" y={24}>
-          <div data-fg-wipe="0" className="bg-parchment p-7 sm:p-9" data-reveal-item>
+          <div data-fg-wipe="0" className="bg-parchment p-7 sm:p-9">
             <h3 className="display text-xl text-parchment-ink">What we do</h3>
             <ul className="mt-6 space-y-4">
               {DOES.map((d) => (
@@ -136,7 +139,7 @@ export function FieldGuide() {
               ))}
             </ul>
           </div>
-          <div data-fg-wipe="1" className="bg-parchment p-7 sm:p-9" data-reveal-item>
+          <div data-fg-wipe="1" className="bg-parchment p-7 sm:p-9">
             <h3 className="display text-xl text-parchment-ink">What we don&apos;t</h3>
             <ul className="mt-6 space-y-5">
               {DONTs.map((d) => (
@@ -202,7 +205,7 @@ export function FieldGuide() {
                 <div
                   key={row.k}
                   data-reveal-item
-                  className={`relative grid gap-1 py-4 sm:grid-cols-[8.5rem_1fr] sm:gap-4 ${i > 0 ? '' : ''}`}
+                  className="relative grid gap-1 py-4 sm:grid-cols-[8.5rem_1fr] sm:gap-4"
                 >
                   {i > 0 && (
                     <Animation target={`[data-status-rule="${i}"]`} start={62 + i * 5} end={68 + i * 5} fromTo={[{ scaleX: 0 }, { scaleX: 1, ease: 'power1.inOut' }]}>

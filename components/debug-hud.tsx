@@ -47,7 +47,6 @@ export function DebugHud() {
     return () => cancelAnimationFrame(raf)
   }, [])
 
-  if (!ref) return null
   return (
     <pre
       ref={ref}

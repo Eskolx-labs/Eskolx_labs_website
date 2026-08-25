@@ -6,7 +6,7 @@ colors:
   loam-night: "#241407"
   parchment-ink: "#29190c"
   ink-soft: "#5c4a33"
-  field-line: "#a1a187"
+  field-line: "#b9a67f"
   field-line-soft: "#d3c5a3"
   cream-100: "#f0e4c8"
   cream-200: "#e2d1ab"
@@ -87,7 +87,7 @@ components:
 
 **Creative North Star: "The Field Journal of a Growing Lab"**
 
-This is a statistical lab that writes its own libraries, presented as a grower's almanac: one book, two fields. The light field is the day-spread, the paper of the report sheet where findings are published. The dark field is the night-spread, the loam of the working soil where the lab builds. The page turns between them as the visitor scrolls, so the reading experience itself dramatizes the lab's cycle of digging and harvesting.
+This is a statistical lab that writes its own libraries, presented as a grower's almanac: one book, two fields. The light field is the day-spread, the paper of the report sheet where findings are published. The dark field is the night-spread, the loam of the working soil where the lab builds. The book opens on the night cover — the founder's order: dark cover, day identity, night trellis, day method, night keepers, day harvest — and the page turns between fields as the visitor scrolls, so the reading experience itself dramatizes the lab's cycle of digging and harvesting.
 
 Every surface belongs to the field it sits on. Chrome is minimal: hairline rules, corner ticks, a fixed print-tooth grain, and a brush-script wordmark with the engraved seal-die — the logo lockup, recut in wine and field ink. The motion language is scrollytelling in the basement.studio register: sections pin, elements scrub against the scroll with eased settles, and every pinned room carries at least two resolving beats (the seal stamp, the page turn). Content sits on the spread; the animation is the turning of the spread.
 
@@ -193,7 +193,7 @@ A mono block on `--loam-950` with a hatched header bar, wine/gold dots, line num
 
 ### Navigation
 
-Fixed, `h-16`, transparent at rest over the hero, paper-field background with `backdrop-blur` once the visitor scrolls (`border-b field-line-soft`). Links are serif `15px` with `underline-offset-8`, gold on hover. The mobile menu is a full-width drop with border rows.
+Fixed, `h-16`, transparent at rest over the hero (ink and borders tint from the field vars, cream over the night cover), paper-field background with `backdrop-blur` once the visitor scrolls (`border-b field-line-soft`). Links are serif `15px` with `underline-offset-8`, gold on hover. The mobile menu is a full-width drop with border rows.
 
 ### The Come-and-Go Rule
 
@@ -206,7 +206,9 @@ Every content block outside the pinned machines owns one scrubbed Reveal (`compo
 - **Marquee band**: "FROM SEED TO HARVEST" travels the viewport with per-letter keyframed pop-ins (basement.studio register).
 - **Seal flood** (`components/seal-flood.tsx`): pinned interlude where the seal swells past the frame while the day field holds steady. The die releases in the first third of the zoom, so nothing near-black ever covers the spread — the flood belongs to the wine fruit on parchment. The night turn stays reserved for the keepers seam right after (`leadership.tsx` carries `PARCHMENT → LOAM`).
 - **Living grain** (`components/living-grain.tsx`): fixed canvas of fibers blown by Lenis velocity; desktop, motion-permitting only.
+- **The cover is night; the identity sits in day**: the hero carries `LOAM → PARCHMENT` across its pin — the book opens dark and lightens as the reader pulls the cover away. The identity chapter keeps `PARCHMENT → PARCHMENT`; a short `h-[55vh]` dusk seam (28vh below md) carries `PARCHMENT → LOAM` into the trellis. Nav chrome tints with the field vars even ungrounded, so it reads cream over the dark cover and ink over paper.
 - **Trellis holds night; dawn turns at a dedicated seam**: the four-tier chapter keeps `LOAM → LOAM` across its whole pin (a mid-read bleach to parchment made tier three unreadable); a short `h-[55vh]` turn Root before the method carries `LOAM → PARCHMENT` so the roadmap still opens on paper.
+- **Keepers and harvest ride the body's turn**: leadership (`PARCHMENT → LOAM`) and community (`LOAM → PARCHMENT`) carry no opaque section background — the body lerp is the transition, so content arrives with its field already under it and no hard seam edge cuts the spread.
 - **Identity and tier copy come from the vault, not invention**: the three identity plates keep their ideas (cluster on one stem; the three X promises; dark-earth rigor) in plain unslopped sentences; the trellis tiers restate Roadmap and Long Term Goals with no code examples — "automation" appears only in tier four.
 - **Eshcol identities, typed by hand** (`components/origin-story.tsx`): one pinned spread; each plate rises alone — icon draws, kicker stamps, then title (per character) and body (per word) write themselves from a time-based timeline that fires when the beat's stake of the pin arrives. Scroll velocity sets nothing: a reader who stops still watches the sentence finish, never a half-word freeze. Plates hold for roughly a third of a 340vh room and lift away read.
 - **Hydration law**: `Animation`'s child mode renders a `<div>` wrapper — it must never sit inside `<p>`/`<h3>` (invalid nesting breaks SSR hydration). Inline text animation uses target-mode `Animation` or plain spans driven by timelines (`data-tw` units).
@@ -226,7 +228,7 @@ The logo lockup from template 1, recut: brush-script wordmark (`--font-script`, 
 
 ### Entrance & Scroll Beats
 
-On load (all viewports, motion-permitting): the hero copy block rises in (y 44→0, power3.out), then the seal stamps with a ring (scale 2.6 → 0.86 → 1, rotate -18 → -6, power4.in into back.out). On scroll: headline lines mask away per third of the room with a scale push, the copy drifts on a slower layer, CTAs ride out, and each field flip commits in one eased turn. Below `lg` there is no scrubbed timeline — instead the entrance plays and sections stack in reading order.
+On load (all viewports, motion-permitting): the hero copy block rises in (y 44→0, power3.out), then the seal stamps with a ring (scale 2.6 → 0.86 → 1, rotate -18 → -6, power4.in into back.out). On scroll: headline lines mask away per third of the room with a scale push, the copy drifts on a slower layer, CTAs ride out, and each field flip commits in one eased turn. Below `md` (768px) there is no scrubbed timeline — instead the entrance plays and sections stack in reading order.
 
 ## Do's and Don'ts
 

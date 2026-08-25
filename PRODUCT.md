@@ -32,7 +32,7 @@ Work happens in small fast-moving builder cohorts on a 3-month cycle: Phase 1 ba
 - The site is animation-forward by explicit product decision, in the scrollytelling register of minimal-goods.webflow.io and basementstudio/scrollytelling: pinned scenes with long scroll rooms, scrubbed transforms, full-page color-field transitions between the parchment and dark-loam variants, masked text reveals, parallax strips. Every ScrollTrigger cleans up (tl.revert), reduced-motion renders static complete states. The feel contract: something is always resolving on screen — fields turn continuously with the scroll, content comes and goes via scrubbed reveals at every width, and each pinned room carries large-amplitude motion end to end. Must stay fast: transform/opacity-driven, no scroll-jank stacking.
 - Real channels: GitHub github.com/eskolx-labs, Telegram t.me/eskolx_labs, LinkedIn linkedin.com/company/eskolx_labs, plus YouTube, X, Instagram, Facebook, TikTok handles @eskolx_labs.
 - One community CTA link is undecided (Slack vs Discord invite).
-- Leadership: Barkilign Mulatu (Founder & CEO), Natnael Getahun (Co-Founder & CTO).
+- Leadership: Barkilign Mulatu (Founder & CEO), Natnael Getahun (Co-Founder and Member of Technical Staff).
 
 ## Brand Commitments
 

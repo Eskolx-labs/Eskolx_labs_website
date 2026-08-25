@@ -17,7 +17,7 @@ const TIERS = [
   {
     id: 2,
     name: 'Modeling & Classical Machine Learning (from scratch)',
-    concepts: ['Modeling on our own primitives', 'Automated hypothesis testing', 'Feature diagnostics', 'Reference comparison against the famous implementations'],
+    concepts: ['Modeling on our own primitives', 'Assumption checks', 'Feature diagnostics', 'Reference comparison against the famous implementations'],
     goal: 'After the basics, modeling and classical machine learning built on what we grew ourselves. Assumption checks and test selection wired end to end, every method backed by the paper it came from.',
   },
   {
@@ -35,6 +35,8 @@ const TIERS = [
 ]
 
 const STAKE_AT = [0, 25, 50, 75]
+// module-level so the Root's timeline effect never sees a fresh object
+const TIERS_FIELD = { from: LOAM, to: LOAM }
 /* the scroll fraction where each tier's plate is fully framed in the pin:
    the stack travels -75% over the room, so plate i frames at i/3 of it */
 const TIER_FRAME_AT = [0, 33.33, 66.67, 100]
@@ -59,6 +61,37 @@ function jumpToTier(index: number) {
 }
 
 export function ConceptTiers() {
+  // which stake the rail reports as current, for assistive tech. Written
+  // straight to the DOM on a rAF-throttled scroll listener: a React state
+  // here would re-render the whole chapter mid-scrub, tearing down and
+  // rebuilding every Waypoint tween exactly when the stakes should light.
+  useEffect(() => {
+    let raf = 0
+    const onScroll = () => {
+      if (raf) return
+      raf = requestAnimationFrame(() => {
+        raf = 0
+        const el = document.getElementById('tiers')
+        if (!el) return
+        const pin = el.querySelector<HTMLElement>('[data-pin]')
+        const room = pin ? pin.offsetHeight - window.innerHeight : 1
+        const progress = Math.min(Math.max(-el.getBoundingClientRect().top / Math.max(room, 1), 0), 1)
+        const current = Math.min(TIERS.length, Math.floor(progress * TIERS.length) + 1)
+        el.querySelectorAll<HTMLButtonElement>('[data-stake]').forEach((btn) => {
+          const id = Number(btn.getAttribute('data-stake'))
+          if (id === current) btn.setAttribute('aria-current', 'true')
+          else btn.removeAttribute('aria-current')
+        })
+      })
+    }
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      cancelAnimationFrame(raf)
+    }
+  }, [])
+
   // the stack travels exactly its own scrollable height, measured — so the
   // fourth tier lands framed no matter how tall the plates run.
   useEffect(() => {
@@ -72,7 +105,10 @@ export function ConceptTiers() {
       // the window fits one plate exactly, so a third of the travel lands
       // each subsequent tier dead-center — at any viewport size
       const fit = () => {
-        frame.style.height = `${Math.min(first.offsetHeight + 2, Math.round(window.innerHeight * 0.66))}px`
+        // the window prefers one plate exactly, but a plate taller than ~78vh
+        // would clip against the sticky shell — the cap trades a little of the
+        // stage for never cutting copy off
+        frame.style.height = `${Math.min(first.offsetHeight + 2, Math.round(window.innerHeight * 0.78))}px`
       }
       fit()
       ScrollTrigger.addEventListener('refreshInit', fit)
@@ -99,15 +135,33 @@ export function ConceptTiers() {
   }, [])
 
   return (
-    <Root
-      id="tiers"
-      className="relative bg-loam-950"
-      scrub={true}
-      field={{
-        from: LOAM,
-        to: LOAM,
-      }}
-    >
+    <>
+      {/* the dusk turn: the identity chapter holds day to the end; this short
+          seam carries the field into night so the trellis opens dark — the
+          mirror of the dawn seam before the method */}
+      <Root
+        id="dusk-seam"
+        className="relative flex h-[28vh] items-center justify-center bg-loam-950 md:h-[55vh]"
+        start="top bottom"
+        end="bottom top"
+        field={{
+          from: { bg: '#ece1c6', ink: '#29190c', soft: '#5c4a33', line: '#b9a67f' },
+          to: LOAM,
+        }}
+      >
+        <div className="flex items-center gap-3" aria-hidden="true">
+          <span className="h-1.5 w-1.5 rounded-full bg-wine-500/80" />
+          <span className="h-1 w-1 rounded-full bg-gold-leaf/70" />
+          <span className="h-1.5 w-1.5 rounded-full bg-wine-500/80" />
+        </div>
+      </Root>
+
+      <Root
+        id="tiers"
+        className="relative bg-loam-950"
+        scrub={true}
+        field={TIERS_FIELD}
+      >
       <Pin height="420vh">
         <section className="relative flex h-full flex-col overflow-hidden">
           <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center px-4 sm:px-6 lg:px-8">
@@ -240,12 +294,13 @@ export function ConceptTiers() {
           key={`name-${tier.id}`}
           at={STAKE_AT[i]}
           tween={{
-            target: `[data-stake-name="${tier.id}"], [data-stake-tier="${tier.id}"]`,
+            target: `[data-stake-name="${tier.id}"]`,
             to: { color: '#f0e4c8' },
             duration: 0.3,
           }}
         />
       ))}
     </Root>
+    </>
   )
 }
