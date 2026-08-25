@@ -176,7 +176,7 @@ export function OriginStory() {
             {IDENTITIES.map((card, i) => {
               const s = i * 32
               return (
-                <div key={card.title} className="py-10 motion-safe:md:[grid-area:1/1] md:h-full md:py-0">
+                <div key={card.title} className="py-10 md:py-0 motion-safe:[@media(min-width:768px)_and_(min-height:700px)]:[grid-area:1/1] [@media(min-width:768px)_and_(min-height:700px)]:h-full">
                   {/* plate entrance */}
                   <Animation target={`[data-id-plate="${i}"]`} start={s} end={s + 4} fromTo={[{ y: 44, opacity: 0 }, { y: 0, opacity: 1, ease: 'power2.out' }]}>
                     <article data-id-plate={i} className="plate-frame hatch relative mx-auto max-w-3xl border border-parchment-ink/20 bg-parchment p-8 text-parchment-ink shadow-[0_24px_60px_-30px_rgb(0_0_0/0.45)] sm:p-10 lg:p-12">

@@ -132,7 +132,7 @@ export function Roadmap() {
                     <div
                       key={p.phase}
                       data-rm-beat={i}
-                      className="flex flex-col justify-center py-12 motion-safe:md:[grid-area:1/1] md:h-full md:py-0 md:pl-16 lg:pr-24"
+                      className="flex flex-col justify-center py-12 md:pl-16 lg:pr-24 motion-safe:[@media(min-width:768px)_and_(min-height:700px)]:[grid-area:1/1] [@media(min-width:768px)_and_(min-height:700px)]:h-full [@media(min-width:768px)_and_(min-height:700px)]:py-0"
                     >
                       <Animation target={`[data-rm-rule="${i}"]`} start={s} end={s + 8} fromTo={[{ scaleX: 0 }, { scaleX: 1, ease: 'power2.out' }]}>
                         <span data-rm-rule={i} className="mb-6 block h-px w-16 origin-left bg-gold-leaf/80" />
