@@ -66,110 +66,100 @@ export function Root({
 }: RootProps) {
   const ref = useRef<HTMLDivElement>(null)
   const [timeline, setTimeline] = useState<gsap.core.Timeline | null>(null)
-  const [reduced, setReduced] = useState(false)
 
+  // the field zone registers on every path — reduced motion, phones, flow —
+  // so the nav tints with the chapter everywhere
   useEffect(() => {
-    const mm = gsap.matchMedia()
-    mm.add('(prefers-reduced-motion: reduce)', () => {
-      setReduced(true)
-      return () => setReduced(false)
+    const el = ref.current
+    if (!el || !field) return
+    const zoneId = `zone-${id ?? Math.random().toString(36).slice(2, 8)}`
+    registerZone({
+      id: zoneId,
+      el,
+      from: field.from,
+      to: field.to,
+      pinned: !!el.querySelector('[data-pin]'),
     })
-    return () => mm.revert()
-  }, [])
+    return () => removeZone(zoneId)
+  }, [field, id])
 
+  // the scrubbed timeline is resize-reactive: gsap.matchMedia re-evaluates
+  // the bands on every crossing, so a desktop window resized down to a
+  // quarter tile rebuilds the book for the shell it actually has, instead
+  // of keeping the timeline it was loaded with. Bands mirror the CSS guard
+  // in globals.css: flow chapters scrub at every size that is not tiny;
+  // pinned scenes need real shell height unless they opted into the tier.
   useEffect(() => {
     const el = ref.current
     if (!el) return
-
-    // reduced-motion, phones, and short viewports are read synchronously so
-    // a from-state never renders before the async matchMedia flip lands.
-    // mobilePins scenes opt back in on portrait phones AND on short desktop
-    // windows (their shortened rooms fit those shells); flow chapters keep
-    // their timelines everywhere (a viewport-crossing scrub needs no shell
-    // height), and pinned non-tier scenes stay flow under 700px of height.
-    const reducedNow = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    const portraitMobileNow = window.matchMedia('(max-width: 767px)').matches
-    const tinyNow = window.matchMedia('(max-height: 499px)').matches
-    const shortDesktopNow = window.matchMedia('(min-width: 768px) and (max-height: 699px)').matches
-
-    // the field is owned by the field controller: this section's zone scrubs
-    // the page colors continuously across the section's travel. It registers
-    // on every path (reduced motion and mobile included) so the nav tints
-    // with the chapter everywhere.
-    let zoneId: string | null = null
-    if (field) {
-      zoneId = `zone-${id ?? Math.random().toString(36).slice(2, 8)}`
-      registerZone({
-        id: zoneId,
-        el,
-        from: field.from,
-        to: field.to,
-        pinned: !!el.querySelector('[data-pin]'),
-      })
-    }
-
-    // below lg the pins are ordinary stacked sections: no scrubbed timeline,
-    // so nothing moves against the scroll and no scroll tax applies — except
-    // scenes that explicitly opt into the mobile pin tier.
-    const pinnedNow = !!el.querySelector('[data-pin]')
-    if (
-      reducedNow ||
-      reduced ||
-      tinyNow ||
-      (portraitMobileNow && !mobilePins) ||
-      (shortDesktopNow && pinnedNow && !mobilePins)
-    ) {
-      return () => {
-        if (zoneId) removeZone(zoneId)
-      }
-    }
-
-    gsap.registerPlugin(ScrollTrigger)
-    const pinned = !!el.querySelector('[data-pin]')
-    // Flow chapters configured as "top bottom"/"bottom top" own their whole
-    // viewport crossing: the natural string-form span is element height +
-    // viewport, which is what makes bands like the seed-catalog marquee read
-    // letter by letter. But a chapter that sits last before a short footer can
-    // never scroll its bottom to the viewport top, so we clamp the span to the
-    // document's last scroll position — mid-page chapters keep the full
-    // crossing, the final one simply completes at book close.
-    const flowTransit = !pinned && start === 'top bottom' && end === 'bottom top'
-    const tl = gsap.timeline({
-      paused: true,
-      defaults: { duration: 1, ease: 'linear' },
-      scrollTrigger: {
-        trigger: el,
-        start,
-        end: pinned
-          ? () => `+=${el.offsetHeight - window.innerHeight}`
-          : flowTransit
-            ? () => {
-                const rect = el.getBoundingClientRect()
-                const startPx = rect.top + window.scrollY - window.innerHeight
-                // natural crossing span; never past the document's last
-                // scroll position so final chapters complete at book close
-                const natural = el.offsetHeight + window.innerHeight
-                const reachable =
-                  document.documentElement.scrollHeight -
-                  window.innerHeight -
-                  startPx
-                return `+=${Math.max(Math.min(natural, reachable), 1)}`
-              }
-            : end,
-        scrub,
+    const mm = gsap.matchMedia()
+    mm.add(
+      {
+        desktop: '(min-width: 768px) and (min-height: 700px)',
+        smallDesktop: '(min-width: 768px) and (min-height: 500px) and (max-height: 699px)',
+        portraitMobile: '(max-width: 767px) and (min-height: 500px)',
+        tiny: '(max-height: 499px)',
+        reduce: '(prefers-reduced-motion: reduce)',
       },
-    })
-    // the beat contract is a 0-100 band: pin the timeline's duration there
-    // even when children end early, or a section whose last tween stops at
-    // 20 compresses every window fivefold (keepers arrived half-faded)
-    tl.set({}, {}, 100)
-    setTimeline(tl)
-    return () => {
-      tl.revert()
-      if (zoneId) removeZone(zoneId)
-      setTimeline(null)
-    }
-  }, [reduced, start, end, scrub, field, id])
+      (ctx) => {
+        const { desktop, smallDesktop, portraitMobile, tiny, reduce } = ctx.conditions as Record<
+          string,
+          boolean
+        >
+        const pinnedNow = !!el.querySelector('[data-pin]')
+        const shouldBuild =
+          !reduce &&
+          !tiny &&
+          (desktop ||
+            (smallDesktop && (!pinnedNow || mobilePins)) ||
+            (portraitMobile && mobilePins))
+        if (!shouldBuild) return
+        gsap.registerPlugin(ScrollTrigger)
+
+        // Flow chapters configured as "top bottom"/"bottom top" own their
+        // whole viewport crossing: the natural string-form span is element
+        // height + viewport, which is what makes bands like the seed-catalog
+        // marquee read letter by letter. But a chapter that sits last before
+        // a short footer can never scroll its bottom to the viewport top, so
+        // we clamp the span to the document's last scroll position —
+        // mid-page chapters keep the full crossing, the final one simply
+        // completes at book close.
+        const pinned = pinnedNow
+        const flowTransit = !pinned && start === 'top bottom' && end === 'bottom top'
+        const tl = gsap.timeline({
+          paused: true,
+          defaults: { duration: 1, ease: 'linear' },
+          scrollTrigger: {
+            trigger: el,
+            start,
+            end: pinned
+              ? () => `+=${el.offsetHeight - window.innerHeight}`
+              : flowTransit
+                ? () => {
+                    const rect = el.getBoundingClientRect()
+                    const startPx = rect.top + window.scrollY - window.innerHeight
+                    const natural = el.offsetHeight + window.innerHeight
+                    const reachable =
+                      document.documentElement.scrollHeight - window.innerHeight - startPx
+                    return `+=${Math.max(Math.min(natural, reachable), 1)}`
+                  }
+                : end,
+            scrub,
+          },
+        })
+        // the beat contract is a 0-100 band: pin the timeline's duration
+        // there even when children end early, or a section whose last tween
+        // stops at 20 compresses every window fivefold
+        tl.set({}, {}, 100)
+        setTimeline(tl)
+        return () => {
+          tl.revert()
+          setTimeline(null)
+        }
+      },
+    )
+    return () => mm.revert()
+  }, [start, end, scrub, id, mobilePins])
 
   const scoped = (selector: string) => {
     if (selector.startsWith('body ')) return Array.from(document.querySelectorAll(selector))
