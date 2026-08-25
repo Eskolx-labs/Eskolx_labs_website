@@ -221,7 +221,10 @@ export function ConceptTiers() {
 
               {/* detail plate: all four bodies stacked, scrubbed through a window.
                   Below lg the window opens and the plates flow in reading order. */}
-              <div className="plate-frame overflow-hidden rounded-sm border border-loam-700/80 bg-loam-900">
+              <div
+                className="plate-frame overflow-hidden rounded-sm border border-loam-700/80 bg-loam-900"
+                style={{ overflow: 'clip' }}
+              >
                 <div data-tier-stack className="will-change-transform max-md:transform-none">
                   {TIERS.map((tier) => (
                     <div key={tier.id} className="p-7 sm:p-9">

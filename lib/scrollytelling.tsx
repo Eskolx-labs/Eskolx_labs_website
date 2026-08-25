@@ -112,7 +112,10 @@ export function Root({
           !tiny &&
           (desktop ||
             (smallDesktop && (!pinnedNow || mobilePins)) ||
-            (portraitMobile && mobilePins))
+            // portrait phones: flow chapters scrub too — their timelines are
+            // viewport-crossing and need no shell height. Only pinned rooms
+            // without a tier room stay flow there.
+            (portraitMobile && (!pinnedNow || mobilePins)))
         if (!shouldBuild) return
         gsap.registerPlugin(ScrollTrigger)
 

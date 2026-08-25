@@ -287,6 +287,7 @@ export function FieldGuide() {
                 <div
                   data-bar-frame
                   className="plate-frame overflow-hidden rounded-sm border border-[color-mix(in_srgb,var(--field-line)_70%,transparent)]"
+                  style={{ overflow: 'clip' }}
                 >
                   <div data-bar-stack>
                     {REQUIREMENTS.map((r) => (
