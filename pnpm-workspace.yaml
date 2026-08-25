@@ -1,6 +1,20 @@
+packages:
+  - .
+
 overrides:
   hono: 4.12.25
 
+# pnpm 10 (Cloudflare's build image) reads onlyBuiltDependencies;
+# pnpm 11 reads allowBuilds. Keep both until the build image moves to 11.
+# msw arrives via shadcn; esbuild/unrs-resolver/workerd via wrangler.
+onlyBuiltDependencies:
+  - msw
+  - esbuild
+  - unrs-resolver
+  - workerd
+
 allowBuilds:
   msw: true
+  esbuild: true
   unrs-resolver: true
+  workerd: true

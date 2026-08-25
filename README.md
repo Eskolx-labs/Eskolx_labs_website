@@ -23,22 +23,26 @@ plain.
 The build emits a fully static site into `out/` (`output: 'export'`), ready
 for any static host.
 
-## Deploy (Cloudflare Pages, free)
+## Deploy (Cloudflare Pages/Workers, free)
 
 The site deploys as a static export — no server runtime, no adapter.
+`wrangler.jsonc` declares the `out/` directory as static assets, so the
+deploy command is plain `npx wrangler deploy`.
 
 1. Push this repo to GitHub (origin: `Eskolx-labs/Eskolx_labs_website`).
-2. In the Cloudflare dashboard: **Workers & Pages → Create → Pages → Connect to Git**,
+2. In the Cloudflare dashboard: **Workers & Pages → Create → Connect to Git**,
    pick the repo, production branch `main`.
-3. Build settings:
-   - Framework preset: **Next.js (Static HTML Export)**
+3. Build settings (Workers build flow):
    - Build command: `pnpm build`
-   - Build output directory: `out`
-4. Environment variables (build):
-   - `NODE_VERSION` = `22`
-   - `PNPM_VERSION` = `11.22.0`
-5. Save and deploy. Every push to `main` redeploys; `*.pages.dev` URL is free,
-   custom domains are free too.
+   - Deploy command: `npx wrangler deploy`
+4. Optional env var (build): `PNPM_VERSION` = `11.22.0`. Not required: the
+   `packageManager` field in package.json pins pnpm, and the workspace file
+   is compatible with the build image's default pnpm 10 too.
+5. Save and deploy. Every push to `main` redeploys automatically.
+   The site serves from `https://<project>.workers.dev` (custom domain free).
+
+Preview a build locally: `python3 -m http.server 8080 --directory out`
+(`next start` is unavailable in export mode).
 
 ## Notes
 
@@ -46,6 +50,4 @@ The site deploys as a static export — no server runtime, no adapter.
 - Append `?debug=1` to the URL to see the animation diagnostics HUD.
 - Reduced-motion visitors get static complete states; pins collapse to plain
   sections below 768px.
-- Local preview of a build: `python3 -m http.server 8080 --directory out`
-  (`next start` is unavailable in export mode).
 

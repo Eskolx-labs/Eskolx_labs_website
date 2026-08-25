@@ -1,0 +1,12 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  // Cloudflare Workers static-assets project: the build emits out/ and this
+  // config serves it at the edge with zero compute. Deploy command on
+  // Cloudflare's build system: npx wrangler deploy
+  "name": "eskolx-labs-website",
+  "compatibility_date": "2026-08-01",
+  "assets": {
+    "directory": "./out",
+    "not_found_handling": "404-page"
+  }
+}
