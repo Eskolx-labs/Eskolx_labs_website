@@ -1,7 +1,7 @@
 'use client'
 
 import { Root, Animation } from '@/lib/scrollytelling'
-import { PARCHMENT, LOAM } from '@/lib/field-controller'
+import { LOAM } from '@/lib/field-controller'
 import { Reveal } from '@/components/reveal'
 import { SealMark } from '@/components/botanical/seal-mark'
 
@@ -14,23 +14,6 @@ const LINKS = [
 export function SiteFooter() {
   return (
     <>
-      {/* the night turn: the guide holds day to its end; this short seam
-          presses the field into loam one last time — the mirror of the dusk
-          seam, and the close the whole book has been walking toward */}
-      <Root
-        id="night-seam"
-        className="relative flex h-[28vh] items-center justify-center bg-loam-950 md:h-[55vh]"
-        start="top bottom"
-        end="bottom top"
-        field={{ from: PARCHMENT, to: LOAM }}
-      >
-        <div className="flex items-center gap-3" aria-hidden="true">
-          <span className="h-1.5 w-1.5 rounded-full bg-wine-500/80" />
-          <span className="h-1 w-1 rounded-full bg-gold-leaf/70" />
-          <span className="h-1.5 w-1.5 rounded-full bg-wine-500/80" />
-        </div>
-      </Root>
-
       <Root
         className="relative overflow-hidden border-t border-[color-mix(in_srgb,var(--field-line)_45%,transparent)] field-bg"
         start="top bottom"

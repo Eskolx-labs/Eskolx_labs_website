@@ -11,12 +11,13 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
  * rises and settles across the same scroll window the field controller is
  * turning underneath, then releases once the real page has caught up.
  *
- * Two pressings, two authored moments: the dawn seam presses daylight back
- * over the night field as the method chapter opens, and the night seam
- * presses loam over the day field as the book closes. Each is anchored to
- * its seam's own crossing (neither has a pin), so neither can drift into
- * the chapters around it. Below md, under reduced motion, or without the
- * filter the page keeps the smooth lerp — this layer is pure enhancement.
+ * One pressing, one authored moment: the dawn seam presses daylight back
+ * over the night field as the method chapter opens. Anchored to the seam's
+ * own crossing (it has no pin), so it can never drift into the chapters
+ * around it. The guide's own turn to night rides the body lerp instead —
+ * text and background move together there, so no press is wanted. Below
+ * md, under reduced motion, or without the filter the page keeps the
+ * smooth lerp — this layer is pure enhancement.
  */
 
 const TURNS = [
@@ -31,21 +32,6 @@ const TURNS = [
     peak: 74,
     rest: 22,
     seed: 12,
-  },
-  {
-    id: 'press-night',
-    section: '#night-seam',
-    color: '#241407',
-    from: 0,
-    to: 1,
-    // the night seam is the book's last crossing: nothing follows except the
-    // short footer, so the seam's bottom never rises past roughly 54% of the
-    // viewport — the press must release by 60% or it can never complete
-    end: 'bottom 60%',
-    bf: '0.015 0.105',
-    peak: 74,
-    rest: 22,
-    seed: 27,
   },
 ] as const
 
