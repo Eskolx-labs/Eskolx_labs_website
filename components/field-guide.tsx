@@ -30,7 +30,14 @@ const DONTs = [
   },
 ]
 
-const REQUIREMENTS = [
+const REQUIREMENTS: {
+  n: string
+  title: string
+  body: string
+  href?: string
+  linkText?: string
+  after?: string
+}[] = [
   {
     n: '01',
     title: 'Working Python',
@@ -49,7 +56,10 @@ const REQUIREMENTS = [
   {
     n: '04',
     title: 'Teaching instinct',
-    body: 'The loop ends when you can explain what you built. Explanations worth publishing go into the open study vault.',
+    body: 'The loop ends when you can explain what you built. Explanations worth publishing go into',
+    linkText: 'the open study vault',
+    href: 'https://github.com/Eskolx-labs/Eskolx-Open-Knowledge',
+    after: '.',
   },
 ]
 
@@ -67,7 +77,13 @@ const STATUS = [
   { k: 'License', v: 'MIT. Everything public.' },
 ]
 
-const FAQ = [
+const FAQ: {
+  q: string
+  a: string
+  href?: string
+  linkText?: string
+  after?: string
+}[] = [
   {
     q: 'Who is Eskolx Labs for?',
     a: 'Anyone interested in statistics or data science who would rather build than watch. Most of our people are students who feel the jump from coursework to real open source is too wide. It is. We build the middle step.',
@@ -86,7 +102,10 @@ const FAQ = [
   },
   {
     q: 'Where does the material come from?',
-    a: 'Books and research papers. Participants take notes before implementing anything, and those notes live in an open Obsidian vault anyone can download. Explanations good enough for the public end up on this site.',
+    a: 'Books and research papers. Participants take notes before implementing anything, and those notes live in an',
+    linkText: 'open Obsidian vault',
+    href: 'https://github.com/Eskolx-labs/Eskolx-Open-Knowledge',
+    after: ' anyone can download. Explanations good enough for the public end up on this site.',
   },
   {
     q: 'Is there a longer FAQ?',
@@ -189,7 +208,7 @@ export function FieldGuide() {
               <h3 className="display text-xl text-parchment-ink">What we do</h3>
               <ul className="mt-6 space-y-4">
                 {DOES.map((d) => (
-                  <li key={d} className="flex gap-3.5 text-[15px] leading-relaxed text-parchment-ink/85">
+                  <li key={d} className="flex gap-3.5 text-[15px] max-md:text-base leading-relaxed text-parchment-ink/85">
                     <svg viewBox="0 0 14 14" className="mt-1 h-3.5 w-3.5 shrink-0 text-wine-600" aria-hidden="true">
                       <path d="M2 7.5 L5.5 11 L12 3" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
@@ -207,8 +226,8 @@ export function FieldGuide() {
                       <path d="M3 3 L11 11 M11 3 L3 11" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                     </svg>
                     <span>
-                      <span className="block text-[15px] font-medium leading-relaxed text-parchment-ink/85">{d.t}</span>
-                      <span className="mt-1 block max-w-[52ch] text-[15px] leading-relaxed text-parchment-ink/70">{d.d}</span>
+                      <span className="block text-[15px] max-md:text-base font-medium leading-relaxed text-parchment-ink/85">{d.t}</span>
+                      <span className="mt-1 block max-w-[52ch] text-[15px] max-md:text-base leading-relaxed text-parchment-ink/70">{d.d}</span>
                     </span>
                   </li>
                 ))}
@@ -283,6 +302,15 @@ export function FieldGuide() {
                         </h3>
                         <p className="mt-3 max-w-[52ch] text-[16px] leading-relaxed text-[color-mix(in_srgb,var(--field-ink)_80%,transparent)]">
                           {r.body}
+                          {r.href && (
+                            <>
+                              {' '}
+                              <a href={r.href} target="_blank" rel="noreferrer" className="text-wine-400 underline decoration-gold-leaf/40 underline-offset-4 transition-colors hover:text-wine-300">
+                                {r.linkText}
+                              </a>
+                              {r.after}
+                            </>
+                          )}
                         </p>
                       </article>
                     ))}
@@ -304,7 +332,7 @@ export function FieldGuide() {
                       >
                         {r.n}
                       </span>
-                      <span className="font-serif text-[15px] leading-tight field-ink-soft" data-bar-stake-name={r.n}>
+                      <span className="font-serif text-[15px] max-md:text-base leading-tight field-ink-soft" data-bar-stake-name={r.n}>
                         {r.title}
                       </span>
                     </div>
@@ -317,7 +345,7 @@ export function FieldGuide() {
 
               {/* hacktivation energy: the definition stamps as the bar closes */}
               <Animation target="[data-fg-hack]" start={84} end={92} fromTo={[{ scale: 1.5, rotate: -7, opacity: 0 }, { scale: 1, rotate: 0, opacity: 1, ease: 'power4.in' }]}>
-                <p className="mx-auto mt-10 max-w-2xl text-center text-[15px] leading-relaxed text-[color-mix(in_srgb,var(--field-ink)_78%,transparent)]">
+                <p className="mx-auto mt-10 max-w-2xl text-center text-[15px] max-md:text-base leading-relaxed text-[color-mix(in_srgb,var(--field-ink)_78%,transparent)]">
                   <span data-fg-hack className="inline-block font-mono text-xs tracking-wide text-wine-400">HACKTIVATION ENERGY</span>
                   <span className="mt-2 block">
                     The effort a newcomer spends before their first useful commit.
@@ -386,7 +414,7 @@ export function FieldGuide() {
                       </Animation>
                     )}
                     <dt className="font-mono text-xs uppercase tracking-[0.16em] field-ink-soft sm:pt-1">{row.k}</dt>
-                    <dd className="text-[15px] leading-relaxed text-[color-mix(in_srgb,var(--field-ink)_85%,transparent)]">
+                    <dd className="text-[15px] max-md:text-base leading-relaxed text-[color-mix(in_srgb,var(--field-ink)_85%,transparent)]">
                       {row.href ? (
                         <a href={row.href} target="_blank" rel="noreferrer" className="underline decoration-gold-leaf/40 underline-offset-4 transition-colors hover:text-wine-400 hover:decoration-wine-400/50">
                           {row.v}
@@ -426,8 +454,17 @@ export function FieldGuide() {
                         </svg>
                       </span>
                     </summary>
-                    <p className="max-w-[74ch] px-5 pb-5 text-[15px] leading-relaxed text-[color-mix(in_srgb,var(--field-ink)_80%,transparent)]">
+                    <p className="max-w-[74ch] px-5 pb-5 text-[16px] leading-relaxed text-[color-mix(in_srgb,var(--field-ink)_80%,transparent)]">
                       {item.a}
+                      {item.href && (
+                        <>
+                          {' '}
+                          <a href={item.href} target="_blank" rel="noreferrer" className="text-wine-400 underline decoration-gold-leaf/40 underline-offset-4 transition-colors hover:text-wine-300">
+                            {item.linkText}
+                          </a>
+                          {item.after}
+                        </>
+                      )}
                     </p>
                   </details>
                 ))}
