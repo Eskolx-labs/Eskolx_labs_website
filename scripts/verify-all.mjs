@@ -414,6 +414,18 @@ const sealState = (page) => page.evaluate(() => {
   // the book-close rule draws at the very end
   await page.evaluate(() => window.__lenis?.scrollTo(document.documentElement.scrollHeight, { immediate: true }))
   await page.waitForTimeout(900)
+  // the roadmap exit was invisible for its whole life: a shorter-than-
+  // viewport zone with pinned-style strings computed a zero-length trigger
+  await page.evaluate(() => {
+    const zone = document.querySelector('[data-exit-inner]').parentElement
+    window.__lenis?.scrollTo(zone.getBoundingClientRect().top + scrollY + zone.offsetHeight / 2 - innerHeight / 2, { immediate: true })
+  })
+  await page.waitForTimeout(700)
+  check('desktop: roadmap exit reveals', await page.evaluate(() =>
+    +getComputedStyle(document.querySelector('[data-exit-inner]')).opacity > 0.5))
+  await page.waitForTimeout(600)
+  await page.evaluate(() => window.__lenis?.scrollTo(document.documentElement.scrollHeight, { immediate: true }))
+  await page.waitForTimeout(1400)
   check('desktop: close-rule drawn at book end', await page.evaluate(() => {
     const el = document.querySelector('[data-close-rule]')
     if (!el) return false

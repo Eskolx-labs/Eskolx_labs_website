@@ -194,9 +194,14 @@ export function Roadmap() {
       </Root>
 
       {/* the quiet exit on the day-spread. It owns its own parchment zone so
-          the body holds paper until the seal floods the page into night. */}
+          the body holds paper until the seal floods the page into night.
+          Flow-chapter strings are load-bearing here: with the default
+          pinned-style start/end this shorter-than-viewport zone computed a
+          zero-length trigger and its content never revealed at all. */}
       <Root
         className="bg-parchment"
+        start="top bottom"
+        end="bottom top"
         field={{
           from: { bg: '#ece1c6', ink: '#29190c', soft: '#5c4a33', line: '#b9a67f' },
           to: { bg: '#ece1c6', ink: '#29190c', soft: '#5c4a33', line: '#b9a67f' },
@@ -210,24 +215,7 @@ export function Roadmap() {
           fromTo={[{ y: 28, opacity: 0 }, { y: 0, opacity: 1 }]}
         />
         <div data-exit-inner className="mx-auto max-w-7xl px-4 pb-24 pt-16 sm:px-6 lg:px-8">
-          <div className="flex flex-col items-start gap-5 rounded-sm border border-parchment-ink/25 bg-parchment p-7 sm:flex-row sm:items-center">
-            <svg viewBox="0 0 40 40" className="h-11 w-11 shrink-0 text-gold-leaf" aria-hidden="true" fill="none">
-              <path d="M8 31 H32 M10 34 H30 M13 37 H27" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" opacity="0.55" />
-              <path d="M20 30 V12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-              <path d="M20 22 C16.5 19.5 13.5 19.5 11 21.5 C13.5 24 17 23.8 20 22 Z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
-              <path d="M20 17 C23.5 14.5 26.5 14.5 29 16.5 C26.5 19 23 18.8 20 17 Z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
-              <circle cx="20" cy="12" r="1.3" fill="currentColor" stroke="none" />
-            </svg>
-            <div>
-              <h3 className="display text-lg text-parchment-ink">Small, fast-moving builder teams</h3>
-              <p className="mt-1.5 max-w-[68ch] text-[15px] leading-relaxed text-parchment-ink/75">
-                Few people, fast cycles. Cohorts work in pure code and ship
-                tested, documented packages instead of notebooks.
-              </p>
-            </div>
-          </div>
-
-          <div className="mt-12 flex flex-col items-start justify-between gap-5 border-t border-parchment-ink/25 pt-10 sm:flex-row sm:items-center">
+          <div className="flex flex-col items-start justify-between gap-5 border-t border-parchment-ink/25 pt-10 sm:flex-row sm:items-center">
             <p className="display text-xl leading-snug text-parchment-ink sm:text-2xl">
               The season starts at the repo.
             </p>
