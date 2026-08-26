@@ -183,7 +183,7 @@ export function SiteNav() {
       ref={headerRef}
       className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
         grounded
-          ? 'border-b border-[color-mix(in_srgb,var(--field-line)_35%,transparent)] bg-[color-mix(in_srgb,var(--field-bg)_86%,transparent)] backdrop-blur-md'
+          ? 'border-b border-[color-mix(in_srgb,var(--field-line)_35%,transparent)] bg-[color-mix(in_srgb,var(--field-bg)_86%,transparent)] backdrop-blur-md max-lg:bg-[color-mix(in_srgb,var(--field-bg)_97%,transparent)] max-lg:backdrop-blur-none'
           : 'border-b border-transparent bg-transparent'
       }`}
     >
@@ -286,7 +286,7 @@ export function SiteNav() {
       </div>
 
       {open && (
-        <div className="border-t border-[color-mix(in_srgb,var(--field-line)_40%,transparent)] bg-[color-mix(in_srgb,var(--field-bg)_95%,transparent)] backdrop-blur-md lg:hidden">
+        <div className="border-t border-[color-mix(in_srgb,var(--field-line)_40%,transparent)] bg-[color-mix(in_srgb,var(--field-bg)_97%,transparent)] lg:hidden">
           <nav className="mx-auto flex max-w-7xl flex-col px-4 py-4 sm:px-6">
             {NAV_LINKS.map((link) => (
               <a

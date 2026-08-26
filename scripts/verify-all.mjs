@@ -239,6 +239,33 @@ const sealState = (page) => page.evaluate(() => {
     return dd && getComputedStyle(dd).fontSize === '16px'
   }))
   check('phone: vault links present', await page.evaluate(() => document.querySelectorAll('a[href*="Eskolx-Open-Knowledge"]').length >= 2))
+  // the strips must READ as lighting on a 44px circle: wine fill, cream
+  // numeral — not the desktop rail's subtle border shift
+  await scrollPin(page, '#tiers [data-pin]', 0.5)
+  await page.waitForTimeout(500)
+  check('phone: tier strip lights wine', await page.evaluate(() => {
+    const btn = [...document.querySelectorAll('#tiers [role=group] button')].find((b) => b.hasAttribute('data-lit'))
+    return btn && getComputedStyle(btn).backgroundColor === 'rgb(124, 44, 84)'
+  }))
+  check('phone: active stake pops', await page.evaluate(() => {
+    const btn = document.querySelector('#tiers [role=group] button[aria-current="true"]')
+    return btn && getComputedStyle(btn).transform !== 'none'
+  }))
+  await scrollPin(page, '#tiers [data-pin]', 0.62)
+  await page.waitForTimeout(400)
+  check('phone: strip progress rule fills', await page.evaluate(() => {
+    const rule = document.querySelector('#tiers [data-strip-progress]')
+    const m = new DOMMatrixReadOnly(getComputedStyle(rule).transform)
+    return m.a > 0.5
+  }))
+  check('phone: tier kicker re-inks', await page.evaluate(() => {
+    const k = document.querySelector('[data-tier-kicker][data-lit]')
+    return k && getComputedStyle(k).color === 'rgb(210, 156, 182)'
+  }))
+  check('phone: nav carries no backdrop blur', await page.evaluate(() => {
+    const nav = document.querySelector('header')
+    return getComputedStyle(nav.querySelector('div, nav, section') ?? nav).backdropFilter === 'none'
+  }))
   check('phone: marquee scrubs', await page.evaluate(async () => {
     const el = [...document.querySelectorAll('div')].find((d) => d.className.includes && String(d.className).includes('w-max'))
     window.__lenis?.scrollTo(el.getBoundingClientRect().top + window.scrollY - window.innerHeight * 0.5, { immediate: true })

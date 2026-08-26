@@ -107,7 +107,15 @@ let initialized = false
 let reduced = false
 let dirty = true
 let lastStamp = ''
+let lastWrite = 0
 let raf = 0
+
+// a write re-styles every element that reads the field vars, so during a
+// fast scroll the turn would repaint the document on most frames. The ramp
+// is slow by design: ~25 updates a second reads as perfectly continuous
+// and roughly halves the work of the heaviest rooms. The trailing write
+// still lands — a scheduled paint runs even after scroll stops.
+const WRITE_MIN_MS = 38
 
 function rgb(hex: string): [number, number, number] {
   const n = parseInt(hex.slice(1), 16)
@@ -199,6 +207,12 @@ function paint() {
   const pq = Math.round(p * 64) / 64
   const stamp = `${zone.id}:${pq}`
   if (stamp === lastStamp) return
+  const now = performance.now()
+  if (now - lastWrite < WRITE_MIN_MS) {
+    schedule()
+    return
+  }
+  lastWrite = now
   lastStamp = stamp
   const values = lerpPair(zone.from, zone.to, pq, zone.flip)
   for (let i = 0; i < KEYS.length; i++) {

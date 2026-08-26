@@ -79,6 +79,11 @@ export function bindStakeLighting(opts: {
     const el = document.getElementById(opts.rootId)
     if (!el) return
     const p = roomProgress(opts.rootId)
+    // the room's own reading rule: a gold hairline under the phone strip
+    // fills with travel, echoing the nav's book-wide one. Compositor-only
+    // (one transform), so it rides every frame.
+    const rule = el.querySelector<HTMLElement>('[data-strip-progress]')
+    if (rule) rule.style.transform = `scaleX(${p < 0 ? 1 : p})`
     // current = last plate whose (led) framing threshold the room passed
     let current = -1
     if (p >= 0 && fractions.length === opts.count) {

@@ -48,6 +48,7 @@ export function ConceptTiers() {
       rootId: 'tiers',
       stackSel: '#tiers [data-tier-stack]',
       stakeAttr: 'data-stake',
+      litAttrs: ['data-tier-kicker'],
       count: TIERS.length,
       gsapScrollTrigger: ScrollTrigger,
     }), [])
@@ -159,6 +160,7 @@ export function ConceptTiers() {
                 </button>
               ))}
             </div>
+            <span data-strip-progress aria-hidden="true" className="mx-auto mt-3 block h-px w-28 origin-left scale-x-0 bg-gold-leaf/80 lg:hidden" />
 
             <div className="mt-10 grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
               {/* rail of tier stakes; the active one lights as scroll advances,
@@ -211,7 +213,7 @@ export function ConceptTiers() {
                   {TIERS.map((tier) => (
                     <div key={tier.id} className="p-7 sm:p-9">
                       <div className="rule-ornament">
-                        <span className="font-mono text-xs tracking-[0.18em] text-gold-leaf">
+                        <span data-tier-kicker={tier.id} className="font-mono text-xs tracking-[0.18em] text-gold-leaf">
                           TIER {tier.id}
                         </span>
                       </div>

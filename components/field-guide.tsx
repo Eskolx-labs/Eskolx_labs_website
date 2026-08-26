@@ -320,6 +320,7 @@ export function FieldGuide() {
               </button>
             ))}
           </div>
+          <span data-strip-progress aria-hidden="true" className="mx-auto mt-3 block h-px w-28 origin-left scale-x-0 bg-gold-leaf/80 lg:hidden" />
 
           <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_0.9fr] lg:items-center">
                 {/* the stack: one plate fills the window at a time */}
