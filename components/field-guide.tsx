@@ -138,10 +138,13 @@ export function FieldGuide() {
       const first = stack?.children[0] as HTMLElement | undefined
       if (!stack || !frame || !first) return
       const fit = () => {
-        // the window prefers one plate exactly, capped at 62vh so the plate
-        // never clips against the sticky shell — on phones the cap does the
-        // work, on desktop the plate height usually does
-        frame.style.height = `${Math.min(first.offsetHeight + 2, Math.round(window.innerHeight * (window.innerHeight < 700 ? 0.48 : 0.62)))}px`
+        // the window derives from the plate — one plate exactly, no slicing
+        // mid-heading. The shell reserve (heading + hacktivation) is a
+        // ceiling for short windows, never the target.
+        frame.style.height = `${Math.min(
+          first.offsetHeight + 2,
+          Math.max(Math.round(window.innerHeight - 300), 260),
+        )}px`
       }
       fit()
       ScrollTrigger.addEventListener('refreshInit', fit)

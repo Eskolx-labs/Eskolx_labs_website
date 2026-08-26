@@ -245,7 +245,7 @@ export function SiteNav() {
             target="_blank"
             rel="noreferrer"
             aria-label="Join the Telegram community"
-            className={`flex h-9 w-9 items-center justify-center rounded-sm border transition-colors sm:h-10 sm:w-10 ${
+            className={`flex h-11 w-11 items-center justify-center rounded-sm border transition-colors ${
               grounded
                 ? 'border-[color-mix(in_srgb,var(--field-ink)_30%,transparent)] text-[color:var(--field-ink)] hover:border-[color:var(--field-ink)]'
                 : 'border-[color-mix(in_srgb,var(--field-ink)_30%,transparent)] text-[color:var(--field-ink)] hover:border-[color:var(--field-ink)]'
@@ -269,7 +269,7 @@ export function SiteNav() {
           type="button"
           ref={toggleRef}
           onClick={() => setOpen((v) => !v)}
-            className={`inline-flex h-10 w-10 flex-col items-center justify-center gap-[5px] rounded-sm text-[color:var(--field-ink)] lg:hidden`}
+            className={`inline-flex h-11 w-11 flex-col items-center justify-center gap-[5px] rounded-sm text-[color:var(--field-ink)] lg:hidden`}
           aria-label={open ? 'Close menu' : 'Open menu'}
           aria-expanded={open}
         >

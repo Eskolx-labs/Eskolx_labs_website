@@ -104,10 +104,13 @@ export function ConceptTiers() {
       // the window fits one plate exactly, so a third of the travel lands
       // each subsequent tier dead-center — at any viewport size
       const fit = () => {
-        // the window prefers one plate exactly, but a plate taller than ~78vh
-        // would clip against the sticky shell — the cap trades a little of the
-        // stage for never cutting copy off
-        frame.style.height = `${Math.min(first.offsetHeight + 2, Math.round(window.innerHeight * (window.innerHeight < 700 ? 0.55 : 0.78)))}px`
+        // the window derives from the plate — one plate exactly, no slicing
+        // mid-heading. The shell reserve (heading + clearance) is a ceiling
+        // for short windows, never the target.
+        frame.style.height = `${Math.min(
+          first.offsetHeight + 2,
+          Math.max(Math.round(window.innerHeight - 230), 260),
+        )}px`
       }
       fit()
       ScrollTrigger.addEventListener('refreshInit', fit)
