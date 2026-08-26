@@ -1,4 +1,3 @@
-import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import localFont from 'next/font/local'
 import { SmoothScroll } from '@/lib/motion'
@@ -111,7 +110,6 @@ export default function RootLayout({
         <SmoothScroll>{children}</SmoothScroll>
         <LivingGrain />
         <DebugHud />
-        {process.env.NODE_ENV === 'production' && process.env.VERCEL === '1' && <Analytics />}
       </body>
     </html>
   )
