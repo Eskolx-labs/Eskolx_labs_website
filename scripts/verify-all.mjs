@@ -404,12 +404,15 @@ const sealState = (page) => page.evaluate(() => {
   const page = await newPage([1440, 900])
   check('content: vault linked twice', await page.evaluate(() => document.querySelectorAll('a[href*="Eskolx-Open-Knowledge"]').length >= 2))
   check('content: 404 page exists in build', fs.existsSync(path.join(OUT, '404.html')))
-  // FAQ accordions open for real
-  check('content: FAQ details open on click', await page.evaluate(async () => {
-    const d = document.querySelector('#guide-ledger details')
-    d.querySelector('summary').click()
-    await new Promise((r) => setTimeout(r, 100))
-    return d.open
+  // FAQ rows unfold on a grid-rows transition (button + aria-expanded)
+  check('content: FAQ answer unfolds on click', await page.evaluate(async () => {
+    const row = document.querySelector('#guide-ledger [data-reveal-item]:has(button[aria-controls^="faq-answer"])')
+    const btn = row.querySelector('button')
+    const panel = document.getElementById(btn.getAttribute('aria-controls'))
+    const closedH = panel.getBoundingClientRect().height
+    btn.click()
+    await new Promise((r) => setTimeout(r, 450))
+    return btn.getAttribute('aria-expanded') === 'true' && closedH < 2 && panel.getBoundingClientRect().height > 20
   }))
   // the book-close rule draws at the very end
   await page.evaluate(() => window.__lenis?.scrollTo(document.documentElement.scrollHeight, { immediate: true }))

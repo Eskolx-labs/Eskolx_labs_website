@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { Root, Pin, Animation } from '@/lib/scrollytelling'
@@ -113,6 +113,53 @@ const FAQ: {
     a: 'Not yet. This one stays short on purpose. Until the expanded version ships, ask us directly on Telegram or by email.',
   },
 ]
+
+/* one asked-often row. The answer unfolds on a grid-rows transition rather
+   than snapping: the + icon has always rotated through the opening, so the
+   panel itself now performs the same confident deceleration. The answer
+   stays in the DOM either way — closed is 0fr, not display:none. */
+function FaqRow({ item, index }: { item: (typeof FAQ)[number]; index: number }) {
+  const [open, setOpen] = useState(false)
+  return (
+    <div className="border-t border-[color-mix(in_srgb,var(--field-line)_45%,transparent)] first:border-t-0" data-reveal-item>
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        aria-controls={`faq-answer-${index}`}
+        className="flex w-full cursor-pointer items-center justify-between gap-6 px-5 py-4 text-left transition-colors hover:bg-[color-mix(in_srgb,var(--field-ink)_5%,transparent)]"
+      >
+        <span className="font-serif text-[16px] font-medium leading-snug field-ink">{item.q}</span>
+        <span
+          className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--field-line)_90%,transparent)] text-[color:var(--field-ink-soft)] transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${open ? 'rotate-45' : ''}`}
+        >
+          <svg viewBox="0 0 12 12" className="h-3 w-3" aria-hidden="true">
+            <path d="M6 1 V11 M1 6 H11" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+          </svg>
+        </span>
+      </button>
+      <div
+        id={`faq-answer-${index}`}
+        className={`grid transition-[grid-template-rows,opacity] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${open ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}
+      >
+        <div className="overflow-hidden">
+          <p className="max-w-[72ch] px-5 pb-5 text-[16px] leading-relaxed text-[color-mix(in_srgb,var(--field-ink)_80%,transparent)]">
+            {item.a}
+            {item.href && (
+              <>
+                {' '}
+                <a href={item.href} target="_blank" rel="noreferrer" className="text-wine-400 underline decoration-gold-leaf/40 underline-offset-4 transition-colors hover:text-wine-300">
+                  {item.linkText}
+                </a>
+                {item.after}
+              </>
+            )}
+          </p>
+        </div>
+      </div>
+    </div>
+  )
+}
 
 // plates on the turning field: surfaces tint from the field vars, so a
 // plate is parchment-papered at the top of the turn and loam-dark by its
@@ -470,29 +517,8 @@ export function FieldGuide() {
             <Reveal className={`rounded-sm p-7 sm:p-9 ${FIELD_PLATE}`} y={24}>
               <h3 className="display text-2xl field-ink" data-reveal-item>Asked often</h3>
               <div className="mt-6 overflow-hidden rounded-sm border border-[color-mix(in_srgb,var(--field-line)_60%,transparent)]">
-                {FAQ.map((item) => (
-                  <details key={item.q} className="group border-t border-[color-mix(in_srgb,var(--field-line)_45%,transparent)] first:border-t-0" data-reveal-item>
-                    <summary className="flex cursor-pointer list-none items-center justify-between gap-6 px-5 py-4 transition-colors hover:bg-[color-mix(in_srgb,var(--field-ink)_5%,transparent)] [&::-webkit-details-marker]:hidden">
-                      <span className="font-serif text-[16px] font-medium leading-snug field-ink">{item.q}</span>
-                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--field-line)_90%,transparent)] text-[color:var(--field-ink-soft)] transition-transform duration-300 group-open:rotate-45">
-                        <svg viewBox="0 0 12 12" className="h-3 w-3" aria-hidden="true">
-                          <path d="M6 1 V11 M1 6 H11" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                        </svg>
-                      </span>
-                    </summary>
-                    <p className="max-w-[72ch] px-5 pb-5 text-[16px] leading-relaxed text-[color-mix(in_srgb,var(--field-ink)_80%,transparent)]">
-                      {item.a}
-                      {item.href && (
-                        <>
-                          {' '}
-                          <a href={item.href} target="_blank" rel="noreferrer" className="text-wine-400 underline decoration-gold-leaf/40 underline-offset-4 transition-colors hover:text-wine-300">
-                            {item.linkText}
-                          </a>
-                          {item.after}
-                        </>
-                      )}
-                    </p>
-                  </details>
+                {FAQ.map((item, i) => (
+                  <FaqRow key={item.q} item={item} index={i} />
                 ))}
               </div>
               <p className="mt-5 text-sm text-[color-mix(in_srgb,var(--field-ink)_70%,transparent)]" data-reveal-item>

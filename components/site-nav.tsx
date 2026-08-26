@@ -272,6 +272,7 @@ export function SiteNav() {
             className={`inline-flex h-11 w-11 flex-col items-center justify-center gap-[5px] rounded-sm text-[color:var(--field-ink)] lg:hidden`}
           aria-label={open ? 'Close menu' : 'Open menu'}
           aria-expanded={open}
+          aria-controls="nav-menu-panel"
         >
           <span
             className={`h-px w-6 bg-current transition-transform duration-200 ${open ? 'translate-y-[6px] rotate-45' : ''}`}
@@ -285,43 +286,54 @@ export function SiteNav() {
         </button>
       </div>
 
-      {open && (
-        <div className="border-t border-[color-mix(in_srgb,var(--field-line)_40%,transparent)] bg-[color-mix(in_srgb,var(--field-bg)_100%,transparent)] lg:hidden">
-          <nav className="mx-auto flex max-w-7xl flex-col px-4 py-4 sm:px-6">
-            {NAV_LINKS.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                onClick={() => setOpen(false)}
-                className="flex items-baseline justify-between border-b border-[color-mix(in_srgb,var(--field-line)_30%,transparent)] py-3 font-serif text-[color:var(--field-ink)] last:border-0 hover:opacity-75"
-              >
-                <span>{link.label}</span>
-                <span className="font-mono text-kicker uppercase tracking-label-snug opacity-50">{link.gloss}</span>
-              </a>
-            ))}
-            <div className="mt-4 flex flex-col gap-3 pb-2">
-              <a
-                href="https://github.com/eskolx-labs"
-                target="_blank"
-                rel="noreferrer"
-                className="btn-plate btn-wine"
-              >
-                <GithubIcon className="h-4 w-4" />
-                Eskolx on GitHub
-              </a>
-              <a
-                href="https://t.me/eskolx_labs"
-                target="_blank"
-                rel="noreferrer"
-                className="btn-plate btn-outline"
-              >
-                <TelegramIcon className="h-4 w-4" />
-                Join the Community
-              </a>
-            </div>
-          </nav>
+      {/* the drop stays mounted and unfolds on grid rows: the burger morphs
+          through 200ms, so the panel answers with the same motion instead of
+          popping. visibility keeps it out of tab order while closed. */}
+      <div
+        id="nav-menu-panel"
+        aria-hidden={!open}
+        className={`grid transition-[grid-template-rows,visibility] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] lg:hidden ${
+          open ? 'visible grid-rows-[1fr]' : 'invisible grid-rows-[0fr]'
+        }`}
+      >
+        <div className="overflow-hidden">
+          <div className="border-t border-[color-mix(in_srgb,var(--field-line)_40%,transparent)] bg-[color-mix(in_srgb,var(--field-bg)_100%,transparent)]">
+            <nav className="mx-auto flex max-w-7xl flex-col px-4 py-4 sm:px-6">
+              {NAV_LINKS.map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  onClick={() => setOpen(false)}
+                  className="flex items-baseline justify-between border-b border-[color-mix(in_srgb,var(--field-line)_30%,transparent)] py-3 font-serif text-[color:var(--field-ink)] last:border-0 hover:opacity-75"
+                >
+                  <span>{link.label}</span>
+                  <span className="font-mono text-kicker uppercase tracking-label-snug opacity-50">{link.gloss}</span>
+                </a>
+              ))}
+              <div className="mt-4 flex flex-col gap-3 pb-2">
+                <a
+                  href="https://github.com/eskolx-labs"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="btn-plate btn-wine"
+                >
+                  <GithubIcon className="h-4 w-4" />
+                  Eskolx on GitHub
+                </a>
+                <a
+                  href="https://t.me/eskolx_labs"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="btn-plate btn-outline"
+                >
+                  <TelegramIcon className="h-4 w-4" />
+                  Join the Community
+                </a>
+              </div>
+            </nav>
+          </div>
         </div>
-      )}
+      </div>
 
       {/* the reading rule: fills as the book is read */}
       <div
