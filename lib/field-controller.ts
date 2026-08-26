@@ -113,19 +113,6 @@ let dirty = true
 let lastStamp = ''
 let lastWrite = 0
 let raf = 0
-let lastWriteAt = 0
-// the per-frame sort is pure overhead between registrations: cached and
-// invalidated only when zones or their measured geometry change
-let sortedCache: Zone[] | null = null
-
-function sortedZones(): Zone[] {
-  if (!sortedCache) {
-    sortedCache = Array.from(zones.values()).sort(
-      (a, b) => a.top - b.top || b.height - a.height,
-    )
-  }
-  return sortedCache
-}
 
 // a write re-styles every element that reads the field vars, so during a
 // fast scroll the turn would repaint the document on most frames. The ramp
@@ -159,7 +146,6 @@ function measure() {
     z.height = z.el.offsetHeight || window.innerHeight
   }
   dirty = false
-  sortedCache = null
 }
 
 // pinned rooms turn across their exact pin duration; ordinary sections turn
@@ -182,17 +168,6 @@ function activeZone(sorted: Zone[], center: number): Zone {
   return zone
 }
 
-// one writer for the four body vars: identical frames write nothing, so a
-// settled page costs zero style recalc
-function writeValues(values: string[]) {
-  const joined = values.join('|')
-  if (joined === lastValues) return
-  lastValues = joined
-  for (let i = 0; i < KEYS.length; i++) {
-    document.body.style.setProperty(VAR_NAMES[KEYS[i]], values[i])
-  }
-}
-
 function paint() {
   raf = 0
   if (!zones.size) return
@@ -204,7 +179,10 @@ function paint() {
   // formally pass into the footer's zone.
   const docH = document.documentElement.scrollHeight
   const closed = window.scrollY + vh >= docH - 2
-  const zone = activeZone(sortedZones(), window.scrollY + vh * 0.5)
+  const sorted = Array.from(zones.values()).sort(
+    (a, b) => a.top - b.top || b.height - a.height,
+  )
+  const zone = activeZone(sorted, window.scrollY + vh * 0.5)
 
   if (reduced || closed) {
     // static contract: each chapter sits at the field its first half opens
@@ -217,7 +195,7 @@ function paint() {
       const raw = Math.min(Math.max((window.scrollY - start) / Math.max(end - start, 1), 0), 1)
       return turnProgress(raw, zone) < 0.5 ? zone.from : zone.to
     })()
-    writeValues(KEYS.map((k) => pair[k]))
+    for (const k of KEYS) document.body.style.setProperty(VAR_NAMES[k], pair[k])
     lastStamp = ''
     return
   }
@@ -245,9 +223,6 @@ function paint() {
   for (let i = 0; i < KEYS.length; i++) {
     document.body.style.setProperty(VAR_NAMES[KEYS[i]], values[i])
   }
-  lastWriteAt = now
-  lastStamp = stamp
-  writeValues(lerpPair(zone.from, zone.to, q))
 }
 
 function schedule() {
@@ -294,7 +269,6 @@ export function registerZone(zone: Omit<Zone, 'flip' | 'top' | 'height'>) {
     height: 0,
   } as Zone)
   dirty = true
-  sortedCache = null
   schedule()
 }
 
@@ -309,7 +283,6 @@ function turnProgress(p: number, zone: Zone): number {
 export function removeZone(id: string) {
   zones.delete(id)
   dirty = true
-  sortedCache = null
   lastStamp = ''
   schedule()
 }
