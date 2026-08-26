@@ -211,7 +211,7 @@ export function FieldGuide() {
           <Animation target="[data-fg-seal]" start={3} end={9} fromTo={[{ scale: 1.35, rotate: -12, opacity: 0, transformOrigin: '50% 50%' }, { scale: 1, rotate: -6, opacity: 1, ease: 'power4.in' }]} />
           <Reveal className="flex flex-wrap items-end justify-between gap-6">
             <div className="max-w-2xl" data-fg-head>
-              <p className="font-mono text-xs uppercase tracking-[0.22em] text-wine-600" data-reveal-item>
+              <p className="font-mono text-kicker uppercase tracking-label text-wine-600" data-reveal-item>
                 The field guide
               </p>
               <h2 className="display mt-4 text-[clamp(2rem,3.8vw,3.2rem)] leading-tight text-parchment-ink" data-reveal-item>
@@ -237,7 +237,7 @@ export function FieldGuide() {
               <h3 className="display text-xl text-parchment-ink">What we do</h3>
               <ul className="mt-6 space-y-4">
                 {DOES.map((d) => (
-                  <li key={d} className="flex gap-3.5 text-[15px] max-md:text-base leading-relaxed text-parchment-ink/85">
+                  <li key={d} className="flex gap-3.5 text-copy max-md:text-base leading-relaxed text-parchment-ink/85">
                     <svg viewBox="0 0 14 14" className="mt-1 h-3.5 w-3.5 shrink-0 text-wine-600" aria-hidden="true">
                       <path d="M2 7.5 L5.5 11 L12 3" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
@@ -255,8 +255,8 @@ export function FieldGuide() {
                       <path d="M3 3 L11 11 M11 3 L3 11" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                     </svg>
                     <span>
-                      <span className="block text-[15px] max-md:text-base font-medium leading-relaxed text-parchment-ink/85">{d.t}</span>
-                      <span className="mt-1 block max-w-[52ch] text-[15px] max-md:text-base leading-relaxed text-parchment-ink/70">{d.d}</span>
+                      <span className="block text-copy max-md:text-base font-medium leading-relaxed text-parchment-ink/85">{d.t}</span>
+                      <span className="mt-1 block max-w-[52ch] text-copy max-md:text-base leading-relaxed text-parchment-ink/70">{d.d}</span>
                     </span>
                   </li>
                 ))}
@@ -384,12 +384,12 @@ export function FieldGuide() {
                       >
                         {r.n}
                       </span>
-                      <span className="font-serif text-[15px] max-md:text-base leading-tight field-ink-soft" data-bar-stake-name={r.n}>
+                      <span className="font-serif text-copy max-md:text-base leading-tight field-ink-soft" data-bar-stake-name={r.n}>
                         {r.title}
                       </span>
                     </div>
                   ))}
-                  <p className="mt-2 max-w-[38ch] font-mono text-[11px] uppercase leading-relaxed tracking-[0.14em] field-ink-soft motion-reduce:hidden">
+                  <p className="mt-2 max-w-[38ch] font-mono text-kicker uppercase leading-relaxed tracking-label-snug field-ink-soft motion-reduce:hidden">
                     Scroll — the bar reads top to bottom
                   </p>
                 </div>
@@ -397,7 +397,7 @@ export function FieldGuide() {
 
               {/* hacktivation energy: the definition stamps as the bar closes */}
               <Animation target="[data-fg-hack]" start={84} end={92} fromTo={[{ scale: 1.5, rotate: -7, opacity: 0 }, { scale: 1, rotate: 0, opacity: 1, ease: 'power4.in' }]}>
-                <p data-fg-hack className="mx-auto mt-10 max-w-2xl text-center text-[15px] max-md:text-base leading-relaxed text-[color-mix(in_srgb,var(--field-ink)_78%,transparent)]">
+                <p data-fg-hack className="mx-auto mt-10 max-w-2xl text-center text-copy max-md:text-base leading-relaxed text-[color-mix(in_srgb,var(--field-ink)_78%,transparent)]">
                   <span className="inline-block font-mono text-xs tracking-wide text-wine-400">HACKTIVATION ENERGY</span>
                   <span className="mt-2 block">
                     The effort a newcomer spends before their first useful commit.
@@ -439,8 +439,8 @@ export function FieldGuide() {
                         <span data-status-rule={i} aria-hidden="true" className="absolute left-0 top-0 block h-px w-full origin-left bg-[color-mix(in_srgb,var(--field-line)_90%,transparent)]" />
                       </Animation>
                     )}
-                    <dt className="font-mono text-xs uppercase tracking-[0.16em] field-ink-soft sm:pt-1">{row.k}</dt>
-                    <dd className="text-[15px] max-md:text-base leading-relaxed text-[color-mix(in_srgb,var(--field-ink)_85%,transparent)]">
+                    <dt className="font-mono text-kicker uppercase tracking-label-snug field-ink-soft sm:pt-1">{row.k}</dt>
+                    <dd className="text-copy max-md:text-base leading-relaxed text-[color-mix(in_srgb,var(--field-ink)_85%,transparent)]">
                       {row.href ? (
                         <a href={row.href} target="_blank" rel="noreferrer" className="underline decoration-gold-leaf/40 underline-offset-4 transition-colors hover:text-wine-400 hover:decoration-wine-400/50">
                           {row.v}
@@ -480,7 +480,7 @@ export function FieldGuide() {
                         </svg>
                       </span>
                     </summary>
-                    <p className="max-w-[74ch] px-5 pb-5 text-[16px] leading-relaxed text-[color-mix(in_srgb,var(--field-ink)_80%,transparent)]">
+                    <p className="max-w-[72ch] px-5 pb-5 text-[16px] leading-relaxed text-[color-mix(in_srgb,var(--field-ink)_80%,transparent)]">
                       {item.a}
                       {item.href && (
                         <>

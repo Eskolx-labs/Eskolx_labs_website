@@ -200,7 +200,7 @@ export function ConceptTiers() {
                     <span>
                       <span
                         data-stake-name={tier.id}
-                        className="block font-serif text-[15px] font-medium text-cream-200/70"
+                        className="block font-serif text-copy font-medium text-cream-200/70"
                       >
                         {tier.name.replace(' (from scratch)', '')}
                       </span>
@@ -220,7 +220,7 @@ export function ConceptTiers() {
                   {TIERS.map((tier) => (
                     <div key={tier.id} className="p-7 sm:p-9">
                       <div className="rule-ornament">
-                        <span data-tier-kicker={tier.id} className="font-mono text-xs tracking-[0.18em] text-gold-leaf">
+                        <span data-tier-kicker={tier.id} className="font-mono text-kicker tracking-label text-gold-leaf">
                           TIER {tier.id}
                         </span>
                       </div>
@@ -231,7 +231,7 @@ export function ConceptTiers() {
 
                       <ul className="mt-7 space-y-2.5">
                         {tier.concepts.map((c) => (
-                          <li key={c} className="flex items-center gap-3 text-[15px] text-cream-100/90">
+                          <li key={c} className="flex items-center gap-3 text-copy text-cream-100/90">
                             <svg viewBox="0 0 14 14" className="h-3.5 w-3.5 shrink-0 text-wine-400" aria-hidden="true">
                               <path
                                 d="M2 7.5 L5.5 11 L12 3"

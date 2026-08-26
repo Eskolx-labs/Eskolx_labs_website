@@ -10,6 +10,13 @@
   --font-serif: var(--font-source-serif), Georgia, serif;
   --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
 
+  /* type roles: secondary body copy and the mono kicker. One size per role,
+     named for purpose so new type can't spawn fresh arbitrary values. */
+  --text-copy: 0.9375rem;
+  --text-kicker: 11px;
+  --tracking-label: 0.2em;
+  --tracking-label-snug: 0.16em;
+
   --color-background: var(--field-bg);
   --color-foreground: var(--field-ink);
   --color-card: var(--field-bg);

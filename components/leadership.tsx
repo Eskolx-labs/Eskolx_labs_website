@@ -87,7 +87,7 @@ export function Leadership() {
             href="https://github.com/eskolx-labs"
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-2 font-serif text-[15px] text-[color-mix(in_srgb,var(--field-ink)_85%,transparent)] underline-offset-4 transition-colors hover:text-[var(--field-ink)] hover:underline hover:decoration-gold-leaf/60"
+            className="inline-flex items-center gap-2 font-serif text-copy text-[color-mix(in_srgb,var(--field-ink)_85%,transparent)] underline-offset-4 transition-colors hover:text-[var(--field-ink)] hover:underline hover:decoration-gold-leaf/60"
           >
             Find us in the commit log
             <svg viewBox="0 0 14 14" className="h-3 w-3" aria-hidden="true">
@@ -106,8 +106,8 @@ export function Leadership() {
             <path d="M14 32.5 C12.6 33.4 12 34.8 12.2 36.4 M26 32.5 C27.4 33.4 28 34.8 27.8 36.4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" opacity="0.7" />
           </svg>
           <div>
-            <p className="font-serif text-[15px] font-medium text-cream-100">Core talent pipeline</p>
-            <p className="mt-1.5 max-w-[68ch] text-[15px] leading-relaxed text-cream-200/80">
+            <p className="font-serif text-copy font-medium text-cream-100">Core talent pipeline</p>
+            <p className="mt-1.5 max-w-[68ch] text-copy leading-relaxed text-cream-200/80">
               An internal engineering internship feeding an open-source
               maintainer pipeline.
             </p>

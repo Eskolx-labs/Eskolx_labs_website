@@ -54,7 +54,7 @@ typography:
     fontFamily: "JetBrains Mono, ui-monospace, monospace"
     fontSize: "11px"
     fontWeight: 400
-    letterSpacing: "0.18em"
+    letterSpacing: "0.2em"
     textTransform: "uppercase"
 rounded:
   sm: "6px"
@@ -135,9 +135,19 @@ The palette is two fields plus a fixed accent set. Fields are carried as CSS cus
 ### Hierarchy
 - **Display** (400, clamp(2.75rem,7vw,6rem), 1.04): hero headline, section headlines, card titles. Balance with `text-wrap`.
 - **Headline** (400, clamp(2rem,3.8vw,3.2rem), 1.2): section headings.
-- **Body** (400, 1rem–1.125rem, 1.625): paragraphs, max 60–65ch.
-- **Body Small** (400, 0.9375rem, 1.6): card copy, plate bodies, footer.
+- **Body** (400, 1rem–1.125rem, 1.625): paragraphs, max 72ch.
+- **Body Small** (`text-copy`, 400, 0.9375rem — 16px under md, 1.6): card copy, plate bodies, footer links.
 - **Code** (400, 13px, 1.5): code samples in plates.
+
+### Type tokens
+Named roles live in `@theme` (globals.css) so new type can't spawn fresh arbitrary values:
+- `text-copy` — the secondary body size (0.9375rem). Phones bump to base via `max-md:text-base`.
+- `text-kicker` — every uppercase mono label is 11px, no exceptions.
+- `tracking-label-snug` (0.16em) — compact caps: nav items, menu glosses, FAQ keys, the scroll cue.
+- `tracking-label` (0.2em) — the standard kicker track: section kickers, badges, footer column heads.
+- Display moments only (seal label, community Telegram rows) may exceed the stops at 0.28–0.35em.
+
+Card-level h3s sit at `text-2xl leading-snug`; movement/chapter titles may run larger (`sm:text-3xl`, `md:text-4xl`). The origin-story headline keeps its own smaller clamp on purpose — it shares its column with a portrait plate.
 - **Label** (400, 11px, 0.18em tracking, uppercase): mono captions for tiers, phases, footer; gold-leaf or muted ink.
 
 ### Named Rules

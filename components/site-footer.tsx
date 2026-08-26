@@ -36,7 +36,7 @@ export function SiteFooter() {
 
             <div className="flex flex-col gap-10 sm:flex-row sm:gap-20">
               <nav className="flex flex-col gap-3">
-                <span className="font-mono text-[11px] uppercase tracking-[0.18em] field-ink-soft">
+                <span className="font-mono text-kicker uppercase tracking-label field-ink-soft">
                   Resources
                 </span>
                 {LINKS.map((l) => {
@@ -47,7 +47,7 @@ export function SiteFooter() {
                       href={l.href}
                       target={external ? '_blank' : undefined}
                       rel={external ? 'noreferrer' : undefined}
-                      className="inline-block py-1 text-[15px] text-[color:var(--field-ink-soft)] underline-offset-4 transition-colors hover:text-[color:var(--field-ink)] hover:underline hover:decoration-gold-leaf/60"
+                      className="inline-block py-1 text-copy text-[color:var(--field-ink-soft)] underline-offset-4 transition-colors hover:text-[color:var(--field-ink)] hover:underline hover:decoration-gold-leaf/60"
                     >
                       {l.label}
                     </a>
@@ -55,12 +55,12 @@ export function SiteFooter() {
                 })}
               </nav>
               <div className="flex flex-col gap-3">
-                <span className="font-mono text-[11px] uppercase tracking-[0.18em] field-ink-soft">
+                <span className="font-mono text-kicker uppercase tracking-label field-ink-soft">
                   Contact
                 </span>
                 <a
                   href="mailto:eskolxlabs@gmail.com"
-                  className="flex items-center gap-2.5 py-1 text-[15px] text-[color:var(--field-ink-soft)] transition-colors hover:text-[color:var(--field-ink)]"
+                  className="flex items-center gap-2.5 py-1 text-copy text-[color:var(--field-ink-soft)] transition-colors hover:text-[color:var(--field-ink)]"
                 >
                   <svg viewBox="0 0 16 16" className="h-4 w-4 text-wine-400" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden="true">
                     <rect x="1.5" y="3" width="13" height="10" rx="1.5" />

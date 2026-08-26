@@ -39,7 +39,7 @@ export function SealFlood() {
               shell a top-[18%] absolute would float over the emblem. */}
           <p
             data-flood-label
-            className="mb-8 font-mono text-[11px] uppercase tracking-[0.35em] field-ink-soft motion-safe:absolute motion-safe:top-[18%] motion-safe:mb-0"
+            className="mb-8 font-mono text-kicker uppercase tracking-[0.35em] field-ink-soft motion-safe:absolute motion-safe:top-[18%] motion-safe:mb-0"
           >
             The seal of the lab · est. in open source
           </p>

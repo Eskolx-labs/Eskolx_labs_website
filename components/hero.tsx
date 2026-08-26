@@ -195,7 +195,7 @@ export function Hero() {
                   <TelegramIcon className="h-5 w-5" />
                   Join the Community
                 </a>
-                <p className="mt-2 font-mono text-xs tracking-[0.14em] field-ink-soft max-md:hidden sm:order-last sm:mt-0 sm:w-full sm:text-center">
+                <p className="mt-2 font-mono text-kicker tracking-label-snug field-ink-soft max-md:hidden sm:order-last sm:mt-0 sm:w-full sm:text-center">
                   OPEN SOURCE · MIT LICENSE · EVERYTHING PUBLIC
                 </p>
               </div>

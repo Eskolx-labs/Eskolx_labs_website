@@ -161,7 +161,7 @@ export function OriginStory() {
         <div className="mx-auto flex h-full max-w-7xl flex-col justify-center px-4 pt-28 pb-16 sm:px-6 lg:px-8">
           <Reveal className="flex items-start justify-between gap-6">
             <div data-reveal-item>
-              <p className="font-mono text-xs uppercase tracking-[0.22em] text-wine-600">The name</p>
+              <p className="font-mono text-kicker uppercase tracking-label text-wine-600">The name</p>
               <h2 className="display mt-4 max-w-xl text-[clamp(2rem,3.6vw,3rem)] leading-tight text-parchment-ink">
                 The Eshcol Identity
               </h2>
@@ -204,7 +204,7 @@ export function OriginStory() {
 
                       {/* kicker stamps in before the writing starts */}
                       <Animation target={`[data-id-kicker="${i}"]`} start={s + 5} end={s + 8} fromTo={[{ scale: 1.6, opacity: 0 }, { scale: 1, opacity: 1, ease: 'power4.in' }]}>
-                        <p data-id-kicker={i} className="mt-6 font-mono text-[11px] uppercase tracking-[0.24em] text-wine-700">
+                        <p data-id-kicker={i} className="mt-6 font-mono text-kicker uppercase tracking-[0.24em] text-wine-700">
                           Identity {`0${i + 1}`}
                         </p>
                       </Animation>

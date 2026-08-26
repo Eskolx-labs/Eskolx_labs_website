@@ -173,16 +173,16 @@ export function Community() {
                   <span
                     data-index={i}
                     aria-hidden="true"
-                    className="mt-1.5 font-mono text-[11px] uppercase tracking-[0.3em] text-parchment-ink/45"
+                    className="mt-1.5 font-mono text-kicker uppercase tracking-[0.3em] text-parchment-ink/45"
                   >
                     No.{i + 1}
                   </span>
                 </div>
-                <h3 className="display mt-5 text-xl text-parchment-ink">{c.name}</h3>
+                <h3 className="display mt-5 text-2xl leading-snug text-parchment-ink">{c.name}</h3>
                 <p className="mt-1 font-mono text-xs tracking-wide text-wine-600">{c.handle}</p>
-                <p className="mt-3 text-[15px] leading-relaxed text-parchment-ink/75">{c.desc}</p>
+                <p className="mt-3 text-copy leading-relaxed text-parchment-ink/75">{c.desc}</p>
                 <div className="mt-auto pt-6">
-                  <span className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.28em] text-parchment-ink/55 transition-colors duration-200 group-hover:text-wine-600">
+                  <span className="inline-flex items-center gap-2 font-mono text-kicker uppercase tracking-[0.28em] text-parchment-ink/55 transition-colors duration-200 group-hover:text-wine-600">
                     Telegram
                     <svg
                       viewBox="0 0 14 14"

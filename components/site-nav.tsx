@@ -217,11 +217,11 @@ export function SiteNav() {
                     : 'text-[color:var(--field-ink-soft)] hover:text-[color:var(--field-ink)]'
                 }`}
               >
-                <span className="block font-serif text-[15px] leading-tight underline-offset-8 group-hover:underline group-hover:decoration-gold-leaf/70">
+                <span className="block font-serif text-copy leading-tight underline-offset-8 group-hover:underline group-hover:decoration-gold-leaf/70">
                   {link.label}
                 </span>
                 <span
-                  className={`mt-0.5 block font-mono text-[11px] leading-none uppercase tracking-[0.12em] ${
+                  className={`mt-0.5 block font-mono text-kicker leading-none uppercase tracking-label-snug ${
                     active ? 'opacity-80' : 'opacity-45'
                   }`}
                 >
@@ -258,7 +258,7 @@ export function SiteNav() {
             href="https://github.com/eskolx-labs"
             target="_blank"
             rel="noreferrer"
-            className="btn-plate btn-wine hidden !px-5 !py-2.5 text-[15px] sm:inline-flex"
+            className="btn-plate btn-wine hidden !px-5 !py-2.5 text-copy sm:inline-flex"
           >
             <GithubIcon className="h-4 w-4" />
             Eskolx on GitHub
@@ -296,7 +296,7 @@ export function SiteNav() {
                 className="flex items-baseline justify-between border-b border-[color-mix(in_srgb,var(--field-line)_30%,transparent)] py-3 font-serif text-[color:var(--field-ink)] last:border-0 hover:opacity-75"
               >
                 <span>{link.label}</span>
-                <span className="font-mono text-[11px] uppercase tracking-[0.12em] opacity-50">{link.gloss}</span>
+                <span className="font-mono text-kicker uppercase tracking-label-snug opacity-50">{link.gloss}</span>
               </a>
             ))}
             <div className="mt-4 flex flex-col gap-3 pb-2">
