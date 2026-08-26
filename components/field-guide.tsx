@@ -336,7 +336,7 @@ export function FieldGuide() {
                   className="plate-frame overflow-hidden rounded-sm border border-[color-mix(in_srgb,var(--field-line)_70%,transparent)]"
                   style={{ overflow: 'clip' }}
                 >
-                  <div data-bar-stack>
+                  <div data-bar-stack className="will-change-transform max-md:transform-none">
                     {REQUIREMENTS.map((r) => (
                       <article
                         key={r.n}

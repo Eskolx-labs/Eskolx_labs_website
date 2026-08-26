@@ -48,7 +48,7 @@ export function SealFlood() {
             target="[data-flood-seal]"
             start={10}
             end={72}
-            fromTo={[{ scale: 1, rotate: -6 }, { scale: 16, rotate: 2, ease: 'power1.inOut' }]}
+            fromTo={[{ scale: 1, rotate: -6 }, { scale: () => (window.innerWidth < 768 ? 11 : 16), rotate: 2, ease: 'power1.inOut' }]}
           >
             <div data-flood-seal>
               <SealMark label="Eskolx Labs seal" className="h-32 w-32" />
@@ -61,11 +61,11 @@ export function SealFlood() {
           <Animation target="[data-flood-seal] .seal-die" start={20} end={32} to={{ opacity: 0 }} />
           <Animation target="[data-flood-seal] .seal-vine" start={44} end={60} to={{ opacity: 0 }} />
 
-          {/* the label lifts away as the stamp presses home */}
-          <Animation target="[data-flood-label]" start={30} end={48} to={{ y: -40, opacity: 0 }} />
+          {/* the label lifts away BEFORE the vine grows past it */}
+          <Animation target="[data-flood-label]" start={22} end={38} to={{ y: -40, opacity: 0 }} />
 
           {/* the emblem releases the frame once the night is set */}
-          <Animation target="[data-flood-seal]" start={78} end={96} to={{ opacity: 0, scale: 19 }} />
+          <Animation target="[data-flood-seal]" start={78} end={96} to={{ opacity: 0, scale: () => (window.innerWidth < 768 ? 13 : 19) }} />
         </section>
       </Pin>
     </Root>
