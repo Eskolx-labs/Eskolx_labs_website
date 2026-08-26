@@ -460,7 +460,7 @@ export function FieldGuide() {
         <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
           <div className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
             {/* status ledger: each row's rule draws itself left to right */}
-            <Reveal className={`rounded-sm p-7 sm:p-9 ${FIELD_PLATE}`} y={24}>
+            <Reveal className={`min-w-0 rounded-sm p-7 sm:p-9 ${FIELD_PLATE}`} y={24}>
               <h3 className="display text-2xl field-ink" data-reveal-item>Where the project stands</h3>
               <dl className="mt-7 space-y-0">
                 {STATUS.map((row, i) => (
@@ -487,14 +487,42 @@ export function FieldGuide() {
                   </div>
                 ))}
               </dl>
+              {/* the only code that ships today is the vault's own guard:
+                  thirteen hermetic scenarios run on every push. The plate
+                  shows the real thing — the proof of the lab's rigor, not a
+                  sample of a library that has not shipped yet. */}
+              <div
+                data-reveal-item
+                className="mt-6 overflow-hidden rounded-sm border border-[color-mix(in_srgb,var(--field-line)_60%,transparent)]"
+              >
+                <div className="flex items-center justify-between border-b border-[color-mix(in_srgb,var(--field-line)_40%,transparent)] bg-[repeating-linear-gradient(-45deg,color-mix(in_srgb,var(--gold-leaf)_14%,transparent),color-mix(in_srgb,var(--gold-leaf)_14%,transparent)_6px,transparent_6px,transparent_12px)] px-4 py-2">
+                  <span className="font-mono text-kicker tracking-label-snug field-ink-soft">
+                    tests/guard_test.sh
+                  </span>
+                  <span className="flex gap-1.5" aria-hidden="true">
+                    <span className="h-2 w-2 rounded-full bg-wine-500/80" />
+                    <span className="h-2 w-2 rounded-full bg-gold-leaf/70" />
+                    <span className="h-2 w-2 rounded-full bg-wine-500/80" />
+                  </span>
+                </div>
+                <pre className="overflow-x-auto bg-[color-mix(in_srgb,var(--field-bg)_55%,#000)] px-4 py-3 font-mono text-[13px] leading-relaxed text-cream-200/85">
+                  <code>{`# 13 hermetic scenarios, run on every push
+# 1. onboarding creates participants/<username> off develop
+# 2. push to main is blocked by the hook
+# 3. push to develop is blocked by the hook
+# 4. locked-path change on a subbranch is blocked
+# 5. secret in a note is blocked
+# 6. clean note push to the subbranch succeeds`}</code>
+                </pre>
+              </div>
               <a
-                href="https://github.com/eskolx-labs"
+                href="https://github.com/eskolx-labs/Eskolx-Open-Knowledge/blob/main/tests/guard_test.sh"
                 target="_blank"
                 rel="noreferrer"
                 className="mt-7 inline-flex items-center gap-2 border-t border-[color-mix(in_srgb,var(--field-line)_60%,transparent)] pt-5 text-sm font-medium text-wine-400 underline-offset-4 transition-colors hover:text-wine-300 hover:underline"
                 data-reveal-item
               >
-                Watch the repos
+                Read the guard, run it yourself
                 <svg viewBox="0 0 14 14" className="h-3.5 w-3.5" aria-hidden="true">
                   <path d="M2 7 H12 M8 3 L12 7 L8 11" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>

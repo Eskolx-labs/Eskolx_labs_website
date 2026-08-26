@@ -70,17 +70,27 @@ export function SiteNav() {
   }, [open])
 
   useEffect(() => {
+    // the reader's place: the last spread whose top has crossed the
+    // upper-third reading line owns the rail's gold mark. rAF-throttled
+    // and change-guarded: Lenis fires scroll events at frame rate, and
+    // the unthrottled version ran six getElementById + offsetTop layout
+    // reads and two setStates per event — the page's worst longtask
+    // source during a fast scroll.
+    let raf = 0
     const onScroll = () => {
-      setGrounded(window.scrollY > 24)
-      // the reader's place: the last spread whose top has crossed the
-      // upper-third reading line owns the rail's gold mark
-      const probe = window.scrollY + window.innerHeight * 0.38
-      let current: string | null = null
-      for (const link of NAV_LINKS) {
-        const el = document.getElementById(link.href.slice(1))
-        if (el && el.offsetTop <= probe) current = link.href.slice(1)
-      }
-      setActiveId(current)
+      if (raf) return
+      raf = requestAnimationFrame(() => {
+        raf = 0
+        const groundedNow = window.scrollY > 24
+        const probe = window.scrollY + window.innerHeight * 0.38
+        let current: string | null = null
+        for (const link of NAV_LINKS) {
+          const el = document.getElementById(link.href.slice(1))
+          if (el && el.offsetTop <= probe) current = link.href.slice(1)
+        }
+        setGrounded((g) => (g === groundedNow ? g : groundedNow))
+        setActiveId((a) => (a === current ? a : current))
+      })
     }
     const onResize = () => setResizeTick(t => t + 1)
     onScroll()
@@ -89,6 +99,7 @@ export function SiteNav() {
     return () => {
       window.removeEventListener('scroll', onScroll)
       window.removeEventListener('resize', onResize)
+      if (raf) cancelAnimationFrame(raf)
     }
   }, [])
 
@@ -191,7 +202,7 @@ export function SiteNav() {
         <a
           ref={logoRef}
           href="#top"
-          className="group flex origin-left items-center gap-2.5"
+          className="group flex origin-left items-center gap-2.5 max-md:hidden"
         >
           <span className="font-script text-[1.5rem] leading-none text-[color:var(--field-ink)]">
             Eskolx Labs
@@ -222,7 +233,7 @@ export function SiteNav() {
                 </span>
                 <span
                   className={`mt-0.5 block font-mono text-kicker leading-none uppercase tracking-label-snug ${
-                    active ? 'opacity-80' : 'opacity-45'
+                    active ? 'opacity-90' : 'opacity-60'
                   }`}
                 >
                   {link.gloss}

@@ -54,8 +54,6 @@ export function LivingGrain() {
     let h = 0
     let raf = 0
     let running = true
-    let inkCache = ''
-    let inkAt = 0
     let lastDraw = 0
     const fibers: Fiber[] = []
     // night frames cost the same and read dimmer; drift slower there
@@ -91,14 +89,16 @@ export function LivingGrain() {
     resize()
     window.addEventListener('resize', resize)
 
-    // track the field's ink color so fibers tint with the spread
+    // track the field's ink color so fibers tint with the spread. The old
+    // sampler polled getComputedStyle every 500ms — a forced style recalc
+    // on every scroll frame, the page's worst longtask source. The field
+    // controller writes the vars to body.style itself, so a MutationObserver
+    // fires exactly when the field changes (throttled to ~25/s by the
+    // controller) and never during settled scroll.
     let inkRGB: [number, number, number] = [41, 25, 12]
-    const sampleInk = (t: number) => {
-      if (t - inkAt < 500 && inkCache) return
-      inkAt = t
+    const sampleInk = () => {
       const v = getComputedStyle(document.body).getPropertyValue('--field-ink').trim()
-      if (!v || v === inkCache) return
-      inkCache = v
+      if (!v) return
       const m = v.match(/(\d+),\s*(\d+),\s*(\d+)/)
       if (m) {
         inkRGB = [+m[1], +m[2], +m[3]]
@@ -107,13 +107,15 @@ export function LivingGrain() {
         frameMin = lum < 0.35 ? FRAME_MIN_NIGHT : FRAME_MIN
       }
     }
+    const inkObserver = new MutationObserver(sampleInk)
+    inkObserver.observe(document.body, { attributes: true, attributeFilter: ['style'] })
+    sampleInk()
 
     let frameMin = FRAME_MIN
     const tick = () => {
       if (!running) return
       raf = requestAnimationFrame(tick)
       const t = performance.now()
-      sampleInk(t)
       if (t - lastDraw < frameMin) return
       lastDraw = t
       const lenis = (window as unknown as { __lenis?: { velocity: number } }).__lenis
@@ -148,6 +150,7 @@ export function LivingGrain() {
     return () => {
       running = false
       cancelAnimationFrame(raf)
+      inkObserver.disconnect()
       window.removeEventListener('resize', resize)
       document.removeEventListener('visibilitychange', onVis)
     }

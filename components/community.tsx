@@ -203,16 +203,16 @@ export function Community() {
         </div>
 
         <Reveal className="mt-6" end="top 70%">
-          <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-parchment-ink/60" data-reveal-item>
-            <span className="font-mono text-kicker uppercase tracking-label text-parchment-ink/45">Also on</span>
+          <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-[color-mix(in_srgb,var(--field-ink)_70%,transparent)]" data-reveal-item>
+            <span className="font-mono text-kicker uppercase tracking-label text-[color-mix(in_srgb,var(--field-ink)_55%,transparent)]">Also on</span>
             {SECONDARY.map((c, i) => (
-              <span key={c.name} className="font-serif text-parchment-ink/70">
+              <span key={c.name} className="font-serif text-[color-mix(in_srgb,var(--field-ink)_80%,transparent)]">
                 {i > 0 && <span aria-hidden="true"> · </span>}
                 <a
                   href={c.href}
                   target="_blank"
                   rel="noreferrer"
-                  className="underline-offset-4 transition-colors hover:text-wine-600 hover:underline hover:decoration-gold-leaf/60"
+                  className="underline-offset-4 transition-colors hover:text-wine-400 hover:underline hover:decoration-gold-leaf/60"
                 >
                   {c.name}
                 </a>

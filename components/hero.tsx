@@ -253,8 +253,8 @@ export function Hero() {
               </p>
             </Animation>
 
-            <Animation target="[data-hero-cta]" start={60} end={66} fromTo={[{ y: 20, opacity: 0 }, { y: 0, opacity: 1 }]}>
-              <div data-hero-cta className="mt-9 flex flex-col items-center justify-center gap-3.5 sm:flex-row sm:flex-wrap">
+            <Animation target="[data-hero-cta]" start={60} end={66} fromTo={[{ y: 20, autoAlpha: 0 }, { y: 0, autoAlpha: 1 }]}>
+              <div data-hero-cta className="mt-9 flex flex-col items-center justify-center gap-3.5 sm:flex-row sm:flex-wrap max-md:hidden">
                 <a
                   href="https://github.com/eskolx-labs"
                   target="_blank"
@@ -313,7 +313,7 @@ export function Hero() {
               href="https://github.com/eskolx-labs"
               target="_blank"
               rel="noreferrer"
-              className="relative z-10 mt-5 inline-flex items-center gap-2 rounded-sm border border-field-ink/30 px-4 py-2 text-sm text-field-ink transition-colors hover:border-field-ink hover:bg-field-ink/5 max-md:mt-4 motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:absolute motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:bottom-[4%] motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:left-1/2 motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:-translate-x-1/2 motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:mt-0"
+              className="relative z-10 mt-5 inline-flex items-center gap-2 rounded-sm border border-field-ink/30 px-4 py-2 text-sm text-field-ink transition-colors hover:border-field-ink hover:bg-field-ink/5 max-md:mt-4 max-md:!opacity-100 max-md:!visible motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:absolute motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:bottom-[4%] motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:left-1/2 motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:-translate-x-1/2 motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:mt-0"
             >
               <GithubIcon className="h-4 w-4" />
               Explore the repos
