@@ -181,7 +181,24 @@ export function ConceptTiers() {
               </p>
             </div>
 
-            <div className="mt-12 grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
+            {/* the phone stake strip: the rail's carrier below lg — same
+                numbers, same lighting waypoints, tap-to-jump included */}
+            <div className="mt-8 flex items-center justify-center gap-3 lg:hidden" role="group" aria-label="Concept tiers">
+              {TIERS.map((tier, i) => (
+                <button
+                  key={tier.id}
+                  type="button"
+                  data-stake={tier.id}
+                  onClick={() => jumpToTier(i)}
+                  aria-label={`Go to ${tier.name}`}
+                  className="tabular flex h-11 w-11 items-center justify-center rounded-full border border-loam-700/70 bg-loam-900/60 font-mono text-sm text-cream-400"
+                >
+                  {tier.id}
+                </button>
+              ))}
+            </div>
+
+            <div className="mt-10 grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
               {/* rail of tier stakes; the active one lights as scroll advances,
                   and each stake is a real button that jumps the pin to its tier.
                   The rail drifts at its own slower speed against the plate.

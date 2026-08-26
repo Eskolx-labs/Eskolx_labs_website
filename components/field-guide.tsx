@@ -126,6 +126,21 @@ const FIELD_PLATE =
  * turns to night across the pin, ink and loam lerping together. The ledger
  * and the FAQ read on night to the close of the book.
  */
+function jumpToRequirement(index: number) {
+  const el = document.getElementById('guide-bar')
+  if (!el) return
+  const pin = el.querySelector('[data-pin]')
+  const room = pin ? pin.getBoundingClientRect().height - window.innerHeight : 0
+  // four plates: plate i frames at i/3 of the room's scrubbed travel
+  const target = el.getBoundingClientRect().top + window.scrollY + Math.max(room, 0) * (index / 3)
+  const lenis = (window as Window & { __lenis?: { scrollTo: (t: number, o?: object) => void } }).__lenis
+  if (lenis) {
+    lenis.scrollTo(target, { duration: 1.4 })
+  } else {
+    window.scrollTo({ top: target, behavior: 'smooth' })
+  }
+}
+
 export function FieldGuide() {
   // the bar's plate stack travels its own scrollable height inside the
   // window, measured — the tiers-stack grammar, one room later in the book
@@ -285,7 +300,24 @@ export function FieldGuide() {
             </p>
           </div>
 
-              <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_0.9fr] lg:items-center">
+              {/* the phone stake strip: jump-to-requirement below lg; the
+              lighting waypoints hit these buttons and the hidden rail */}
+          <div className="mt-8 flex items-center justify-center gap-3 lg:hidden" role="group" aria-label="Joining requirements">
+            {REQUIREMENTS.map((r, i) => (
+              <button
+                key={r.n}
+                type="button"
+                data-bar-stake={r.n}
+                onClick={() => jumpToRequirement(i)}
+                aria-label={`Go to requirement ${r.n}: ${r.title}`}
+                className="tabular flex h-11 w-11 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--field-line)_90%,transparent)] bg-[color-mix(in_srgb,var(--field-bg)_88%,transparent)] font-mono text-sm field-ink-soft"
+              >
+                {r.n}
+              </button>
+            ))}
+          </div>
+
+          <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_0.9fr] lg:items-center">
                 {/* the stack: one plate fills the window at a time */}
                 <div
                   data-bar-frame
