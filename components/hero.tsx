@@ -106,9 +106,15 @@ export function Hero() {
       end="bottom bottom"
       scrub={true}
       field={{ from: LOAM, to: PARCHMENT }}
+      mobilePins
     >
-      <Pin height="300vh">
-        <section className="relative flex h-full flex-col items-center justify-center gap-12 overflow-hidden px-4 pt-24 pb-20 sm:px-6 [@media(min-width:768px)_and_(max-height:899.9px)]:gap-8 [@media(min-width:768px)_and_(max-height:899.9px)]:pb-10 [@media(min-width:768px)_and_(max-height:899.9px)]:pt-16 [@media(min-width:768px)_and_(min-height:900px)]:gap-16 [@media(min-width:768px)_and_(min-height:900px)]:py-0">
+      {/* the cover joins the mobile pin tier: phones and short windows get
+          the full lift room — night holds, the headline rises, the field
+          turns across 200vh instead of flicking to mud in one thumb-flick.
+          A pinned shell also never scrolls under the nav, which is what
+          clipped the wordmark before. */}
+      <Pin height="300vh" mobileHeight="200vh" pinMobile>
+        <section className="relative flex h-full flex-col items-center justify-center gap-12 overflow-hidden px-4 pt-24 pb-20 max-md:gap-7 max-md:pt-20 max-md:pb-12 sm:px-6 [@media(min-width:768px)_and_(max-height:899.9px)]:gap-8 [@media(min-width:768px)_and_(max-height:899.9px)]:pb-10 [@media(min-width:768px)_and_(max-height:899.9px)]:pt-16 [@media(min-width:768px)_and_(min-height:900px)]:gap-16 [@media(min-width:768px)_and_(min-height:900px)]:py-0">
           <div ref={markRef} className="pointer-events-none z-10 flex items-center gap-[0.55em]">
             <div data-hero-mark className="flex items-center gap-[0.85em] text-[clamp(3.25rem,13vw,10rem)]">
               <span className="font-script field-ink leading-none">
@@ -159,7 +165,7 @@ export function Hero() {
             <Animation target="[data-hero-sub]" start={22} end={38} fromTo={[{ y: 24, opacity: 0 }, { y: 0, opacity: 1 }]}>
               <p
                 data-hero-sub
-                className="mx-auto mt-7 max-w-xl text-lg leading-relaxed field-ink-soft"
+                className="mx-auto mt-7 max-w-xl text-lg leading-relaxed field-ink-soft max-md:mt-5 max-md:text-base"
               >
                 We solve the problem AI is causing in education. Learning has
                 started to look pointless, so we hand anyone interested real,
@@ -189,7 +195,7 @@ export function Hero() {
                   <TelegramIcon className="h-5 w-5" />
                   Join the Community
                 </a>
-                <p className="mt-2 font-mono text-xs tracking-[0.14em] field-ink-soft sm:mt-0 sm:w-full sm:text-center">
+                <p className="mt-2 font-mono text-xs tracking-[0.14em] field-ink-soft max-md:hidden sm:mt-0 sm:w-full sm:text-center">
                   OPEN SOURCE · MIT LICENSE · EVERYTHING PUBLIC
                 </p>
               </div>
@@ -203,7 +209,7 @@ export function Hero() {
             <a
               data-hero-cue
               href="#ecosystem"
-              className="relative z-10 mt-10 flex items-center justify-center gap-3 text-sm field-ink-soft transition-colors hover:field-ink md:mx-auto md:w-fit motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:absolute motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:bottom-7 motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:left-1/2 motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:mt-0 motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:-translate-x-1/2"
+              className="relative z-10 mt-10 flex items-center justify-center gap-3 text-sm field-ink-soft transition-colors hover:field-ink max-md:mt-6 md:mx-auto md:w-fit motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:absolute motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:bottom-7 motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:left-1/2 motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:mt-0 motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:-translate-x-1/2"
             >
               <span>Scroll to open the almanac</span>
               <svg viewBox="0 0 16 20" className="h-4 w-4" aria-hidden="true">

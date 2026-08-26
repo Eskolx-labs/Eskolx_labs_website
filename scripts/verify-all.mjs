@@ -161,6 +161,23 @@ const sealState = (page) => page.evaluate(() => {
     const h = getComputedStyle(document.querySelector(`${s} [data-pin] > div`)).height
     return h.includes('vh') || parseInt(h) > window.innerHeight
   }, sel)
+  check('phone: hero pin active', await pinActive('#top'))
+  check('phone: cover opens on night', (await fieldState(page)).bg.toLowerCase().includes('36, 20, 7'))
+  // the turn must spread across the room: halfway through the hero's
+  // travel the field is still visibly mid-night, not the mud-flick the
+  // unpinned cover gave (parchment by 170px of scroll)
+  await page.evaluate((y) => window.__lenis?.scrollTo(y, { immediate: true }), (await page.evaluate(() => {
+    const pin = document.querySelector('#top [data-pin]')
+    return (pin.offsetHeight - window.innerHeight) * 0.5
+  })))
+  await page.waitForTimeout(500)
+  check('phone: cover still mid-turn at half room', await page.evaluate(() => {
+    const bg = getComputedStyle(document.body).getPropertyValue('--field-bg').trim()
+    const nums = bg.match(/\d+/g).map(Number)
+    return nums[0] > 60 && nums[0] < 200
+  }))
+  check('phone: headline rises with the scroll', await page.evaluate(() =>
+    getComputedStyle(document.querySelector('[data-hero-line="0"]')).transform !== 'none'))
   check('phone: trellis pin active', await pinActive('#tiers'))
   check('phone: bar pin active', await pinActive('#guide-bar'))
   check('phone: flood pin active', await pinActive('#seal-flood'))
@@ -236,11 +253,10 @@ const sealState = (page) => page.evaluate(() => {
 {
   const vp = [960, 540]
   const page = await newPage(vp)
-  check('short: hero reads flow (headline visible)', await page.evaluate(() => {
-    const line = document.querySelector('[data-hero-line="0"]')
-    return getComputedStyle(line).transform === 'none' && +getComputedStyle(line).opacity === 1
-  }))
-  check('short: hero shell not sticky', await page.evaluate(() => getComputedStyle(document.querySelector('#top [data-pin] > div > div')).position === 'static'))
+  check('short: hero pinned with its phone room', await page.evaluate(() =>
+    getComputedStyle(document.querySelector('#top [data-pin] > div > div')).position === 'sticky'))
+  check('short: cover lines masked until scrolled', await page.evaluate(() =>
+    getComputedStyle(document.querySelector('[data-hero-line="0"]')).transform !== 'none'))
   check('short: nav logo visible', await page.evaluate(() => {
     const el = document.querySelector('header a[href="#top"]')
     return el && getComputedStyle(el).visibility === 'visible'
@@ -273,7 +289,9 @@ const sealState = (page) => page.evaluate(() => {
   await page.waitForTimeout(1000)
   await page.evaluate("window.__lenis?.scrollTo(0, { immediate: true })")
   await page.waitForTimeout(600)
-  check('resize: desktop->short rebuilds (headline static)', await page.evaluate(() => getComputedStyle(document.querySelector('[data-hero-line="0"]')).transform === 'none'))
+  check('resize: desktop->short rebuilds (hero re-pinned, lines masked)', await page.evaluate(() =>
+    getComputedStyle(document.querySelector('#top [data-pin] > div > div')).position === 'sticky' &&
+    getComputedStyle(document.querySelector('[data-hero-line="0"]')).transform !== 'none'))
   await page.evaluate("(() => { const el = document.querySelector('#tiers [data-pin]'); const top = el.getBoundingClientRect().top + window.scrollY; window.__lenis?.scrollTo(top + 300, { immediate: true }) })()")
   await page.waitForTimeout(600)
   check('resize: short trellis still scrubs', await page.evaluate(() => getComputedStyle(document.querySelector('#tiers [data-tier-stack]')).transform !== 'none'))
@@ -354,9 +372,7 @@ const sealState = (page) => page.evaluate(() => {
   // bands with frozen pins and no timelines.
   const page = await newPage([1440, 699])
   check('band 699h: tier rooms pinned', await page.evaluate(() =>
-    ['#tiers', '#guide-bar', '#seal-flood'].every((id) => getComputedStyle(document.querySelector(`${id} [data-pin] > div > div`)).position === 'sticky')))
-  check('band 699h: hero room collapsed to flow', await page.evaluate(() =>
-    getComputedStyle(document.querySelector('#top [data-pin] > div > div')).position === 'static'))
+    ['#top', '#tiers', '#guide-bar', '#seal-flood'].every((id) => getComputedStyle(document.querySelector(`${id} [data-pin] > div > div`)).position === 'sticky')))
   await page.setViewportSize({ width: 1440, height: 700 })
   await page.waitForTimeout(1000)
   check('band 700h: hero pinned again', await page.evaluate(() =>
