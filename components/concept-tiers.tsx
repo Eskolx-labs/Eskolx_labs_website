@@ -17,7 +17,7 @@ const TIERS = [
   {
     id: 2,
     name: 'Modeling & Classical Machine Learning (from scratch)',
-    concepts: ['Modeling on our own primitives', 'Assumption checks', 'Feature diagnostics', 'Reference comparison against the famous implementations'],
+    concepts: ['Modeling on our own packages', 'Assumption checks', 'Feature diagnostics', 'Reference comparison against the famous implementations'],
     goal: 'After the basics, modeling and classical machine learning built on what we grew ourselves. Assumption checks and test selection wired end to end, every method backed by the paper it came from.',
   },
   {

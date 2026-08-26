@@ -13,7 +13,7 @@ const PHASES = [
   {
     phase: 'Phase 2',
     title: 'Books and papers before every function',
-    body: 'Every function starts as reading. We work through the books and papers behind each method, record what we learn in an open Obsidian vault, then implement. Participants learn how research is done by doing it.',
+    body: 'Every function starts as a question, not a subject. Why does the Student t-distribution have heavier tails? You chase it through books and papers, write the mathematics, build the naive version, test it, and compare your numbers against the famous implementations until they agree. Notes land in the open vault before code lands in the library.',
     tags: ['Paper → code', 'Open notes', 'Reference comparison'],
   },
   {

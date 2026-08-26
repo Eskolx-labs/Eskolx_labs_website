@@ -166,7 +166,7 @@ export function OriginStory() {
                 The Eshcol Identity
               </h2>
               <p className="mt-4 max-w-2xl font-serif text-lg leading-relaxed text-parchment-ink/75">
-                Abundance &amp; interconnected execution. Three facts of the soil this lab grows in.
+                Three facts of the soil this lab grows in.
               </p>
             </div>
             <SealMark label="Eskolx Labs seal" className="mt-1 hidden h-14 w-14 shrink-0 sm:block sm:h-16 sm:w-16" />

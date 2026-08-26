@@ -78,6 +78,29 @@ const STATUS = [
   { k: 'License', v: 'MIT. Everything public.' },
 ]
 
+const ASKS = [
+  {
+    t: 'Working Python and class statistics',
+    d: 'That is the whole entry bar. The hard parts arrive as projects, not prerequisites.',
+  },
+  {
+    t: 'Read before you write',
+    d: 'Every function starts in books and research papers, and your notes from that reading are part of the work.',
+  },
+  {
+    t: 'Let your notes go public',
+    d: 'They land in the open vault under MIT with your name on them. Participants are the authors of the knowledge base we are building.',
+  },
+  {
+    t: 'Work in the open',
+    d: 'Commits, reviews, and decisions happen in public, in teams small enough that review is close and nothing waits on a committee.',
+  },
+  {
+    t: 'Finish by teaching',
+    d: 'The last step of every piece of work is an explanation others can learn from. The best ones get published on this site.',
+  },
+]
+
 const FAQ: {
   q: string
   a: string
@@ -309,6 +332,26 @@ export function FieldGuide() {
                 ))}
               </ul>
             </div>
+          </Reveal>
+
+          {/* what we ask: the contributor requirements, straight from the
+              direction notes. The do/don't plate says what the lab is; this
+              one says what joining costs and what it produces. */}
+          <Reveal className="mt-6 rounded-sm border border-parchment-ink/20 bg-parchment p-7 sm:p-9" y={24}>
+            <h3 className="display text-xl text-parchment-ink" data-reveal-item>What we ask of you</h3>
+            <ol className="mt-6 space-y-5">
+              {ASKS.map((a, i) => (
+                <li key={a.t} className="flex gap-4" data-reveal-item>
+                  <span className="tabular mt-0.5 font-mono text-sm tracking-widest text-wine-600/80">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <span>
+                    <span className="block text-copy max-md:text-base font-medium leading-relaxed text-parchment-ink/85">{a.t}</span>
+                    <span className="mt-1 block max-w-[68ch] text-copy max-md:text-base leading-relaxed text-parchment-ink/70">{a.d}</span>
+                  </span>
+                </li>
+              ))}
+            </ol>
           </Reveal>
         </div>
       </Root>
