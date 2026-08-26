@@ -95,6 +95,21 @@ const sealState = (page) => page.evaluate(() => {
   await scrollPin(page, '#guide-bar [data-pin]', 0.5)
   await page.waitForTimeout(500)
   check('desktop: bar stack scrubs', await page.evaluate(() => getComputedStyle(document.querySelector('#guide-bar [data-bar-stack]')).transform !== 'none'))
+
+  // plate rooms end their travel inside the room: a pinned stage that
+  // freezes for the last third is a room that overpaid for its plate
+  check('desktop: tier room ends its travel by 95%', await page.evaluate(() => {
+    const stack = document.querySelector('#tiers [data-tier-stack]')
+    const pin = document.querySelector('#tiers [data-pin]')
+    const travel = stack.scrollHeight - stack.parentElement.clientHeight
+    return travel / (pin.offsetHeight - innerHeight) < 0.95
+  }))
+  check('desktop: bar room ends its travel by 95%', await page.evaluate(() => {
+    const stack = document.querySelector('#guide-bar [data-bar-stack]')
+    const pin = document.querySelector('#guide-bar [data-pin]')
+    const travel = stack.scrollHeight - stack.parentElement.clientHeight
+    return travel / (pin.offsetHeight - innerHeight) < 0.95
+  }))
   await scrollPin(page, '#seal-flood [data-pin]', 0.5)
   await page.waitForTimeout(500)
   const sealMid = await sealState(page)
@@ -230,6 +245,16 @@ const sealState = (page) => page.evaluate(() => {
   }))
   await scrollPin(page, '#guide-bar [data-pin]', 1)
   await page.waitForTimeout(400)
+  // the roadmap and identity chapters are deliberately NOT in the mobile
+  // pin tier: their tall plates clip a phone shell, so they flow below md
+  check('phone: roadmap and identity flow (no pinned shell)', await page.evaluate(() =>
+    getComputedStyle(document.querySelector('#roadmap [data-pin] > div > div')).position === 'static' &&
+    getComputedStyle(document.querySelector('#ecosystem [data-pin] > div > div')).position === 'static'))
+  // the resting cover carries one quiet action so a non-scroller is never stuck
+  check('phone: resting cover CTA present', await page.evaluate(() => {
+    const a = document.querySelector('[data-resting-cta]')
+    return a && a.offsetHeight > 30 && getComputedStyle(a).visibility !== 'hidden'
+  }))
   check('phone: bar reaches requirement 4', await page.evaluate(() => {
     const stack = document.querySelector('#guide-bar [data-bar-stack]')
     const frame = stack.parentElement

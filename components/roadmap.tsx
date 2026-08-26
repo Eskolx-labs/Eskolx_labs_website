@@ -62,9 +62,8 @@ export function Roadmap() {
           from: { bg: '#ece1c6', ink: '#29190c', soft: '#5c4a33', line: '#b9a67f' },
           to: { bg: '#ece1c6', ink: '#29190c', soft: '#5c4a33', line: '#b9a67f' },
         }}
-        mobilePins
       >
-        <Pin height="320vh" mobileHeight="250vh" pinMobile>
+        <Pin height="320vh">
           <div className="mx-auto flex h-full max-w-7xl flex-col justify-center px-4 pb-10 pt-20 sm:px-6 lg:px-8">
             {/* room furniture: static inside the pinned shell (a viewport
                 Reveal measured in a sticky room scrambles on resize) */}
@@ -87,7 +86,7 @@ export function Roadmap() {
                 <Animation target="[data-vine-rail]" start={2} end={88} fromTo={[{ scaleY: 0 }, { scaleY: 1, ease: 'power1.inOut' }]}>
                   <span data-vine-rail className="block h-full w-full origin-top bg-parchment-ink/25" />
                 </Animation>
-                <svg viewBox="0 0 24 24" className="absolute -bottom-5 -left-[11px] h-5 w-5 text-parchment-ink/40" fill="none">
+                <svg viewBox="0 0 24 24" aria-hidden="true" className="absolute -bottom-5 -left-[11px] h-5 w-5 text-parchment-ink/40" fill="none">
                   <path d="M12 2 C11.4 7 13.5 10 17 11 M17 11 c3-.8 4.4 1.2 3.2 3 c-1 1.5-3.2 1-3.4-.8" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
                 </svg>
               </div>

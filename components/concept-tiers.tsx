@@ -135,7 +135,7 @@ export function ConceptTiers() {
         field={TIERS_FIELD}
         mobilePins
       >
-      <Pin height="420vh" mobileHeight="240vh" pinMobile>
+      <Pin height="255vh" mobileHeight="170vh" pinMobile>
         <section className="relative flex h-full flex-col overflow-hidden">
           <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center px-4 pt-16 sm:px-6 lg:px-8">
             {/* room furniture: static inside the pinned shell (see the

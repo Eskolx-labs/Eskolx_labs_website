@@ -82,10 +82,11 @@ as the year's entry, scrolls through pinned scenes where the page flips
 to the night-spread and back, watches the four-tier trellis and the
 three-month method advance with the scroll, and joins GitHub or Telegram
 at the harvest table.
-FIRST VIEWPORT: parchment day-spread; giant serif headline "Good soil.
-Great minds. Abundant impact." with "Abundant" in wine italic rising in
-on load; the single vermilion seal stamps mid-pin; a scroll cue at the
-foot.
+FIRST VIEWPORT: loam night-spread; the script wordmark docks into the
+nav while the motto performs — DeepLearning rises, the "ing" peels, the
+words trade into "Learn deep", and "build expertise." settles — then
+the mission lines rise and the field turns to day in the tail. The
+resting cover carries the motto, the mission, and one quiet CTA.
 FORM: the Observatory Almanac, the pick card of the direction roll (seed
 839e0b7c), chosen over the assigned Illuminated Codex; raised by declined
 challengers: one-law generation (rain-garden), no empty fields (gallery

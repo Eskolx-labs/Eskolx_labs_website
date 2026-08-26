@@ -341,7 +341,7 @@ export function FieldGuide() {
         field={{ from: LOAM, to: LOAM }}
         mobilePins
       >
-        <Pin height="260vh" mobileHeight="190vh" pinMobile>
+        <Pin height="215vh" mobileHeight="150vh" pinMobile>
           <section className="relative flex h-full flex-col justify-center overflow-hidden px-0 pt-20">
             <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           {/* room furniture: static, never a viewport Reveal — a Reveal

@@ -287,6 +287,20 @@ export function Hero() {
             </a>
           </Animation>
 
+          {/* one resting action: a non-scroller never sees the mission or the
+              CTA block (both arrive past ~1200px of scroll), so the cover
+              carries a quiet single action beneath the cue */}
+          <a
+            data-resting-cta
+            href="https://github.com/eskolx-labs"
+            target="_blank"
+            rel="noreferrer"
+            className="relative z-10 mt-5 inline-flex items-center gap-2 rounded-sm border border-field-ink/30 px-4 py-2 text-sm text-field-ink transition-colors hover:border-field-ink hover:bg-field-ink/5 max-md:mt-4"
+          >
+            <GithubIcon className="h-4 w-4" />
+            Explore the repos
+          </a>
+
           <Animation
             target="[data-hero-mark]"
             start={90}
