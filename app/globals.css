@@ -161,21 +161,61 @@
 }
 
 @layer components {
-  /* print-tooth grain over the whole page, one fixed layer. The turbulence
-     is converted to dark-ink speckles inside the SVG itself (feColorMatrix
-     maps noise luminance to alpha over a near-black ink), so the layer needs
-     no mix-blend-mode — a full-page blend recomposited on every produced
-     frame was measurably one of the heaviest things on the compositor while
-     scrolling. Visually it keeps the multiply character: tooth presses on
-     parchment and stays quiet on loam. */
+  /* print-tooth grain over the whole page, one fixed layer. No blend mode:
+     mix-blend-mode forces a full-page composite of a moving document every
+     frame — the single worst scroll-jank source this page ever had. The
+     speckle tile carries its own tooth at plain alpha instead. */
   .grain::before {
     content: '';
     position: fixed;
     inset: 0;
     z-index: 60;
     pointer-events: none;
-    opacity: 0.14;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.078 0 0 0 0 0.055 0 0 0 0 0.027 0.47 0.47 0.47 0 -0.55'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.06;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* Viewports under 500px of height (landscape phones, slivers) never pin:
+     a 100vh sticky shell clips every room. Non-tier pins also collapse on
+     500-699px heights (short desktop windows) — their content cannot fit a
+     100vh shell. Tier scenes carry data-pin-mobile and keep their shortened
+     rooms there; the JS gates in scrollytelling.tsx read the same queries. */
+  @media (max-height: 699.9px) {
+    [data-pin]:not([data-pin-mobile]),
+    [data-pin]:not([data-pin-mobile]) > div {
+      height: auto !important;
+    }
+    [data-pin]:not([data-pin-mobile]) > div > div {
+      position: static !important;
+      height: auto !important;
+      overflow: visible !important;
+    }
+  }
+  @media (max-height: 499.9px) {
+    [data-pin],
+    [data-pin] > div {
+      height: auto !important;
+    }
+    [data-pin] > div > div {
+      position: static !important;
+      height: auto !important;
+      overflow: visible !important;
+    }
+  }
+
+  /* reduced motion: the Root builds no scrubbed timelines, so the pins have
+     nothing to do — collapse them to flow everywhere, or reduced-motion
+     readers scroll through hundreds of vh of frozen sticky rooms. */
+  @media (prefers-reduced-motion: reduce) {
+    [data-pin],
+    [data-pin] > div {
+      height: auto !important;
+    }
+    [data-pin] > div > div {
+      position: static !important;
+      height: auto !important;
+      overflow: visible !important;
+    }
   }
 
   /* field utilities: every surface tints from the current field */
@@ -195,128 +235,6 @@
     border-color: var(--field-line-soft);
   }
 
-  /* letterpress buttons: plate with double hairline, presses on actuation */
-  .btn-plate {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.6rem;
-    padding: 0.85rem 1.6rem;
-    font-family: var(--font-serif);
-    font-size: 1rem;
-    font-weight: 500;
-    letter-spacing: 0.01em;
-    border-radius: var(--radius-sm);
-    border: 1px solid rgba(41, 25, 12, 0.4);
-    box-shadow:
-      inset 0 0 0 1px var(--field-bg),
-      inset 0 0 0 2px rgba(41, 25, 12, 0.12),
-      0 10px 24px -12px rgb(0 0 0 / 0.35);
-    transition:
-      transform 140ms cubic-bezier(0.2, 0.8, 0.2, 1),
-      box-shadow 140ms cubic-bezier(0.2, 0.8, 0.2, 1),
-      background-color 140ms linear,
-      border-color 140ms linear;
-  }
-  .btn-plate:hover {
-    transform: translateY(-1px);
-  }
-  .btn-plate:active {
-    transform: translateY(1px);
-    box-shadow:
-      inset 0 0 0 1px var(--field-bg),
-      inset 0 0 0 2px rgba(41, 25, 12, 0.2),
-      0 4px 10px -8px rgb(0 0 0 / 0.4);
-  }
-
-  .btn-wine {
-    /* template buttons are dusty plum with a cream border; vermilion is
-       reserved for the seal alone */
-    background: var(--wine-600);
-    color: var(--cream-100);
-    border-color: rgb(236 225 198 / 0.75);
-  }
-  .btn-wine:hover {
-    background: var(--wine-500);
-    border-color: var(--cream-100);
-  }
-
-  .btn-outline {
-    background: transparent;
-    color: var(--field-ink);
-    border-color: rgb(41 25 12 / 0.5);
-  }
-  .btn-outline:hover {
-    background: rgb(41 25 12 / 0.06);
-    border-color: rgba(41, 25, 12, 0.75);
-  }
-
-  /* hairline rule with a centered diamond, engraving-plate divider */
-  .rule-ornament {
-    display: flex;
-    align-items: center;
-    gap: 0.9rem;
-    color: var(--gold-leaf);
-  }
-  .rule-ornament::before,
-  .rule-ornament::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(
-      to right,
-      transparent,
-      rgb(179 148 106 / 0.55),
-      transparent
-    );
-  }
-
-  /* corner ticks framing a botanical plate */
-  .plate-frame {
-    position: relative;
-  }
-  .plate-frame::before,
-  .plate-frame::after {
-    content: '';
-    position: absolute;
-    width: 18px;
-    height: 18px;
-    pointer-events: none;
-  }
-  .plate-frame::before {
-    top: -1px;
-    left: -1px;
-    border-top: 1.5px solid var(--gold-leaf);
-    border-left: 1.5px solid var(--gold-leaf);
-  }
-  .plate-frame::after {
-    bottom: -1px;
-    right: -1px;
-    border-bottom: 1.5px solid var(--gold-leaf);
-    border-right: 1.5px solid var(--gold-leaf);
-  }
-
-  /* hatched shading strip, woodcut line density standing in for tone */
-  .hatch {
-    background-image: repeating-linear-gradient(
-      -45deg,
-      rgb(179 148 106 / 0.16) 0 1px,
-      transparent 1px 7px
-    );
-  }
-
-  .display {
-    font-family: var(--font-display);
-    font-weight: 400;
-    letter-spacing: 0.005em;
-    text-wrap: balance;
-  }
-
-  .tabular {
-    font-variant-numeric: tabular-nums;
-  }
-}
 
 @media (prefers-reduced-motion: reduce) {
   html {
@@ -328,5 +246,215 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+/* letterpress buttons: plate with double hairline, presses on actuation */
+.btn-plate {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 0.85rem 1.6rem;
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(41, 25, 12, 0.4);
+  box-shadow:
+    inset 0 0 0 1px var(--field-bg),
+    inset 0 0 0 2px rgba(41, 25, 12, 0.12),
+    0 10px 24px -12px rgb(0 0 0 / 0.35);
+  transition:
+    transform 140ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 140ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    background-color 140ms linear,
+    border-color 140ms linear;
+}
+.btn-plate:hover {
+  transform: translateY(-1px);
+}
+.btn-plate:active {
+  transform: translateY(1px);
+  box-shadow:
+    inset 0 0 0 1px var(--field-bg),
+    inset 0 0 0 2px rgba(41, 25, 12, 0.2),
+    0 4px 10px -8px rgb(0 0 0 / 0.4);
+}
+
+.btn-wine {
+  /* template buttons are dusty plum with a cream border; vermilion is
+     reserved for the seal alone */
+  background: var(--wine-600);
+  color: var(--cream-100);
+  border-color: rgb(236 225 198 / 0.75);
+}
+.btn-wine:hover {
+  background: var(--wine-500);
+  border-color: var(--cream-100);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--field-ink);
+  border-color: rgb(41 25 12 / 0.5);
+}
+.btn-outline:hover {
+  background: rgb(41 25 12 / 0.06);
+  border-color: rgba(41, 25, 12, 0.75);
+}
+
+/* hairline rule with a centered diamond, engraving-plate divider */
+.rule-ornament {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  color: var(--gold-leaf);
+}
+.rule-ornament::before,
+.rule-ornament::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgb(179 148 106 / 0.55),
+    transparent
+  );
+}
+
+/* corner ticks framing a botanical plate */
+.plate-frame {
+  position: relative;
+}
+.plate-frame::before,
+.plate-frame::after {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  pointer-events: none;
+}
+.plate-frame::before {
+  top: -1px;
+  left: -1px;
+  border-top: 1.5px solid var(--gold-leaf);
+  border-left: 1.5px solid var(--gold-leaf);
+}
+.plate-frame::after {
+  bottom: -1px;
+  right: -1px;
+  border-bottom: 1.5px solid var(--gold-leaf);
+  border-right: 1.5px solid var(--gold-leaf);
+}
+
+/* hatched shading strip, woodcut line density standing in for tone */
+.hatch {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    rgb(179 148 106 / 0.16) 0 1px,
+    transparent 1px 7px
+  );
+}
+
+.display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: 0.005em;
+  text-wrap: balance;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+}
+
+/* anchor jumps clear the fixed rail */
+[id] {
+  scroll-margin-top: 5rem;
+}
+
+/* the current stake lifts on the desktop rail too — past and present must
+   not read identically on the element whose job is "you are here" */
+#tiers [data-stake][aria-current='true'],
+[data-bar-stake][aria-current='true'] {
+  background-color: #963a68;
+  transform: translateY(-1px);
+}
+
+/* Plate-room stake lighting, and the phone strip treatment. Unlayered on
+ purpose: these must beat the utility classes on the same elements
+ (bg-loam-900/60 and friends), and Tailwind v4's utilities layer wins the
+ cascade against ANY layered rule regardless of specificity — layered lit
+ styles silently never applied. lib/stakes toggles data-lit as each plate
+ frames; cumulative, measured, one attribute flip per change. */
+#tiers [data-stake],
+#tiers [data-stake-num],
+#tiers [data-stake-name],
+[data-bar-num],
+[data-bar-stake] {
+  transition:
+    border-color 0.3s,
+    background-color 0.3s,
+    color 0.3s;
+}
+#tiers [data-stake][data-lit] {
+  border-color: rgb(176 90 129 / 0.6);
+  background-color: rgb(56 36 18 / 0.9);
+}
+/* a lit stake re-inks its own numeral and label */
+#tiers [data-stake][data-lit] [data-stake-num] {
+  border-color: #b05a81;
+  background-color: #7c2c54;
+  color: #f0e4c8;
+}
+#tiers [data-stake][data-lit] [data-stake-name] {
+  color: #f0e4c8;
+}
+[data-bar-num][data-lit] {
+  background-color: rgb(150 58 104 / 0.18);
+  border-color: #b05a81;
+  color: #f0e4c8;
+}
+[data-bar-stake][data-lit] {
+  border-color: rgb(176 90 129 / 0.7);
+}
+[data-tier-kicker][data-lit] {
+  color: #d29cb6;
+}
+
+/* Below lg only the phone strips carry the stakes, and a lit state that
+   reads on a desktop rail (a border shift) disappears on a 44px circle.
+   Phones get the full treatment: wine fill, cream numeral, the active
+   stake popping forward, and the room's own reading rule under it all. */
+@media (max-width: 1023.9px) {
+  #tiers [data-stake][data-lit] {
+    background-color: #7c2c54;
+    border-color: #b05a81;
+    color: #f0e4c8;
+  }
+  [data-bar-stake][data-lit] {
+    background-color: rgb(150 58 104 / 0.4);
+    border-color: #b05a81;
+    color: #f0e4c8;
+  }
+  #tiers [data-stake][aria-current='true'],
+  [data-bar-stake][aria-current='true'] {
+    background-color: #963a68;
+    transform: scale(1.15);
+  }
+  #tiers [data-stake],
+  [data-bar-stake] {
+    transition:
+      border-color 0.3s,
+      background-color 0.3s,
+      color 0.3s,
+      transform 0.3s;
+  }
+  [data-strip-progress] {
+    transition: transform 0.15s linear;
   }
 }

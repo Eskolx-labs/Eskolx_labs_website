@@ -1,7 +1,5 @@
 'use client'
 
-import { useEffect } from 'react'
-import gsap from 'gsap'
 import { Root, Pin, Animation } from '@/lib/scrollytelling'
 import { PARCHMENT } from '@/lib/field-controller'
 import { SealMark } from '@/components/botanical/seal-mark'
@@ -16,26 +14,11 @@ import { SealMark } from '@/components/botanical/seal-mark'
  * flood, then releases.
  */
 export function SealFlood() {
-  // below md the pin collapses, so the flood gets a one-shot stage instead:
-  // label arrives, the stamp swells once, the die releases — then rests,
-  // fruit-forward. No scroll tax on phones.
-  useEffect(() => {
-    const mm = gsap.matchMedia()
-    mm.add('(prefers-reduced-motion: no-preference) and (max-width: 767px)', () => {
-      const ctx = gsap.context(() => {
-        gsap
-          .timeline({
-            scrollTrigger: { trigger: '#seal-flood', start: 'top 65%', once: true },
-          })
-          .fromTo('[data-flood-label]', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.6 })
-          .fromTo('[data-flood-seal]', { scale: 1, rotate: -6 }, { scale: 2.6, rotate: 2, duration: 1.4, ease: 'power2.inOut' }, 0.25)
-          .to('#seal-flood .seal-die', { opacity: 0, duration: 0.45 }, 0.75)
-      })
-      return () => ctx.revert()
-    })
-    return () => mm.revert()
-  }, [])
-
+  // the pinned scrub choreographs the whole flood at every size now —
+  // label set, seal swelling past the frame, die and vine dissolving into
+  // the harvest. The old below-md one-shot is gone: it double-drove the
+  // seal (its final opacity:0 killed the element the scrub was still
+  // animating) and left phones a blank room for ~90vh of scrolling.
   return (
     <Root
       id="seal-flood"
@@ -43,23 +26,29 @@ export function SealFlood() {
       end="bottom bottom"
       scrub={true}
       field={{ from: PARCHMENT, to: PARCHMENT }}
+      mobilePins
     >
-      <Pin height="260vh">
-        <section className="relative flex h-full items-center justify-center overflow-hidden">
-          <Animation target="[data-flood-label]" start={4} end={22} fromTo={[{ y: 18, opacity: 0 }, { y: 0, opacity: 1 }]}>
-            <p
-              data-flood-label
-              className="absolute top-[18%] font-mono text-[11px] uppercase tracking-[0.35em] field-ink-soft"
-            >
-              The seal of the lab · est. in open source
-            </p>
-          </Animation>
+      <Pin height="260vh" mobileHeight="180vh" pinMobile>
+        {/* column layout: in the pinned shell the label is absolute and the
+            seal centers alone; when reduced motion collapses the room, the
+            label stacks above the emblem as ordinary flow */}
+        <section className="relative flex h-full flex-col items-center justify-center overflow-hidden">
+          {/* the label is on stage at progress 0 — the room opens with its
+              caption already set, and lifts away as the stamp presses home.
+              Absolute only while motion runs: in a collapsed auto-height
+              shell a top-[18%] absolute would float over the emblem. */}
+          <p
+            data-flood-label
+            className="mb-8 font-mono text-[11px] uppercase tracking-[0.35em] field-ink-soft motion-safe:absolute motion-safe:top-[18%] motion-safe:mb-0"
+          >
+            The seal of the lab · est. in open source
+          </p>
 
           <Animation
             target="[data-flood-seal]"
             start={10}
             end={72}
-            fromTo={[{ scale: 1, rotate: -6 }, { scale: 16, rotate: 2, ease: 'power1.inOut' }]}
+            fromTo={[{ scale: 1, rotate: -6 }, { scale: () => (window.innerWidth < 768 ? 11 : 16), rotate: 2, ease: 'power1.inOut' }]}
           >
             <div data-flood-seal>
               <SealMark label="Eskolx Labs seal" className="h-32 w-32" />
@@ -72,11 +61,11 @@ export function SealFlood() {
           <Animation target="[data-flood-seal] .seal-die" start={20} end={32} to={{ opacity: 0 }} />
           <Animation target="[data-flood-seal] .seal-vine" start={44} end={60} to={{ opacity: 0 }} />
 
-          {/* the label lifts away as the stamp presses home */}
-          <Animation target="[data-flood-label]" start={30} end={48} to={{ y: -40, opacity: 0 }} />
+          {/* the label lifts away BEFORE the vine grows past it */}
+          <Animation target="[data-flood-label]" start={22} end={38} to={{ y: -40, opacity: 0 }} />
 
           {/* the emblem releases the frame once the night is set */}
-          <Animation target="[data-flood-seal]" start={78} end={96} to={{ opacity: 0, scale: 19 }} />
+          <Animation target="[data-flood-seal]" start={78} end={96} to={{ opacity: 0, scale: () => (window.innerWidth < 768 ? 13 : 19) }} />
         </section>
       </Pin>
     </Root>

@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { Root, Animation } from '@/lib/scrollytelling'
+import { LOAM, PARCHMENT } from '@/lib/field-controller'
 import { Reveal } from '@/components/reveal'
 import {
   GithubIcon,
@@ -129,30 +130,28 @@ export function Community() {
   }, [])
 
   return (
+    <>
     <Root
       id="community"
       start="top bottom"
       end="bottom top"
       className="relative py-24"
-      field={{
-        from: { bg: '#241407', ink: '#f0e4c8', soft: '#b8a284', line: '#5a4227' },
-        to: { bg: '#ece1c6', ink: '#29190c', soft: '#5c4a33', line: '#b9a67f' },
-      }}
+      field={{ from: LOAM, to: LOAM }}
     >
       <div ref={stageRef} className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <Animation target="[data-harvest-head]" start={6} end={94} fromTo={[{ y: 34 }, { y: -22 }]}>
           <div data-harvest-head className="max-w-3xl">
-            <h2 className="display text-[clamp(2rem,3.8vw,3.2rem)] leading-tight text-parchment-ink">
+            <h2 className="display text-[clamp(2rem,3.8vw,3.2rem)] leading-tight field-ink">
               The harvest table
             </h2>
-            <p className="mt-4 max-w-xl text-lg leading-relaxed text-parchment-ink/75">
+            <p className="mt-4 max-w-xl text-lg leading-relaxed text-[color-mix(in_srgb,var(--field-ink)_75%,transparent)]">
               Follow the code, the research, and the conversation across every
               channel.
             </p>
           </div>
         </Animation>
 
-        <div data-harvest-rule className="mt-12 h-px origin-left bg-parchment-ink/25" />
+        <div data-harvest-rule className="mt-12 h-px origin-left bg-[color-mix(in_srgb,var(--field-ink)_25%,transparent)]" />
 
         <div className="mt-6 grid gap-6 md:grid-cols-3">
           {PRIMARY.map((c, i) => (
@@ -184,7 +183,7 @@ export function Community() {
                 <p className="mt-3 text-[15px] leading-relaxed text-parchment-ink/75">{c.desc}</p>
                 <div className="mt-auto pt-6">
                   <span className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.28em] text-parchment-ink/55 transition-colors duration-200 group-hover:text-wine-600">
-                    Open channel
+                    Telegram
                     <svg
                       viewBox="0 0 14 14"
                       className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-0.5"
@@ -200,7 +199,7 @@ export function Community() {
           ))}
         </div>
 
-        <Reveal className="mt-6">
+        <Reveal className="mt-6" end="top 70%">
           <ul className="grid grid-cols-2 gap-4 sm:grid-cols-5">
             {SECONDARY.map((c) => (
               <li key={c.name} data-reveal-item>
@@ -232,5 +231,22 @@ export function Community() {
         </Reveal>
       </div>
     </Root>
+
+    {/* the harvest's dawn: night holds through the keepers and the harvest;
+        this seam hands the field back to paper before the practicalities */}
+    <Root
+      id="harvest-dawn"
+      className="relative flex h-[28vh] items-center justify-center bg-loam-950 md:h-[55vh]"
+      start="top bottom"
+      end="bottom top"
+      field={{ from: LOAM, to: PARCHMENT }}
+    >
+      <div className="flex items-center gap-3" aria-hidden="true">
+        <span className="h-1 w-1 rounded-full bg-gold-leaf/70" />
+        <span className="h-1.5 w-1.5 rounded-full bg-wine-500/80" />
+        <span className="h-1 w-1 rounded-full bg-gold-leaf/70" />
+      </div>
+    </Root>
+    </>
   )
 }

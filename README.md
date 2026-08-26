@@ -23,6 +23,16 @@ plain.
 The build emits a fully static site into `out/` (`output: 'export'`), ready
 for any static host.
 
+## Test
+
+    pnpm build
+    pnpm test
+
+`pnpm test` serves `out/` locally and walks the book with headless Chromium:
+pins, scrubs, the ink snap's contrast floor, room openings, phone framing,
+tap-to-jump, resize reactivity, and the reduced-motion fallback. It exits
+non-zero on any failure and needs no server running first.
+
 ## Deploy (Cloudflare Pages/Workers, free)
 
 The site deploys as a static export — no server runtime, no adapter.

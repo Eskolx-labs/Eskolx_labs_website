@@ -6,8 +6,9 @@ import { LOAM } from '@/lib/field-controller'
 /*
  * The seed catalog band, in the basement.studio marquee register: the phrase
  * travels the full viewport width against the scroll while every letter
- * pops through its own keyframed window (rise, land, settle). Below lg the
- * timeline never builds and the phrase sits as a static strip.
+ * pops through its own keyframed window (rise, land, settle). The band is
+ * a flow chapter: it scrubs at every size that is not tiny or reduced,
+ * phones included.
  */
 
 const WORDS = ['FROM', 'SEED', 'TO', 'HARVEST']
@@ -35,7 +36,7 @@ export function MarqueeBand() {
       end="bottom top"
       scrub={true}
       field={{ from: LOAM, to: LOAM }}
-      className="overflow-hidden py-14 sm:py-20"
+      className="relative overflow-hidden py-14 sm:py-20"
     >
       <Animation
         target="[data-marquee-track]"

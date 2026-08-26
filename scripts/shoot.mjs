@@ -5,7 +5,7 @@ const exe = '/usr/bin/chromium'
 
 const browser = await chromium.launch({
   executablePath: exe,
-  args: ['--no-sandbox', '--force-prefers-reduced-motion'],
+  args: ['--no-sandbox'],
 })
 
 async function capture(name, { width, height, dsf = 1 }) {
@@ -27,7 +27,7 @@ await capture('mobile.png', { width: 390, height: 844, dsf: 2 })
 
 // live-motion evidence: normal motion, mid-scroll at the roadmap vine
 {
-  const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } })
+  const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: 'no-preference' })
   const page = await ctx.newPage()
   await page.goto(BASE, { waitUntil: 'networkidle' })
   await page.waitForTimeout(800)

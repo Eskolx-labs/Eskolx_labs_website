@@ -2,7 +2,6 @@
 
 import { Root, Animation, Waypoint, Pin } from '@/lib/scrollytelling'
 import { PARCHMENT, LOAM } from '@/lib/field-controller'
-import { Reveal } from '@/components/reveal'
 
 const PHASES = [
   {
@@ -66,20 +65,24 @@ export function Roadmap() {
       >
         <Pin height="320vh">
           <div className="mx-auto flex h-full max-w-7xl flex-col justify-center px-4 pb-10 pt-20 sm:px-6 lg:px-8">
-            <Reveal className="max-w-3xl">
-              <h2 className="display text-[clamp(2rem,3.8vw,3.2rem)] leading-tight text-parchment-ink" data-reveal-item>
+            {/* room furniture: static inside the pinned shell (a viewport
+                Reveal measured in a sticky room scrambles on resize) */}
+            <div className="max-w-3xl">
+              <h2 className="display text-[clamp(2rem,3.8vw,3.2rem)] leading-tight text-parchment-ink">
                 The growing method
               </h2>
-              <p className="mt-4 max-w-xl text-lg leading-relaxed text-parchment-ink/75" data-reveal-item>
+              <p className="mt-4 max-w-xl text-lg leading-relaxed text-parchment-ink/75">
                 Three months to statistical packages built from scratch, then
                 research with your own tools. The plan, unedited.
               </p>
-            </Reveal>
+            </div>
 
             {/* the open stage: three beats share one place, no frame */}
             <div className="relative mt-8 min-h-0 flex-1 md:mt-10">
-              {/* vine rail draws past the chapter nodes */}
-              <div aria-hidden="true" className="absolute bottom-6 left-[19px] top-1 hidden w-px md:block">
+              {/* vine rail draws past the chapter nodes. Decorative only, and
+                  absolute against a shell that reduced motion collapses — so
+                  it exists only while motion runs. */}
+              <div aria-hidden="true" className="absolute bottom-6 left-[19px] top-1 hidden w-px motion-safe:md:block">
                 <Animation target="[data-vine-rail]" start={2} end={88} fromTo={[{ scaleY: 0 }, { scaleY: 1, ease: 'power1.inOut' }]}>
                   <span data-vine-rail className="block h-full w-full origin-top bg-parchment-ink/25" />
                 </Animation>
@@ -93,7 +96,7 @@ export function Roadmap() {
                   data-vine-node={i}
                   aria-hidden="true"
                   style={{ top: `${14 + i * 30}%` }}
-                  className="absolute left-[14px] hidden h-[11px] w-[11px] rounded-full border-2 border-parchment-ink/40 bg-parchment transition-colors duration-300 md:block"
+                  className="absolute left-[14px] hidden h-[11px] w-[11px] rounded-full border-2 border-parchment-ink/40 bg-parchment transition-colors duration-300 motion-safe:md:block"
                 />
               ))}
               {[0, 1, 2].map((i) => (
@@ -109,7 +112,7 @@ export function Roadmap() {
               ))}
 
               {/* the reader's place: chapter numerals */}
-              <div aria-hidden="true" className="absolute right-0 top-1/2 hidden -translate-y-1/2 flex-col items-end gap-7 font-mono text-[13px] tracking-widest text-parchment-ink opacity-35 lg:flex">
+              <div aria-hidden="true" className="absolute right-0 top-1/2 hidden -translate-y-1/2 flex-col items-end gap-7 font-mono text-[15px] tracking-widest text-parchment-ink/70 lg:flex">
                 {PHASES.map((p, i) => (
                   <span key={p.phase} data-rm-num={i}>{`0${i + 1}`}</span>
                 ))}
@@ -132,40 +135,47 @@ export function Roadmap() {
                     <div
                       key={p.phase}
                       data-rm-beat={i}
-                      className="flex flex-col justify-center py-12 motion-safe:md:[grid-area:1/1] md:h-full md:py-0 md:pl-16 lg:pr-24"
+                      className="flex flex-col justify-center py-12 md:pl-16 lg:pr-24 motion-safe:[@media(min-width:768px)_and_(min-height:700px)]:[grid-area:1/1] [@media(min-width:768px)_and_(min-height:700px)]:h-full [@media(min-width:768px)_and_(min-height:700px)]:py-0"
                     >
-                      <Animation target={`[data-rm-rule="${i}"]`} start={s} end={s + 8} fromTo={[{ scaleX: 0 }, { scaleX: 1, ease: 'power2.out' }]}>
+                      {/* phase 1 is on stage at progress 0 — the room never
+                          opens on a blank spread */}
+                      {i > 0 ? (
+                        <Animation target={`[data-rm-rule="${i}"]`} start={s} end={s + 8} fromTo={[{ scaleX: 0 }, { scaleX: 1, ease: 'power2.out' }]}>
+                          <span data-rm-rule={i} className="mb-6 block h-px w-16 origin-left bg-gold-leaf/80" />
+                        </Animation>
+                      ) : (
                         <span data-rm-rule={i} className="mb-6 block h-px w-16 origin-left bg-gold-leaf/80" />
-                      </Animation>
-                      <Animation
-                        target={`[data-rm-unit="${i}"]`}
-                        start={s + 2}
-                        end={s + 18}
-                        fromTo={[{ y: 48, opacity: 0 }, { y: 0, opacity: 1, ease: 'power2.out' }]}
-                      >
-                        <div data-rm-unit={i}>
-                          <span className="tabular inline-flex items-center gap-2 rounded-full border border-wine-500/50 bg-wine-600/10 px-3.5 py-1 font-mono text-xs tracking-wide text-wine-600">
-                            <span className="h-1.5 w-1.5 rounded-full bg-wine-500" />
-                            {p.phase}
-                          </span>
-                          <h3 className="display mt-6 max-w-3xl text-3xl leading-[1.08] text-parchment-ink md:text-4xl">
-                            {p.title}
-                          </h3>
-                          <p className="mt-5 max-w-[58ch] text-base leading-relaxed text-parchment-ink/75 md:text-lg">
-                            {p.body}
-                          </p>
-                          <ul className="mt-7 flex flex-wrap gap-2">
-                            {p.tags.map((t) => (
-                              <li
-                                key={t}
-                                className="rounded-sm border border-parchment-ink/25 px-2.5 py-1 font-mono text-[11px] text-parchment-ink/80"
-                              >
-                                {t}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      </Animation>
+                      )}
+                      {i > 0 && (
+                        <Animation
+                          target={`[data-rm-unit="${i}"]`}
+                          start={s + 2}
+                          end={s + 18}
+                          fromTo={[{ y: 48, opacity: 0 }, { y: 0, opacity: 1, ease: 'power2.out' }]}
+                        />
+                      )}
+                      <div data-rm-unit={i}>
+                        <span className="tabular inline-flex items-center gap-2 rounded-full border border-wine-500/50 bg-wine-600/10 px-3.5 py-1 font-mono text-xs tracking-wide text-wine-600">
+                          <span className="h-1.5 w-1.5 rounded-full bg-wine-500" />
+                          {p.phase}
+                        </span>
+                        <h3 className="display mt-6 max-w-3xl text-3xl leading-[1.08] text-parchment-ink md:text-4xl">
+                          {p.title}
+                        </h3>
+                        <p className="mt-5 max-w-[58ch] text-base leading-relaxed text-parchment-ink/75 md:text-lg">
+                          {p.body}
+                        </p>
+                        <ul className="mt-7 flex flex-wrap gap-2">
+                          {p.tags.map((t) => (
+                            <li
+                              key={t}
+                              className="rounded-sm border border-parchment-ink/25 px-2.5 py-1 font-mono text-[11px] text-parchment-ink/80"
+                            >
+                              {t}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                       {i < 2 && (
                         <Animation
                           target={`[data-rm-unit="${i}"]`}
@@ -184,9 +194,14 @@ export function Roadmap() {
       </Root>
 
       {/* the quiet exit on the day-spread. It owns its own parchment zone so
-          the body holds paper until the seal floods the page into night. */}
+          the body holds paper until the seal floods the page into night.
+          Flow-chapter strings are load-bearing here: with the default
+          pinned-style start/end this shorter-than-viewport zone computed a
+          zero-length trigger and its content never revealed at all. */}
       <Root
         className="bg-parchment"
+        start="top bottom"
+        end="bottom top"
         field={{
           from: { bg: '#ece1c6', ink: '#29190c', soft: '#5c4a33', line: '#b9a67f' },
           to: { bg: '#ece1c6', ink: '#29190c', soft: '#5c4a33', line: '#b9a67f' },
@@ -200,24 +215,7 @@ export function Roadmap() {
           fromTo={[{ y: 28, opacity: 0 }, { y: 0, opacity: 1 }]}
         />
         <div data-exit-inner className="mx-auto max-w-7xl px-4 pb-24 pt-16 sm:px-6 lg:px-8">
-          <div className="flex flex-col items-start gap-5 rounded-sm border border-parchment-ink/25 bg-parchment p-7 sm:flex-row sm:items-center">
-            <svg viewBox="0 0 40 40" className="h-11 w-11 shrink-0 text-gold-leaf" aria-hidden="true" fill="none">
-              <path d="M8 31 H32 M10 34 H30 M13 37 H27" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" opacity="0.55" />
-              <path d="M20 30 V12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-              <path d="M20 22 C16.5 19.5 13.5 19.5 11 21.5 C13.5 24 17 23.8 20 22 Z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
-              <path d="M20 17 C23.5 14.5 26.5 14.5 29 16.5 C26.5 19 23 18.8 20 17 Z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
-              <circle cx="20" cy="12" r="1.3" fill="currentColor" stroke="none" />
-            </svg>
-            <div>
-              <h3 className="display text-lg text-parchment-ink">Small, fast-moving builder teams</h3>
-              <p className="mt-1.5 max-w-[68ch] text-[15px] leading-relaxed text-parchment-ink/75">
-                Few people, fast cycles. Cohorts work in pure code and ship
-                tested, documented packages instead of notebooks.
-              </p>
-            </div>
-          </div>
-
-          <div className="mt-12 flex flex-col items-start justify-between gap-5 border-t border-parchment-ink/25 pt-10 sm:flex-row sm:items-center">
+          <div className="flex flex-col items-start justify-between gap-5 border-t border-parchment-ink/25 pt-10 sm:flex-row sm:items-center">
             <p className="display text-xl leading-snug text-parchment-ink sm:text-2xl">
               The season starts at the repo.
             </p>

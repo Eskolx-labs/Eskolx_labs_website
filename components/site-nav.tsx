@@ -70,57 +70,25 @@ export function SiteNav() {
   }, [open])
 
   useEffect(() => {
-    let raf = 0
-    // section tops are geometry, not per-event work: measured here and on
-    // the events that can shift them, never inside the scroll handler
-    let tops: Array<[string, number]> = []
-    const measure = () => {
-      tops = NAV_LINKS.map((link) => {
-        const el = document.getElementById(link.href.slice(1))
-        return [
-          link.href.slice(1),
-          el ? el.getBoundingClientRect().top + window.scrollY : Number.POSITIVE_INFINITY,
-        ]
-      })
-    }
-    const evaluate = () => {
-      raf = 0
+    const onScroll = () => {
       setGrounded(window.scrollY > 24)
       // the reader's place: the last spread whose top has crossed the
       // upper-third reading line owns the rail's gold mark
       const probe = window.scrollY + window.innerHeight * 0.38
       let current: string | null = null
-      for (const [id, top] of tops) {
-        if (top <= probe) current = id
+      for (const link of NAV_LINKS) {
+        const el = document.getElementById(link.href.slice(1))
+        if (el && el.offsetTop <= probe) current = link.href.slice(1)
       }
       setActiveId(current)
     }
-    // scroll storms coalesce to one evaluation per frame
-    const schedule = () => {
-      if (!raf) raf = requestAnimationFrame(evaluate)
-    }
-    const remeasure = () => {
-      measure()
-      schedule()
-    }
-    const onResize = () => {
-      setResizeTick((t) => t + 1)
-      remeasure()
-    }
-    measure()
-    evaluate()
-    window.addEventListener('scroll', schedule, { passive: true })
+    const onResize = () => setResizeTick(t => t + 1)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
     window.addEventListener('resize', onResize)
-    window.addEventListener('load', remeasure)
-    document.fonts?.ready.then(remeasure)
-    gsap.registerPlugin(ScrollTrigger)
-    ScrollTrigger.addEventListener('refresh', remeasure)
     return () => {
-      cancelAnimationFrame(raf)
-      window.removeEventListener('scroll', schedule)
+      window.removeEventListener('scroll', onScroll)
       window.removeEventListener('resize', onResize)
-      window.removeEventListener('load', remeasure)
-      ScrollTrigger.removeEventListener('refresh', remeasure)
     }
   }, [])
 
@@ -146,7 +114,9 @@ export function SiteNav() {
   // then crossfades in pixel-aligned. The seal turns slowly with the read.
   useEffect(() => {
     const mm = gsap.matchMedia()
-    mm.add('(prefers-reduced-motion: no-preference) and (min-width: 768px)', () => {
+    // the dock needs a tall pinned hero to dock within; short windows read
+    // the flow layout, where the logo simply stays visible in the rail
+    mm.add('(prefers-reduced-motion: no-preference) and (min-width: 768px) and (min-height: 700px)', () => {
       gsap.registerPlugin(ScrollTrigger)
       const ctx = gsap.context(() => {
         gsap.set(logoRef.current, { autoAlpha: 0 })
@@ -213,7 +183,7 @@ export function SiteNav() {
       ref={headerRef}
       className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
         grounded
-          ? 'border-b border-[color-mix(in_srgb,var(--field-line)_35%,transparent)] bg-[color-mix(in_srgb,var(--field-bg)_86%,transparent)] backdrop-blur-md'
+          ? 'border-b border-[color-mix(in_srgb,var(--field-line)_35%,transparent)] bg-[color-mix(in_srgb,var(--field-bg)_86%,transparent)] backdrop-blur-md max-lg:bg-[color-mix(in_srgb,var(--field-bg)_97%,transparent)] max-lg:backdrop-blur-none'
           : 'border-b border-transparent bg-transparent'
       }`}
     >
@@ -275,7 +245,7 @@ export function SiteNav() {
             target="_blank"
             rel="noreferrer"
             aria-label="Join the Telegram community"
-            className={`flex h-9 w-9 items-center justify-center rounded-sm border transition-colors sm:h-10 sm:w-10 ${
+            className={`flex h-11 w-11 items-center justify-center rounded-sm border transition-colors ${
               grounded
                 ? 'border-[color-mix(in_srgb,var(--field-ink)_30%,transparent)] text-[color:var(--field-ink)] hover:border-[color:var(--field-ink)]'
                 : 'border-[color-mix(in_srgb,var(--field-ink)_30%,transparent)] text-[color:var(--field-ink)] hover:border-[color:var(--field-ink)]'
@@ -291,7 +261,7 @@ export function SiteNav() {
             className="btn-plate btn-wine hidden !px-5 !py-2.5 text-[15px] sm:inline-flex"
           >
             <GithubIcon className="h-4 w-4" />
-            Explore GitHub
+            Eskolx on GitHub
           </a>
         </div>
 
@@ -299,7 +269,7 @@ export function SiteNav() {
           type="button"
           ref={toggleRef}
           onClick={() => setOpen((v) => !v)}
-            className={`inline-flex h-10 w-10 flex-col items-center justify-center gap-[5px] rounded-sm text-[color:var(--field-ink)] lg:hidden`}
+            className={`inline-flex h-11 w-11 flex-col items-center justify-center gap-[5px] rounded-sm text-[color:var(--field-ink)] lg:hidden`}
           aria-label={open ? 'Close menu' : 'Open menu'}
           aria-expanded={open}
         >
@@ -316,7 +286,7 @@ export function SiteNav() {
       </div>
 
       {open && (
-        <div className="border-t border-[color-mix(in_srgb,var(--field-line)_40%,transparent)] bg-[color-mix(in_srgb,var(--field-bg)_95%,transparent)] backdrop-blur-md lg:hidden">
+        <div className="border-t border-[color-mix(in_srgb,var(--field-line)_40%,transparent)] bg-[color-mix(in_srgb,var(--field-bg)_100%,transparent)] lg:hidden">
           <nav className="mx-auto flex max-w-7xl flex-col px-4 py-4 sm:px-6">
             {NAV_LINKS.map((link) => (
               <a
@@ -337,7 +307,7 @@ export function SiteNav() {
                 className="btn-plate btn-wine"
               >
                 <GithubIcon className="h-4 w-4" />
-                Explore GitHub
+                Eskolx on GitHub
               </a>
               <a
                 href="https://t.me/eskolx_labs"

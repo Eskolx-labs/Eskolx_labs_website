@@ -14,8 +14,10 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
  * One pressing, one authored moment: the dawn seam presses daylight back
  * over the night field as the method chapter opens. Anchored to the seam's
  * own crossing (it has no pin), so it can never drift into the chapters
- * around it. Below md, under reduced motion, or without the filter the
- * page keeps today's smooth lerp — this layer is pure enhancement.
+ * around it. The guide's own turn to night rides the body lerp instead —
+ * text and background move together there, so no press is wanted. Below
+ * md, under reduced motion, or without the filter the page keeps the
+ * smooth lerp — this layer is pure enhancement.
  */
 
 const TURNS = [
@@ -25,6 +27,7 @@ const TURNS = [
     color: '#ece1c6',
     from: 0,
     to: 1,
+    end: 'bottom 30%',
     bf: '0.015 0.105',
     peak: 74,
     rest: 22,
@@ -61,7 +64,7 @@ export function InkPress() {
           }
           ctx = gsap.context(() => {
             for (const t of TURNS) {
-              // the dawn seam is a flow section: the press rides its own
+              // each seam is a flow section: the press rides its own
               // crossing into the viewport, not a pin room
               const section = document.querySelector(t.section)
               const pin = section?.querySelector('[data-pin]') ?? section
@@ -76,12 +79,17 @@ export function InkPress() {
                 scrollTrigger: {
                   trigger: pin,
                   start: 'top 78%',
-                  end: 'bottom 30%',
+                  end: t.end,
                   scrub: true,
                   invalidateOnRefresh: true,
                   onUpdate: (self) => {
-                    root.style.visibility =
-                      self.progress > 0 && self.progress < 1 ? 'visible' : 'hidden'
+                    // the night seam is the document's last flow section: its
+                    // crossing can settle a rounding hair short of progress 1
+                    // and never receive another scroll event, so the gate
+                    // releases early and the opacity-out completes before the
+                    // timeline's end — a press can never ghost over the close
+                    const p = self.progress
+                    root.style.visibility = p > 0.001 && p < 0.995 ? 'visible' : 'hidden'
                   },
                 },
                 defaults: { ease: 'none' },
@@ -91,7 +99,7 @@ export function InkPress() {
               tl.fromTo(root, { opacity: 0 }, { opacity: 0.94, duration: 0.14 }, 0)
                 .fromTo(disp, { attr: { scale: 0 } }, { attr: { scale: t.peak }, duration: 0.46, ease: 'power2.in' }, 0.06)
                 .to(disp, { attr: { scale: t.rest }, duration: 0.38, ease: 'power2.out' }, 0.52)
-                .to(root, { opacity: 0, duration: 0.16 }, 0.9)
+                .to(root, { opacity: 0, duration: 0.05 }, 0.9)
             }
           })
         }
@@ -119,9 +127,7 @@ export function InkPress() {
               height="130%"
               colorInterpolationFilters="sRGB"
             >
-              {/* one octave: the displaced edge reads the same, the noise
-                  primitive costs half as much per rasterization */}
-              <feTurbulence type="fractalNoise" baseFrequency={t.bf} numOctaves="1" seed={t.seed} result="grain" />
+              <feTurbulence type="fractalNoise" baseFrequency={t.bf} numOctaves="2" seed={t.seed} result="grain" />
               <feDisplacementMap id={`${t.id}-disp`} in="SourceGraphic" in2="grain" scale="0" xChannelSelector="R" yChannelSelector="G" />
             </filter>
           ))}

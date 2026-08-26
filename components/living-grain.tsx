@@ -54,15 +54,14 @@ export function LivingGrain() {
     let h = 0
     let raf = 0
     let running = true
-    let lastDraw = 0
     let inkCache = ''
     let inkAt = 0
-    // one style string per fiber, rebuilt only when the field's ink turns —
-    // not 110 template allocations every frame
-    const styles = new Array<string>(COUNT)
+    let lastDraw = 0
     const fibers: Fiber[] = []
-    // grain fibers are soft weather; retina precision buys nothing here
+    // night frames cost the same and read dimmer; drift slower there
     const dpr = Math.min(window.devicePixelRatio || 1, 1.5)
+    const FRAME_MIN = 33
+    const FRAME_MIN_NIGHT = 50
 
     const resize = () => {
       w = window.innerWidth
@@ -101,30 +100,28 @@ export function LivingGrain() {
       if (!v || v === inkCache) return
       inkCache = v
       const m = v.match(/(\d+),\s*(\d+),\s*(\d+)/)
-      if (m) inkRGB = [+m[1], +m[2], +m[3]]
-      for (let i = 0; i < COUNT; i++) {
-        styles[i] = `rgba(${inkRGB[0]}, ${inkRGB[1]}, ${inkRGB[2]}, ${fibers[i].alpha})`
+      if (m) {
+        inkRGB = [+m[1], +m[2], +m[3]]
+        const lum =
+          (0.2126 * inkRGB[0] + 0.7152 * inkRGB[1] + 0.0722 * inkRGB[2]) / 255
+        frameMin = lum < 0.35 ? FRAME_MIN_NIGHT : FRAME_MIN
       }
     }
-    sampleInk(0)
 
+    let frameMin = FRAME_MIN
     const tick = () => {
       if (!running) return
       raf = requestAnimationFrame(tick)
       const t = performance.now()
       sampleInk(t)
+      if (t - lastDraw < frameMin) return
+      lastDraw = t
       const lenis = (window as unknown as { __lenis?: { velocity: number } }).__lenis
       const vel = lenis ? lenis.velocity : 0
-      // the fibers drift slowly enough that a capped frame rate reads
-      // identically: ~30fps under the scroll's wind, a lazy 20 at rest,
-      // leaving the display's full frame budget to the scrubbed chapters
-      const interval = Math.abs(vel) > 0.05 ? 33 : 50
-      if (t - lastDraw < interval) return
-      lastDraw = t
       const boost = Math.max(-14, Math.min(14, vel * 0.55))
       ctx2d.clearRect(0, 0, w, h)
-      for (let i = 0; i < COUNT; i++) {
-        const f = fibers[i]
+      ctx2d.fillStyle = `rgb(${inkRGB[0]}, ${inkRGB[1]}, ${inkRGB[2]})`
+      for (const f of fibers) {
         f.phase += 0.008
         f.x += f.vx + Math.sin(f.phase) * 0.18 + boost * 0.045
         f.y += f.vy + boost * 0.22
@@ -133,9 +130,11 @@ export function LivingGrain() {
         if (f.x < -4) f.x = w + 4
         if (f.x > w + 4) f.x = -4
         const stretch = 1 + Math.min(Math.abs(boost) * 0.16, 2.6)
-        ctx2d.fillStyle = styles[i]
+        ctx2d.globalAlpha = f.alpha
         ctx2d.fillRect(f.x, f.y, f.s * stretch, f.s)
       }
+      ctx2d.globalAlpha = 1
+      ctx2d.fillStyle = `rgb(${inkRGB[0]}, ${inkRGB[1]}, ${inkRGB[2]})`
     }
     raf = requestAnimationFrame(tick)
 
