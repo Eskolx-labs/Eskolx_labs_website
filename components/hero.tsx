@@ -111,7 +111,10 @@ export function Hero() {
           shell also never scrolls under the nav. */}
       <Pin height="300vh" mobileHeight="220vh" pinMobile>
         <section className="relative flex h-full flex-col items-center justify-center gap-10 overflow-hidden px-4 pt-24 pb-20 max-md:gap-6 max-md:pt-20 max-md:pb-12 sm:px-6 [@media(min-width:768px)_and_(max-height:899.9px)]:gap-7 [@media(min-width:768px)_and_(max-height:899.9px)]:pb-10 [@media(min-width:768px)_and_(max-height:899.9px)]:pt-16">
-          <div ref={markRef} className="pointer-events-none z-10 flex items-center gap-[0.55em]">
+          <div
+            ref={markRef}
+            className="pointer-events-none z-10 flex items-center gap-[0.55em] motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:absolute motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:left-1/2 motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:top-[19%] motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:-translate-x-1/2"
+          >
             <div data-hero-mark className="flex items-center gap-[0.85em] text-[clamp(3.25rem,13vw,10rem)]">
               <span className="font-script field-ink leading-none">
                 Eskolx Labs
@@ -124,76 +127,90 @@ export function Hero() {
             </div>
           </div>
 
+          {/* the motto stage, dead-centered on tall desktop and flowing on
+              phones. The resting state IS the thesis: Learn Deep / build
+              expertise., with the mission already beneath it - no hidden
+              words, no compound. The interruption is a scroll beat, not a
+              loading state. */}
+          <div
+            data-motto
+            className="z-10 w-full select-none px-4 text-center max-md:px-2 motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:absolute motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:inset-x-0 motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:top-[42%] motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:-translate-y-1/2"
+            aria-hidden="true"
+          >
+            <span className="block whitespace-nowrap">
+              <span data-motto-wording className="display block whitespace-nowrap text-[clamp(2.6rem,7.5vw,5.75rem)] leading-[1.04] field-ink">
+                <span data-motto-learn className="inline-block will-change-transform">Learn</span>
+                <span data-motto-deep className="ml-[0.24em] inline-block will-change-transform">Deep</span>
+                <span data-motto-ing className="inline-block will-change-transform">ing</span>
+              </span>
+            </span>
+            <span data-motto-promise className="display block text-[clamp(1.5rem,3.6vw,2.6rem)] leading-[1.15] field-ink-soft">
+              build <em className="text-wine-400">expertise.</em>
+            </span>
+          </div>
+
           <div
             data-hero-copy
-            className="z-10 w-full max-w-3xl px-4 text-center max-md:px-2"
+            className="z-10 w-full max-w-3xl px-4 text-center max-md:px-2 motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:absolute motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:bottom-[9%] motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:left-0 motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:right-0"
           >
-            {/* the motto: DeepLearning decomposes into Learn Deep, and the
-                promise under it. The h1 carries both motto and mission so
-                the cover reads as one statement to screen readers. */}
-            <div data-motto className="select-none" aria-hidden="true">
-              <span className="block overflow-hidden">
-                <Animation
-                  target="[data-motto-wording]"
-                  start={20}
-                  end={30}
-                  fromTo={[{ yPercent: 120 }, { yPercent: 0 }]}
-                >
-                  <span data-motto-wording className="display block whitespace-nowrap text-[clamp(2.6rem,7.5vw,5.75rem)] leading-[1.04] field-ink">
-                    <span data-motto-learn className="inline-block will-change-transform">Learn</span>
-                    <span data-motto-deep className="ml-[0.24em] inline-block will-change-transform">Deep</span>
-                    <span data-motto-ing className="inline-block will-change-transform">ing</span>
-                  </span>
-                </Animation>
-              </span>
-              <span className="block overflow-hidden">
-                <Animation
-                  target="[data-motto-promise]"
-                  start={46}
-                  end={54}
-                  fromTo={[{ yPercent: 120 }, { yPercent: 0 }]}
-                >
-                  <span data-motto-promise className="display block text-[clamp(1.5rem,3.6vw,2.6rem)] leading-[1.15] field-ink-soft">
-                    build <em className="text-wine-400">expertise.</em>
-                  </span>
-                </Animation>
-              </span>
-            </div>
+            {/* the mission rises directly beneath the promise: one column.
+                On tall desktop the motto stage owns the center and the copy
+                reads from the bottom band; below that the two flow. */}
+            <div className="h-[0.2em] max-md:hidden" aria-hidden="true" />
 
-            {/* the decomposition, in em offsets so any viewport scales it:
-                at rest the words sit swapped (Deep first, Learn second, ing
-                attached after Learn) and read DeepLearning; the peel sends
-                ing drifting away, then the swap slides Learn and Deep past
-                each other into the motto. Offsets are measured IM Fell
+            {/* the interruption and the settle, in em offsets so any viewport
+                scales it: at rest the words read Learn Deep. Scrolling, the
+                buzzword grabs them - Learn slides right, Deep slides left,
+                the ing attaches - a single sharp compound. The ing peels
+                away, the promise dims, and the words trade back into the
+                motto, which is now earned. Offsets are measured IM Fell
                 widths: Learn 2.535em, Deep 2.283em, word gap 0.24em. */}
             <Animation
               target="[data-motto-learn]"
-              start={40}
-              end={48}
-              fromTo={[{ x: '2.52em' }, { x: '0em' }]}
+              start={18}
+              end={24}
+              to={{ x: '2.52em' }}
             />
             <Animation
               target="[data-motto-deep]"
-              start={40}
-              end={48}
-              fromTo={[{ x: '-2.78em' }, { x: '0em' }]}
+              start={18}
+              end={24}
+              to={{ x: '-2.78em' }}
             />
-            {/* the trade: as the words slide past each other they dip and
-                lift around one another, then settle level - a handoff, not
-                a collision */}
-            <Animation target="[data-motto-learn]" start={40} end={44} to={{ y: '0.18em' }} />
-            <Animation target="[data-motto-learn]" start={44} end={48} to={{ y: '0em' }} />
-            <Animation target="[data-motto-deep]" start={40} end={44} to={{ y: '-0.18em' }} />
-            <Animation target="[data-motto-deep]" start={44} end={48} to={{ y: '0em' }} />
             <Animation
               target="[data-motto-ing]"
-              start={34}
-              end={42}
-              fromTo={[
-                { x: '0em', y: '0em', rotation: 0, autoAlpha: 1 },
-                { x: '0.6em', y: '-0.85em', rotation: 14, autoAlpha: 0, ease: 'power2.in' },
-              ]}
+              start={18}
+              end={22}
+              to={{ x: '2.52em', autoAlpha: 1 }}
             />
+            {/* the buzzword dims the real statement while it holds */}
+            <Animation target="[data-motto-promise]" start={20} end={24} to={{ opacity: 0.32 }} />
+            <Animation target="[data-motto-promise]" start={34} end={40} to={{ opacity: 1 }} />
+            {/* the peel: the ing drifts off and dies */}
+            <Animation
+              target="[data-motto-ing]"
+              start={24}
+              end={32}
+              to={{ x: '3.12em', y: '-0.85em', rotation: 14, autoAlpha: 0, ease: 'power2.in' }}
+            />
+            {/* the settle: Learn and Deep trade back into the motto, dipping
+                and lifting around one another - a handoff, not a collision */}
+            <Animation
+              target="[data-motto-learn]"
+              start={32}
+              end={40}
+              fromTo={[{ x: '2.52em' }, { x: '0em', immediateRender: false }]}
+            />
+            <Animation
+              target="[data-motto-deep]"
+              start={32}
+              end={40}
+              fromTo={[{ x: '-2.78em' }, { x: '0em', immediateRender: false }]}
+            />
+            <Animation target="[data-motto-learn]" start={32} end={36} to={{ y: '0.18em' }} />
+            <Animation target="[data-motto-learn]" start={36} end={40} to={{ y: '0em' }} />
+            <Animation target="[data-motto-deep]" start={32} end={36} to={{ y: '-0.18em' }} />
+            <Animation target="[data-motto-deep]" start={36} end={40} to={{ y: '0em' }} />
 
             <h1
               className="display mt-8 text-[clamp(2.4rem,5.6vw,4.25rem)] leading-[1.06] field-ink max-md:mt-6"
@@ -204,8 +221,8 @@ export function Hero() {
                   <span key={i} className="block overflow-hidden">
                     <Animation
                       target={`[data-hero-line="${i}"]`}
-                      start={58 + i * 2.5}
-                      end={63 + i * 2.5}
+                      start={44 + i * 2.5}
+                      end={49 + i * 2.5}
                       fromTo={[{ yPercent: 118 }, { yPercent: 0 }]}
                     >
                       <span data-hero-line={i} className="block">
@@ -224,7 +241,7 @@ export function Hero() {
               </span>
             </h1>
 
-            <Animation target="[data-hero-sub]" start={66} end={72} fromTo={[{ y: 24, opacity: 0 }, { y: 0, opacity: 1 }]}>
+            <Animation target="[data-hero-sub]" start={58} end={64} fromTo={[{ y: 24, opacity: 0 }, { y: 0, opacity: 1 }]}>
               <p
                 data-hero-sub
                 className="mx-auto mt-7 max-w-xl text-lg leading-relaxed field-ink-soft max-md:mt-5 max-md:text-base"
@@ -236,7 +253,7 @@ export function Hero() {
               </p>
             </Animation>
 
-            <Animation target="[data-hero-cta]" start={68} end={74} fromTo={[{ y: 20, opacity: 0 }, { y: 0, opacity: 1 }]}>
+            <Animation target="[data-hero-cta]" start={60} end={66} fromTo={[{ y: 20, opacity: 0 }, { y: 0, opacity: 1 }]}>
               <div data-hero-cta className="mt-9 flex flex-col items-center justify-center gap-3.5 sm:flex-row sm:flex-wrap">
                 <a
                   href="https://github.com/eskolx-labs"
@@ -272,7 +289,7 @@ export function Hero() {
             <a
               data-hero-cue
               href="#ecosystem"
-              className="relative z-10 mt-10 flex items-center justify-center gap-3 text-sm field-ink-soft transition-colors hover:field-ink max-md:mt-6 md:mx-auto md:w-fit"
+              className="relative z-10 mt-10 flex items-center justify-center gap-3 text-sm field-ink-soft transition-colors hover:field-ink max-md:mt-6 md:mx-auto md:w-fit motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:absolute motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:bottom-[7%] motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:left-1/2 motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:-translate-x-1/2 motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:mt-0"
             >
               <span>Scroll to open the almanac</span>
               <svg viewBox="0 0 16 20" className="h-4 w-4" aria-hidden="true">
@@ -288,18 +305,20 @@ export function Hero() {
           </Animation>
 
           {/* one resting action: a non-scroller never sees the mission or the
-              CTA block (both arrive past ~1200px of scroll), so the cover
-              carries a quiet single action beneath the cue */}
-          <a
-            data-resting-cta
-            href="https://github.com/eskolx-labs"
-            target="_blank"
-            rel="noreferrer"
-            className="relative z-10 mt-5 inline-flex items-center gap-2 rounded-sm border border-field-ink/30 px-4 py-2 text-sm text-field-ink transition-colors hover:border-field-ink hover:bg-field-ink/5 max-md:mt-4"
-          >
-            <GithubIcon className="h-4 w-4" />
-            Explore the repos
-          </a>
+              CTA block until they scroll, so the cover carries a quiet single
+              action beneath the cue. It yields as the real CTA block rises. */}
+          <Animation target="[data-resting-cta]" start={56} end={60} to={{ autoAlpha: 0 }}>
+            <a
+              data-resting-cta
+              href="https://github.com/eskolx-labs"
+              target="_blank"
+              rel="noreferrer"
+              className="relative z-10 mt-5 inline-flex items-center gap-2 rounded-sm border border-field-ink/30 px-4 py-2 text-sm text-field-ink transition-colors hover:border-field-ink hover:bg-field-ink/5 max-md:mt-4 motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:absolute motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:bottom-[4%] motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:left-1/2 motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:-translate-x-1/2 motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:mt-0"
+            >
+              <GithubIcon className="h-4 w-4" />
+              Explore the repos
+            </a>
+          </Animation>
 
           <Animation
             target="[data-hero-mark]"

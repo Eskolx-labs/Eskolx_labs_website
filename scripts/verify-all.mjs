@@ -251,11 +251,16 @@ const sealState = (page) => page.evaluate(() => {
     getComputedStyle(document.querySelector('#roadmap [data-pin] > div > div')).position === 'static' &&
     getComputedStyle(document.querySelector('#ecosystem [data-pin] > div > div')).position === 'static'))
   // the resting cover carries one quiet action so a non-scroller is never stuck
-  check('phone: resting cover CTA present', await page.evaluate(() => {
+  check('phone: resting cover CTA present', await page.evaluate(async () => {
+    await window.__lenis?.scrollTo(0, { immediate: true })
+    await new Promise((r) => setTimeout(r, 200))
     const a = document.querySelector('[data-resting-cta]')
-    return a && a.offsetHeight > 30 && getComputedStyle(a).visibility !== 'hidden'
+    return a && a.offsetHeight > 30 && +getComputedStyle(a).opacity > 0.9
   }))
-  check('phone: bar reaches requirement 4', await page.evaluate(() => {
+  check('phone: bar reaches requirement 4', await page.evaluate(async () => {
+    const pin = document.querySelector('#guide-bar [data-pin]')
+    await window.__lenis?.scrollTo(pin.getBoundingClientRect().top + scrollY + (pin.offsetHeight - innerHeight), { immediate: true })
+    await new Promise((r) => setTimeout(r, 300))
     const stack = document.querySelector('#guide-bar [data-bar-stack]')
     const frame = stack.parentElement
     const m = new DOMMatrixReadOnly(getComputedStyle(stack).transform === 'none' ? 'matrix(1,0,0,1,0,0)' : getComputedStyle(stack).transform)
