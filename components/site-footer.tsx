@@ -30,7 +30,7 @@ export function SiteFooter() {
                 </a>
               </Animation>
               <p className="display mt-6 text-[clamp(1.9rem,3vw,2.75rem)] italic leading-[1.15] text-gold-leaf">
-                Must Build, Not&nbsp;Just&nbsp;Learn.
+                Learn deep, build&nbsp;expertise.
               </p>
             </div>
 

@@ -24,7 +24,7 @@ const TIERS = [
     id: 3,
     name: 'Advanced Applied Machine Learning (from scratch)',
     concepts: ['Neural networks', 'Modern architectures', 'Time series & stationarity', 'Design of Experiments'],
-    goal: 'Advanced data science next, still from scratch. Dense methodology enters as reading and leaves as tested, documented code that participants can explain line by line.',
+    goal: 'Next comes advanced data science, still from scratch. You read the papers, then write tested, documented code you can explain line by line.',
   },
   {
     id: 4,

@@ -168,6 +168,14 @@
 }
 
 @layer components {
+  /* the motto's throwaway particle: hidden in the resting cover (no-JS,
+     reduced motion) where the motto reads "Learn Deep". The scrubbed
+     fromTo overrides visibility when the timeline builds, showing it only
+     for the DeepLearning decomposition beat. */
+  [data-motto-ing] {
+    visibility: hidden;
+  }
+
   /* print-tooth grain over the whole page, one fixed layer. No blend mode:
      mix-blend-mode forces a full-page composite of a moving document every
      frame — the single worst scroll-jank source this page ever had. The

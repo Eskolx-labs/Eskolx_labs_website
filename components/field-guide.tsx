@@ -31,7 +31,7 @@ const DONTs = [
   },
 ]
 
-const REQUIREMENTS: {
+const ASKS: {
   n: string
   title: string
   body: string
@@ -42,25 +42,30 @@ const REQUIREMENTS: {
   {
     n: '01',
     title: 'Working Python',
-    body: 'You do not need to be senior. You do need to read and write it without hand-holding.',
+    body: 'That is the whole entry bar. You need to read and write it without hand-holding.',
   },
   {
     n: '02',
-    title: 'Patience for sources',
-    body: 'Every function starts as a book chapter or a paper. If that sounds tedious, this is not your lab.',
+    title: 'Read before you write',
+    body: 'Every function starts in books and research papers, and your notes from that reading are part of the work.',
   },
   {
     n: '03',
-    title: 'Small-team pace',
-    body: 'Few people, fast cycles, real milestones. Everyone ships.',
-  },
-  {
-    n: '04',
-    title: 'Teaching instinct',
-    body: 'The loop ends when you can explain what you built. Explanations worth publishing go into',
+    title: 'Notes go public',
+    body: 'They land in the open vault under MIT, with your name on them. The notes build the knowledge base, and you are one of its authors. Start with',
     linkText: 'the open study vault',
     href: 'https://github.com/Eskolx-labs/Eskolx-Open-Knowledge',
     after: '.',
+  },
+  {
+    n: '04',
+    title: 'Small, fast teams',
+    body: 'Few people, short cycles, real milestones. Everyone ships, and review stays close.',
+  },
+  {
+    n: '05',
+    title: 'Finish by teaching',
+    body: 'The loop ends when you can explain what you built. The best explanations get published on this site.',
   },
 ]
 
@@ -76,29 +81,6 @@ const STATUS = [
     v: 'Cut when a package milestone closes. The statistical basics land first.',
   },
   { k: 'License', v: 'MIT. Everything public.' },
-]
-
-const ASKS = [
-  {
-    t: 'Working Python and class statistics',
-    d: 'That is the whole entry bar. The hard parts arrive as projects, not prerequisites.',
-  },
-  {
-    t: 'Read before you write',
-    d: 'Every function starts in books and research papers, and your notes from that reading are part of the work.',
-  },
-  {
-    t: 'Let your notes go public',
-    d: 'They land in the open vault under MIT with your name on them. Participants are the authors of the knowledge base we are building.',
-  },
-  {
-    t: 'Work in the open',
-    d: 'Commits, reviews, and decisions happen in public, in teams small enough that review is close and nothing waits on a committee.',
-  },
-  {
-    t: 'Finish by teaching',
-    d: 'The last step of every piece of work is an explanation others can learn from. The best ones get published on this site.',
-  },
 ]
 
 const FAQ: {
@@ -198,7 +180,7 @@ const FIELD_PLATE =
  * and the FAQ read on night to the close of the book.
  */
 function jumpToRequirement(index: number) {
-  scrollToPlate('guide-bar', '#guide-bar [data-bar-stack]', index, REQUIREMENTS.length)
+  scrollToPlate('guide-bar', '#guide-bar [data-bar-stack]', index, ASKS.length)
 }
 
 export function FieldGuide() {
@@ -211,7 +193,7 @@ export function FieldGuide() {
       stackSel: '#guide-bar [data-bar-stack]',
       stakeAttr: 'data-bar-stake',
       litAttrs: ['data-bar-num'],
-      count: REQUIREMENTS.length,
+      count: ASKS.length,
       gsapScrollTrigger: ScrollTrigger,
     }), [])
 
@@ -333,26 +315,6 @@ export function FieldGuide() {
               </ul>
             </div>
           </Reveal>
-
-          {/* what we ask: the contributor requirements, straight from the
-              direction notes. The do/don't plate says what the lab is; this
-              one says what joining costs and what it produces. */}
-          <Reveal className="mt-6 rounded-sm border border-parchment-ink/20 bg-parchment p-7 sm:p-9" y={24}>
-            <h3 className="display text-xl text-parchment-ink" data-reveal-item>What we ask of you</h3>
-            <ol className="mt-6 space-y-5">
-              {ASKS.map((a, i) => (
-                <li key={a.t} className="flex gap-4" data-reveal-item>
-                  <span className="tabular mt-0.5 font-mono text-sm tracking-widest text-wine-600/80">
-                    {String(i + 1).padStart(2, '0')}
-                  </span>
-                  <span>
-                    <span className="block text-copy max-md:text-base font-medium leading-relaxed text-parchment-ink/85">{a.t}</span>
-                    <span className="mt-1 block max-w-[68ch] text-copy max-md:text-base leading-relaxed text-parchment-ink/70">{a.d}</span>
-                  </span>
-                </li>
-              ))}
-            </ol>
-          </Reveal>
         </div>
       </Root>
 
@@ -393,18 +355,18 @@ export function FieldGuide() {
               reveal window lands at the pin's end */}
           <div className="max-w-3xl">
             <h2 className="display text-[clamp(2rem,3.8vw,3.2rem)] leading-tight field-ink">
-              What it takes to join
+              What we ask of you
             </h2>
             <p className="mt-4 max-w-xl text-lg leading-relaxed field-ink-soft">
-              The mission sets the bar. Here it is, plainly — four things,
-              no hidden fifth.
+              The mission sets the bar. Here it is, plainly: five things,
+              and that is the whole filter.
             </p>
           </div>
 
               {/* the phone stake strip: jump-to-requirement below lg; the
               lighting waypoints hit these buttons and the hidden rail */}
           <div className="mt-8 flex items-center justify-center gap-3 lg:hidden" role="group" aria-label="Joining requirements">
-            {REQUIREMENTS.map((r, i) => (
+            {ASKS.map((r, i) => (
               <button
                 key={r.n}
                 type="button"
@@ -427,7 +389,7 @@ export function FieldGuide() {
                   style={{ overflow: 'clip' }}
                 >
                   <div data-bar-stack className="will-change-transform max-md:transform-none">
-                    {REQUIREMENTS.map((r) => (
+                    {ASKS.map((r) => (
                       <article
                         key={r.n}
                         data-bar-plate={r.n}
@@ -462,7 +424,7 @@ export function FieldGuide() {
                 {/* the rail: four stakes, one per plate, lighting as the
                     stack frames them — the trellis rail, restated */}
                 <div className="hidden flex-col gap-3 lg:flex" role="group" aria-label="Joining requirements">
-                  {REQUIREMENTS.map((r) => (
+                  {ASKS.map((r) => (
                     <div
                       key={r.n}
                       data-bar-stake={r.n}
@@ -484,18 +446,6 @@ export function FieldGuide() {
                   </p>
                 </div>
               </div>
-
-              {/* hacktivation energy: the definition stamps as the bar closes */}
-              <Animation target="[data-fg-hack]" start={84} end={92} fromTo={[{ scale: 1.5, rotate: -7, opacity: 0 }, { scale: 1, rotate: 0, opacity: 1, ease: 'power4.in' }]}>
-                <p data-fg-hack className="mx-auto mt-10 max-w-2xl text-center text-copy max-md:text-base leading-relaxed text-[color-mix(in_srgb,var(--field-ink)_78%,transparent)]">
-                  <span className="inline-block font-mono text-xs tracking-wide text-wine-400">HACKTIVATION ENERGY</span>
-                  <span className="mt-2 block">
-                    The effort a newcomer spends before their first useful commit.
-                    Lower is better, so we grind it down: clone a repo, run the
-                    tests, ship a fix. Setup should never be the hard part.
-                  </span>
-                </p>
-              </Animation>
             </div>
           </section>
         </Pin>

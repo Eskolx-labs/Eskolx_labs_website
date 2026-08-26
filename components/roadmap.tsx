@@ -62,8 +62,9 @@ export function Roadmap() {
           from: { bg: '#ece1c6', ink: '#29190c', soft: '#5c4a33', line: '#b9a67f' },
           to: { bg: '#ece1c6', ink: '#29190c', soft: '#5c4a33', line: '#b9a67f' },
         }}
+        mobilePins
       >
-        <Pin height="320vh">
+        <Pin height="320vh" mobileHeight="250vh" pinMobile>
           <div className="mx-auto flex h-full max-w-7xl flex-col justify-center px-4 pb-10 pt-20 sm:px-6 lg:px-8">
             {/* room furniture: static inside the pinned shell (a viewport
                 Reveal measured in a sticky room scrambles on resize) */}

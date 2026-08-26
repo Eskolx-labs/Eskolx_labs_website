@@ -7,29 +7,26 @@ import { PARCHMENT, LOAM } from '@/lib/field-controller'
 import { SealMark } from '@/components/botanical/seal-mark'
 import { GithubIcon, TelegramIcon } from '@/components/brand-icons'
 
-const LINES = [
-  { text: 'The only way' },
-  { text: 'to understand something' },
-  { text: 'is to ', accent: 'build it.' },
-]
-
 /*
- * The cover of the almanac, in the minimal-goods register: the script
- * wordmark opens the book — enormous, centered, sealed — and docks into the
- * nav rail as the reader pulls the cover away (scrubbed across most of the
- * pin). The mission rises in behind it through masked lines, rides the room,
- * and exits before the page turns loam underneath.
+ * The cover of the almanac. The script wordmark opens the book and docks
+ * into the nav rail. Then the motto performs: DeepLearning rises as one
+ * compound word, the "ing" peels off and drifts away, Deep and Learn slide
+ * past each other into "Learn Deep", and "build expertise." settles under
+ * it. Only then do the mission lines rise. Every beat is scrubbed scroll
+ * travel through the Root timeline - nothing plays on a clock.
  *
- * Resting CSS state (no-JS, mobile, reduced motion): wordmark centered,
- * copy beneath it — the complete cover, static.
+ * The swap slides are em-based on purpose: every motto span shares one
+ * font-size, so em offsets are exact ratios that survive any viewport
+ * without measurement or refresh invalidation.
+ *
+ * Resting CSS state (no-JS, mobile, reduced motion): the complete cover
+ * static - wordmark, motto in its final form, mission, actions.
  */
 export function Hero() {
   const markRef = useRef<HTMLDivElement>(null)
-  const copyRef = useRef<HTMLDivElement>(null)
 
-  // load-time arrival: the lockup settles and its seal stamps. The mission
-  // copy stays owned by the scrubbed timeline — it rises as the reader
-  // pulls the cover, within the first breath of travel.
+  // load-time arrival: the lockup settles and its seal stamps. Everything
+  // else is owned by the scrubbed timeline.
   useEffect(() => {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     if (reduced) return
@@ -50,14 +47,14 @@ export function Hero() {
 
   // the dock: measured against the live nav slot. All geometry comes from
   // the never-transformed wrapper (markRef), whose flex-centered rect is
-  // identical at any point in the pin — so invalidateOnRefresh can safely
+  // identical at any point in the pin - so invalidateOnRefresh can safely
   // re-measure after late font swaps or resizes without feedback drift.
   useEffect(() => {
     const mm = gsap.matchMedia()
     // the dock and the nav's logo-hide are one contract: a tall pinned hero.
     // The nav gate carries (min-height: 700px); without it here the mark
     // flew onto an empty rail slot on short desktop windows while the real
-    // logo sat beside it — two wordmarks on one rail.
+    // logo sat beside it - two wordmarks on one rail.
     mm.add('(prefers-reduced-motion: no-preference) and (min-width: 768px) and (min-height: 700px)', () => {
       const wrapper = markRef.current
       const mark = wrapper?.querySelector('[data-hero-mark]')
@@ -87,7 +84,7 @@ export function Hero() {
             scrollTrigger: {
               trigger: '#top',
               start: 'top top',
-              end: () => `+=${(room() - window.innerHeight) * 0.55}`,
+              end: () => `+=${(room() - window.innerHeight) * 0.24}`,
               scrub: true,
               invalidateOnRefresh: true,
             },
@@ -105,16 +102,15 @@ export function Hero() {
       start="top top"
       end="bottom bottom"
       scrub={true}
-      field={{ from: LOAM, to: PARCHMENT, turnAt: [0.84, 1] }}
+      field={{ from: LOAM, to: PARCHMENT, turnAt: [0.92, 1] }}
       mobilePins
     >
       {/* the cover joins the mobile pin tier: phones and short windows get
-          the full lift room — night holds, the headline rises, the field
-          turns across 200vh instead of flicking to mud in one thumb-flick.
-          A pinned shell also never scrolls under the nav, which is what
-          clipped the wordmark before. */}
-      <Pin height="300vh" mobileHeight="200vh" pinMobile>
-        <section className="relative flex h-full flex-col items-center justify-center gap-12 overflow-hidden px-4 pt-24 pb-20 max-md:gap-7 max-md:pt-20 max-md:pb-12 sm:px-6 [@media(min-width:768px)_and_(max-height:899.9px)]:gap-8 [@media(min-width:768px)_and_(max-height:899.9px)]:pb-10 [@media(min-width:768px)_and_(max-height:899.9px)]:pt-16 motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:gap-16 motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:py-0">
+          the full lift room - night holds, the motto performs, the mission
+          rises, and the field turns across the content-empty tail. A pinned
+          shell also never scrolls under the nav. */}
+      <Pin height="400vh" mobileHeight="260vh" pinMobile>
+        <section className="relative flex h-full flex-col items-center justify-center gap-10 overflow-hidden px-4 pt-24 pb-20 max-md:gap-6 max-md:pt-20 max-md:pb-12 sm:px-6 [@media(min-width:768px)_and_(max-height:899.9px)]:gap-7 [@media(min-width:768px)_and_(max-height:899.9px)]:pb-10 [@media(min-width:768px)_and_(max-height:899.9px)]:pt-16">
           <div ref={markRef} className="pointer-events-none z-10 flex items-center gap-[0.55em]">
             <div data-hero-mark className="flex items-center gap-[0.85em] text-[clamp(3.25rem,13vw,10rem)]">
               <span className="font-script field-ink leading-none">
@@ -129,21 +125,87 @@ export function Hero() {
           </div>
 
           <div
-            ref={copyRef}
             data-hero-copy
-            className="z-10 max-w-3xl px-4 text-center md:mx-auto md:w-full motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:absolute motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:bottom-[6%] motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:left-0 motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:right-0"
+            className="z-10 w-full max-w-3xl px-4 text-center max-md:px-2"
           >
+            {/* the motto: DeepLearning decomposes into Learn Deep, and the
+                promise under it. The h1 carries both motto and mission so
+                the cover reads as one statement to screen readers. */}
+            <div data-motto className="select-none" aria-hidden="true">
+              <span className="block overflow-hidden">
+                <Animation
+                  target="[data-motto-wording]"
+                  start={24}
+                  end={36}
+                  fromTo={[{ yPercent: 120 }, { yPercent: 0 }]}
+                >
+                  <span data-motto-wording className="display block whitespace-nowrap text-[clamp(2.6rem,7.5vw,5.75rem)] leading-[1.04] field-ink">
+                    <span data-motto-learn className="inline-block will-change-transform">Learn</span>
+                    <span data-motto-deep className="ml-[0.24em] inline-block will-change-transform">Deep</span>
+                    <span data-motto-ing className="inline-block will-change-transform">ing</span>
+                  </span>
+                </Animation>
+              </span>
+              <span className="block overflow-hidden">
+                <Animation
+                  target="[data-motto-promise]"
+                  start={58}
+                  end={68}
+                  fromTo={[{ yPercent: 120 }, { yPercent: 0 }]}
+                >
+                  <span data-motto-promise className="display block text-[clamp(1.5rem,3.6vw,2.6rem)] leading-[1.15] field-ink-soft">
+                    build <em className="text-wine-400">expertise.</em>
+                  </span>
+                </Animation>
+              </span>
+            </div>
+
+            {/* the decomposition, in em offsets so any viewport scales it:
+                at rest the words sit swapped (Deep first, Learn second, ing
+                attached after Learn) and read DeepLearning; the peel sends
+                ing drifting away, then the swap slides Learn and Deep past
+                each other into the motto. Offsets are measured IM Fell
+                widths: Learn 2.535em, Deep 2.283em, word gap 0.24em. */}
+            <Animation
+              target="[data-motto-learn]"
+              start={48}
+              end={58}
+              fromTo={[{ x: '2.52em' }, { x: '0em' }]}
+            />
+            <Animation
+              target="[data-motto-deep]"
+              start={48}
+              end={58}
+              fromTo={[{ x: '-2.78em' }, { x: '0em' }]}
+            />
+            {/* the trade: as the words slide past each other they dip and
+                lift around one another, then settle level - a handoff, not
+                a collision */}
+            <Animation target="[data-motto-learn]" start={48} end={53} to={{ y: '0.18em' }} />
+            <Animation target="[data-motto-learn]" start={53} end={58} to={{ y: '0em' }} />
+            <Animation target="[data-motto-deep]" start={48} end={53} to={{ y: '-0.18em' }} />
+            <Animation target="[data-motto-deep]" start={53} end={58} to={{ y: '0em' }} />
+            <Animation
+              target="[data-motto-ing]"
+              start={42}
+              end={52}
+              fromTo={[
+                { x: '0em', y: '0em', rotation: 0, autoAlpha: 1 },
+                { x: '0.6em', y: '-0.85em', rotation: 14, autoAlpha: 0, ease: 'power2.in' },
+              ]}
+            />
+
             <h1
-              className="display text-[clamp(2.4rem,5.6vw,4.25rem)] leading-[1.06] field-ink"
-              aria-label="The only way to understand something is to build it."
+              className="display mt-8 text-[clamp(2.4rem,5.6vw,4.25rem)] leading-[1.06] field-ink max-md:mt-6"
+              aria-label="Learn deep, build expertise. The only way to understand something is to build it."
             >
               <span aria-hidden="true" className="block">
                 {LINES.map((line, i) => (
                   <span key={i} className="block overflow-hidden">
                     <Animation
                       target={`[data-hero-line="${i}"]`}
-                      start={6 + i * 5}
-                      end={6 + i * 5 + 15}
+                      start={70 + i * 2.7}
+                      end={76 + i * 2.7}
                       fromTo={[{ yPercent: 118 }, { yPercent: 0 }]}
                     >
                       <span data-hero-line={i} className="block">
@@ -162,20 +224,19 @@ export function Hero() {
               </span>
             </h1>
 
-            <Animation target="[data-hero-sub]" start={22} end={38} fromTo={[{ y: 24, opacity: 0 }, { y: 0, opacity: 1 }]}>
+            <Animation target="[data-hero-sub]" start={78} end={84} fromTo={[{ y: 24, opacity: 0 }, { y: 0, opacity: 1 }]}>
               <p
                 data-hero-sub
                 className="mx-auto mt-7 max-w-xl text-lg leading-relaxed field-ink-soft max-md:mt-5 max-md:text-base"
               >
-                We solve the problem AI is causing in education. Learning has
-                started to look pointless, so we hand anyone interested real,
-                difficult, highly technical problems instead. You rebuild the
-                statistical libraries everyone takes for granted, then point
-                them at questions nobody has answered.
+                AI is making learning feel pointless. We hand you the opposite:
+                real, hard, highly technical problems. You rebuild the
+                statistical libraries everyone takes for granted, then turn
+                them on questions nobody has answered.
               </p>
             </Animation>
 
-            <Animation target="[data-hero-cta]" start={26} end={40} fromTo={[{ y: 20, opacity: 0 }, { y: 0, opacity: 1 }]}>
+            <Animation target="[data-hero-cta]" start={80} end={86} fromTo={[{ y: 20, opacity: 0 }, { y: 0, opacity: 1 }]}>
               <div data-hero-cta className="mt-9 flex flex-col items-center justify-center gap-3.5 sm:flex-row sm:flex-wrap">
                 <a
                   href="https://github.com/eskolx-labs"
@@ -204,14 +265,14 @@ export function Hero() {
 
           {/* the whole spread lifts away before the field turns: the cover
               reads on settled night, empties, then the page-turn runs in
-              the tail (turnAt 0.84-1) over nothing but the mark's fade */}
-          <Animation target="[data-hero-copy]" start={68} end={84} to={{ y: -64, opacity: 0 }} />
+              the tail (turnAt 0.92-1) over nothing but the mark's fade */}
+          <Animation target="[data-hero-copy]" start={86} end={93} to={{ y: -64, opacity: 0 }} />
 
           <Animation target="[data-hero-cue]" start={0} end={8} to={{ opacity: 0 }}>
             <a
               data-hero-cue
               href="#ecosystem"
-              className="relative z-10 mt-10 flex items-center justify-center gap-3 text-sm field-ink-soft transition-colors hover:field-ink max-md:mt-6 md:mx-auto md:w-fit motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:absolute motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:bottom-7 motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:left-1/2 motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:mt-0 motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:-translate-x-1/2"
+              className="relative z-10 mt-10 flex items-center justify-center gap-3 text-sm field-ink-soft transition-colors hover:field-ink max-md:mt-6 md:mx-auto md:w-fit"
             >
               <span>Scroll to open the almanac</span>
               <svg viewBox="0 0 16 20" className="h-4 w-4" aria-hidden="true">
@@ -228,7 +289,7 @@ export function Hero() {
 
           <Animation
             target="[data-hero-mark]"
-            start={90}
+            start={92}
             end={100}
             to={{ autoAlpha: 0 }}
           />
@@ -237,3 +298,9 @@ export function Hero() {
     </Root>
   )
 }
+
+const LINES = [
+  { text: 'The only way' },
+  { text: 'to understand something' },
+  { text: 'is to ', accent: 'build it.' },
+]

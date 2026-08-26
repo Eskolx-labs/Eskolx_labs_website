@@ -156,8 +156,9 @@ export function OriginStory() {
       start="top top"
       end="bottom bottom"
       field={{ from: PARCHMENT, to: PARCHMENT }}
+      mobilePins
     >
-      <Pin height="340vh">
+      <Pin height="340vh" mobileHeight="245vh" pinMobile>
         <div className="mx-auto flex h-full max-w-7xl flex-col justify-center px-4 pt-28 pb-16 sm:px-6 lg:px-8">
           <Reveal className="flex items-start justify-between gap-6">
             <div data-reveal-item>
