@@ -149,6 +149,36 @@ const sealState = (page) => page.evaluate(() => {
   }
   check('desktop: reverse ramp (cover lift) stays above 3.2:1', minReverse >= 3.2, `min ${minReverse}:1`)
   check('desktop: nav CTA renamed', await page.evaluate(() => document.querySelector('header a.btn-wine')?.textContent.includes('Eskolx on GitHub')))
+  check('desktop: hero CTAs single-line', await page.evaluate(() => {
+    const btn = document.querySelector('[data-hero-cta] a')
+    return btn && btn.getBoundingClientRect().height < 64
+  }))
+  // keepers and harvest sit on settled night — never mid-lerp
+  for (const [id, name] of [['leadership', 'keepers'], ['community', 'harvest']]) {
+    await scrollToSel(page, `#${id}`)
+    await page.waitForTimeout(500)
+    check(`desktop: ${name} reads on settled loam`, await page.evaluate((id) => {
+      const el = document.getElementById(id)
+      const r = el.getBoundingClientRect()
+      return r.top < innerHeight * 0.5 && r.bottom > innerHeight * 0.5
+        ? getComputedStyle(document.body).getPropertyValue('--field-bg').trim().startsWith('rgb(36, 20, 7')
+        : false
+    }, id))
+  }
+  // plate windows: a reader stopped mid-room lands on complete plates
+  await scrollPin(page, '#guide-bar [data-pin]', 0.52)
+  await page.waitForTimeout(500)
+  check('desktop: no guillotined heading mid-bar', await page.evaluate(() => {
+    const stack = document.querySelector('#guide-bar [data-bar-stack]')
+    const frame = stack.parentElement
+    const fr = frame.getBoundingClientRect()
+    return [...stack.children].every((plate) => {
+      const h = plate.querySelector('h3')
+      if (!h) return true
+      const r = h.getBoundingClientRect()
+      return r.bottom < fr.bottom - 8 || r.top > fr.top + 8
+    })
+  }))
   check('desktop: no horizontal overflow', await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
   await page.close()
 }
@@ -171,10 +201,18 @@ const sealState = (page) => page.evaluate(() => {
     return (pin.offsetHeight - window.innerHeight) * 0.5
   })))
   await page.waitForTimeout(500)
-  check('phone: cover still mid-turn at half room', await page.evaluate(() => {
+  check('phone: cover holds night at half room (seams-only)', await page.evaluate(() => {
     const bg = getComputedStyle(document.body).getPropertyValue('--field-bg').trim()
-    const nums = bg.match(/\d+/g).map(Number)
-    return nums[0] > 60 && nums[0] < 200
+    return bg.startsWith('rgb(36, 20, 7')
+  }))
+  await page.evaluate((y) => window.__lenis?.scrollTo(y, { immediate: true }), (await page.evaluate(() => {
+    const pin = document.querySelector('#top [data-pin]')
+    return pin.offsetHeight - window.innerHeight
+  })))
+  await page.waitForTimeout(500)
+  check('phone: cover turns to parchment in the tail', await page.evaluate(() => {
+    const bg = getComputedStyle(document.body).getPropertyValue('--field-bg').trim()
+    return bg.startsWith('rgb(236, 225, 198')
   }))
   check('phone: headline rises with the scroll', await page.evaluate(() =>
     getComputedStyle(document.querySelector('[data-hero-line="0"]')).transform !== 'none'))
@@ -338,6 +376,11 @@ const sealState = (page) => page.evaluate(() => {
   await page.goto(BASE, { waitUntil: 'networkidle' })
   await page.waitForTimeout(1200)
   check('reduced: hero headline static visible', await page.evaluate(() => getComputedStyle(document.querySelector('[data-hero-line="0"]')).transform === 'none' && +getComputedStyle(document.querySelector('[data-hero-line="0"]')).opacity === 1))
+  check('reduced: wordmark clears the nav', await page.evaluate(() => {
+    const mark = document.querySelector('[data-hero-mark]').getBoundingClientRect()
+    const nav = document.querySelector('header a[href="#top"]').getBoundingClientRect()
+    return mark.top >= nav.bottom - 2
+  }))
   check('reduced: pins collapsed', await page.evaluate(() => getComputedStyle(document.querySelector('#top [data-pin] > div > div')).position === 'static'))
   check('reduced: origin plate visible', await page.evaluate(() => {
     const p = document.querySelector('[data-id-plate="0"]')

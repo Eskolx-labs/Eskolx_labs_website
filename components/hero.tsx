@@ -105,7 +105,7 @@ export function Hero() {
       start="top top"
       end="bottom bottom"
       scrub={true}
-      field={{ from: LOAM, to: PARCHMENT }}
+      field={{ from: LOAM, to: PARCHMENT, turnAt: [0.84, 1] }}
       mobilePins
     >
       {/* the cover joins the mobile pin tier: phones and short windows get
@@ -114,7 +114,7 @@ export function Hero() {
           A pinned shell also never scrolls under the nav, which is what
           clipped the wordmark before. */}
       <Pin height="300vh" mobileHeight="200vh" pinMobile>
-        <section className="relative flex h-full flex-col items-center justify-center gap-12 overflow-hidden px-4 pt-24 pb-20 max-md:gap-7 max-md:pt-20 max-md:pb-12 sm:px-6 [@media(min-width:768px)_and_(max-height:899.9px)]:gap-8 [@media(min-width:768px)_and_(max-height:899.9px)]:pb-10 [@media(min-width:768px)_and_(max-height:899.9px)]:pt-16 [@media(min-width:768px)_and_(min-height:900px)]:gap-16 [@media(min-width:768px)_and_(min-height:900px)]:py-0">
+        <section className="relative flex h-full flex-col items-center justify-center gap-12 overflow-hidden px-4 pt-24 pb-20 max-md:gap-7 max-md:pt-20 max-md:pb-12 sm:px-6 [@media(min-width:768px)_and_(max-height:899.9px)]:gap-8 [@media(min-width:768px)_and_(max-height:899.9px)]:pb-10 [@media(min-width:768px)_and_(max-height:899.9px)]:pt-16 motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:gap-16 motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:py-0">
           <div ref={markRef} className="pointer-events-none z-10 flex items-center gap-[0.55em]">
             <div data-hero-mark className="flex items-center gap-[0.85em] text-[clamp(3.25rem,13vw,10rem)]">
               <span className="font-script field-ink leading-none">
@@ -134,7 +134,7 @@ export function Hero() {
             className="z-10 max-w-3xl px-4 text-center md:mx-auto md:w-full motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:absolute motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:bottom-[6%] motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:left-0 motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:right-0"
           >
             <h1
-              className="display text-[clamp(2.4rem,5.6vw,4.6rem)] leading-[1.06] field-ink"
+              className="display text-[clamp(2.4rem,5.6vw,4.25rem)] leading-[1.06] field-ink"
               aria-label="The only way to understand something is to build it."
             >
               <span aria-hidden="true" className="block">
@@ -176,7 +176,7 @@ export function Hero() {
             </Animation>
 
             <Animation target="[data-hero-cta]" start={26} end={40} fromTo={[{ y: 20, opacity: 0 }, { y: 0, opacity: 1 }]}>
-              <div data-hero-cta className="mt-9 flex flex-col items-center justify-center gap-3.5 sm:flex-row">
+              <div data-hero-cta className="mt-9 flex flex-col items-center justify-center gap-3.5 sm:flex-row sm:flex-wrap">
                 <a
                   href="https://github.com/eskolx-labs"
                   target="_blank"
@@ -195,15 +195,17 @@ export function Hero() {
                   <TelegramIcon className="h-5 w-5" />
                   Join the Community
                 </a>
-                <p className="mt-2 font-mono text-xs tracking-[0.14em] field-ink-soft max-md:hidden sm:mt-0 sm:w-full sm:text-center">
+                <p className="mt-2 font-mono text-xs tracking-[0.14em] field-ink-soft max-md:hidden sm:order-last sm:mt-0 sm:w-full sm:text-center">
                   OPEN SOURCE · MIT LICENSE · EVERYTHING PUBLIC
                 </p>
               </div>
             </Animation>
           </div>
 
-          {/* the whole spread lifts away as the chapter closes */}
-          <Animation target="[data-hero-copy]" start={80} end={96} to={{ y: -64, opacity: 0 }} />
+          {/* the whole spread lifts away before the field turns: the cover
+              reads on settled night, empties, then the page-turn runs in
+              the tail (turnAt 0.84-1) over nothing but the mark's fade */}
+          <Animation target="[data-hero-copy]" start={68} end={84} to={{ y: -64, opacity: 0 }} />
 
           <Animation target="[data-hero-cue]" start={0} end={8} to={{ opacity: 0 }}>
             <a

@@ -19,16 +19,31 @@ const LEADERS = [
 
 export function Leadership() {
   return (
-    <Root
-      id="leadership"
-      start="top bottom"
-      end="bottom top"
-      className="relative overflow-hidden py-24"
-      field={{
-        from: PARCHMENT,
-        to: LOAM,
-      }}
-    >
+    <>
+      {/* the keepers' dusk: the flood holds day to its end; this short seam
+          carries the field into night before the people arrive — the
+          chapter itself reads on settled loam, never mid-turn */}
+      <Root
+        id="keepers-dusk"
+        className="relative flex h-[28vh] items-center justify-center bg-loam-950 md:h-[55vh]"
+        start="top bottom"
+        end="bottom top"
+        field={{ from: PARCHMENT, to: LOAM }}
+      >
+        <div className="flex items-center gap-3" aria-hidden="true">
+          <span className="h-1.5 w-1.5 rounded-full bg-wine-500/80" />
+          <span className="h-1 w-1 rounded-full bg-gold-leaf/70" />
+          <span className="h-1.5 w-1.5 rounded-full bg-wine-500/80" />
+        </div>
+      </Root>
+
+      <Root
+        id="leadership"
+        start="top bottom"
+        end="bottom top"
+        className="relative overflow-hidden py-24"
+        field={{ from: LOAM, to: LOAM }}
+      >
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <Reveal className="max-w-3xl">
           <h2 className="display text-[clamp(2rem,3.8vw,3.2rem)] leading-tight field-ink" data-reveal-item>
@@ -100,5 +115,6 @@ export function Leadership() {
         </div>
       </div>
     </Root>
+    </>
   )
 }

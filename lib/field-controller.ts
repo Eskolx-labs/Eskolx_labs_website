@@ -98,6 +98,10 @@ type Zone = {
   to: FieldPair
   flip: number
   pinned: boolean
+  /** confine the turn to a sub-range of the window (fractions 0-1): the
+      field holds one settled spread while the room's content reads, then
+      turns across the empty stretch — the seams-only contract */
+  turnAt?: [number, number]
   top: number
   height: number
 }
@@ -188,8 +192,8 @@ function paint() {
     // began, the lab still working by lamplight.
     const pair = closed ? LOAM : (() => {
       const [start, end] = turnWindow(zone, vh)
-      const p = Math.min(Math.max((window.scrollY - start) / Math.max(end - start, 1), 0), 1)
-      return p < 0.5 ? zone.from : zone.to
+      const raw = Math.min(Math.max((window.scrollY - start) / Math.max(end - start, 1), 0), 1)
+      return turnProgress(raw, zone) < 0.5 ? zone.from : zone.to
     })()
     for (const k of KEYS) document.body.style.setProperty(VAR_NAMES[k], pair[k])
     lastStamp = ''
@@ -197,7 +201,8 @@ function paint() {
   }
 
   const [start, end] = turnWindow(zone, vh)
-  const p = Math.min(Math.max((window.scrollY - start) / Math.max(end - start, 1), 0), 1)
+  const raw = Math.min(Math.max((window.scrollY - start) / Math.max(end - start, 1), 0), 1)
+  const p = turnProgress(raw, zone)
   // quantize the turn to 1/64 steps before writing: each write dirties the
   // whole document (four custom properties on body), so continuous writes
   // re-styled every element on every scroll frame. Sixty-four steps across
@@ -265,6 +270,14 @@ export function registerZone(zone: Omit<Zone, 'flip' | 'top' | 'height'>) {
   } as Zone)
   dirty = true
   schedule()
+}
+
+// map raw window progress through the zone's turn range; outside the
+// range the field sits fully settled on one spread
+function turnProgress(p: number, zone: Zone): number {
+  const [a, b] = zone.turnAt ?? [0, 1]
+  if (b <= a) return p < a ? 0 : 1
+  return Math.min(Math.max((p - a) / (b - a), 0), 1)
 }
 
 export function removeZone(id: string) {

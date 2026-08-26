@@ -372,6 +372,19 @@
 }
 }
 
+/* anchor jumps clear the fixed rail */
+[id] {
+  scroll-margin-top: 5rem;
+}
+
+/* the current stake lifts on the desktop rail too — past and present must
+   not read identically on the element whose job is "you are here" */
+#tiers [data-stake][aria-current='true'],
+[data-bar-stake][aria-current='true'] {
+  background-color: #963a68;
+  transform: translateY(-1px);
+}
+
 /* Plate-room stake lighting, and the phone strip treatment. Unlayered on
  purpose: these must beat the utility classes on the same elements
  (bg-loam-900/60 and friends), and Tailwind v4's utilities layer wins the

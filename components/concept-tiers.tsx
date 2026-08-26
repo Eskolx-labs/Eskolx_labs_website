@@ -65,14 +65,20 @@ export function ConceptTiers() {
       if (!stack || !frame || !first) return
       // the window fits one plate exactly, so a third of the travel lands
       // each subsequent tier dead-center — at any viewport size
+      const kids = Array.from(stack.children) as HTMLElement[]
       const fit = () => {
-        // the window derives from the plate — one plate exactly, no slicing
-        // mid-heading. The shell reserve (heading + clearance) is a ceiling
-        // for short windows, never the target.
-        frame.style.height = `${Math.min(
-          first.offsetHeight + 2,
+        // the window derives from the tallest plate — no slicing mid-heading
+        // when plates run unequal — capped by the shell reserve (heading +
+        // clearance) on short windows. Every plate then stretches to fill
+        // the window exactly, so a reader who stops anywhere lands on a
+        // complete spread, never a guillotined heading.
+        const maxH = Math.max(...kids.map((k) => k.offsetHeight))
+        const windowH = Math.min(
+          maxH + 2,
           Math.max(Math.round(window.innerHeight - 230), 260),
-        )}px`
+        )
+        frame.style.height = `${windowH}px`
+        for (const k of kids) k.style.minHeight = `${windowH}px`
       }
       fit()
       ScrollTrigger.addEventListener('refreshInit', fit)
@@ -94,6 +100,7 @@ export function ConceptTiers() {
         ScrollTrigger.removeEventListener('refreshInit', fit)
         ctx.revert()
         frame.style.height = ''
+        for (const k of kids) k.style.minHeight = ''
       }
     })
     return () => mm.revert()
@@ -195,7 +202,7 @@ export function ConceptTiers() {
                         data-stake-name={tier.id}
                         className="block font-serif text-[15px] font-medium text-cream-200/70"
                       >
-                        {tier.name}
+                        {tier.name.replace(' (from scratch)', '')}
                       </span>
                     </span>
                    </button>

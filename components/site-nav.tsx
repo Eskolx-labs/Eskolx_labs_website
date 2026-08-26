@@ -286,7 +286,7 @@ export function SiteNav() {
       </div>
 
       {open && (
-        <div className="border-t border-[color-mix(in_srgb,var(--field-line)_40%,transparent)] bg-[color-mix(in_srgb,var(--field-bg)_97%,transparent)] lg:hidden">
+        <div className="border-t border-[color-mix(in_srgb,var(--field-line)_40%,transparent)] bg-[color-mix(in_srgb,var(--field-bg)_100%,transparent)] lg:hidden">
           <nav className="mx-auto flex max-w-7xl flex-col px-4 py-4 sm:px-6">
             {NAV_LINKS.map((link) => (
               <a

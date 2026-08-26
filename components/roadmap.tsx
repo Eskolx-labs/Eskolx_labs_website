@@ -112,7 +112,7 @@ export function Roadmap() {
               ))}
 
               {/* the reader's place: chapter numerals */}
-              <div aria-hidden="true" className="absolute right-0 top-1/2 hidden -translate-y-1/2 flex-col items-end gap-7 font-mono text-[13px] tracking-widest text-parchment-ink opacity-35 lg:flex">
+              <div aria-hidden="true" className="absolute right-0 top-1/2 hidden -translate-y-1/2 flex-col items-end gap-7 font-mono text-[15px] tracking-widest text-parchment-ink/70 lg:flex">
                 {PHASES.map((p, i) => (
                   <span key={p.phase} data-rm-num={i}>{`0${i + 1}`}</span>
                 ))}

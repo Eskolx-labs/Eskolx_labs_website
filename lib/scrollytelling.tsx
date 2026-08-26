@@ -27,6 +27,9 @@ import { registerZone, removeZone } from '@/lib/field-controller'
 type Field = {
   from: { bg: string; ink: string; soft: string; line: string }
   to: { bg: string; ink: string; soft: string; line: string }
+  /** confine the turn to a sub-range of the section's window (0-1):
+      the seams-only contract — hold settled while content reads */
+  turnAt?: [number, number]
 }
 
 type ScrollytellingContextValue = {
@@ -73,13 +76,14 @@ export function Root({
     const el = ref.current
     if (!el || !field) return
     const zoneId = `zone-${id ?? Math.random().toString(36).slice(2, 8)}`
-    registerZone({
-      id: zoneId,
-      el,
-      from: field.from,
-      to: field.to,
-      pinned: !!el.querySelector('[data-pin]'),
-    })
+      registerZone({
+        id: zoneId,
+        el,
+        from: field.from,
+        to: field.to,
+        turnAt: field.turnAt,
+        pinned: !!el.querySelector('[data-pin]'),
+      })
     return () => removeZone(zoneId)
   }, [field, id])
 

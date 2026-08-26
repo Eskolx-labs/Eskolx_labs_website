@@ -155,14 +155,20 @@ export function FieldGuide() {
       const frame = stack?.parentElement as HTMLElement | null
       const first = stack?.children[0] as HTMLElement | undefined
       if (!stack || !frame || !first) return
+      const kids = Array.from(stack.children) as HTMLElement[]
       const fit = () => {
-        // the window derives from the plate — one plate exactly, no slicing
-        // mid-heading. The shell reserve (heading + hacktivation) is a
-        // ceiling for short windows, never the target.
-        frame.style.height = `${Math.min(
-          first.offsetHeight + 2,
+        // the window derives from the tallest plate — no slicing mid-heading
+        // when plates run unequal — capped by the shell reserve (heading +
+        // hacktivation) on short windows. Every plate then stretches to fill
+        // the window exactly, so a reader who stops anywhere lands on a
+        // complete spread, never a guillotined heading.
+        const maxH = Math.max(...kids.map((k) => k.offsetHeight))
+        const windowH = Math.min(
+          maxH + 2,
           Math.max(Math.round(window.innerHeight - 300), 260),
-        )}px`
+        )
+        frame.style.height = `${windowH}px`
+        for (const k of kids) k.style.minHeight = `${windowH}px`
       }
       fit()
       ScrollTrigger.addEventListener('refreshInit', fit)
@@ -184,6 +190,7 @@ export function FieldGuide() {
         ScrollTrigger.removeEventListener('refreshInit', fit)
         ctx.revert()
         frame.style.height = ''
+        for (const k of kids) k.style.minHeight = ''
       }
     })
     return () => mm.revert()
@@ -382,7 +389,7 @@ export function FieldGuide() {
                       </span>
                     </div>
                   ))}
-                  <p className="mt-2 max-w-[38ch] font-mono text-[11px] uppercase leading-relaxed tracking-[0.14em] field-ink-soft">
+                  <p className="mt-2 max-w-[38ch] font-mono text-[11px] uppercase leading-relaxed tracking-[0.14em] field-ink-soft motion-reduce:hidden">
                     Scroll — the bar reads top to bottom
                   </p>
                 </div>
@@ -390,8 +397,8 @@ export function FieldGuide() {
 
               {/* hacktivation energy: the definition stamps as the bar closes */}
               <Animation target="[data-fg-hack]" start={84} end={92} fromTo={[{ scale: 1.5, rotate: -7, opacity: 0 }, { scale: 1, rotate: 0, opacity: 1, ease: 'power4.in' }]}>
-                <p className="mx-auto mt-10 max-w-2xl text-center text-[15px] max-md:text-base leading-relaxed text-[color-mix(in_srgb,var(--field-ink)_78%,transparent)]">
-                  <span data-fg-hack className="inline-block font-mono text-xs tracking-wide text-wine-400">HACKTIVATION ENERGY</span>
+                <p data-fg-hack className="mx-auto mt-10 max-w-2xl text-center text-[15px] max-md:text-base leading-relaxed text-[color-mix(in_srgb,var(--field-ink)_78%,transparent)]">
+                  <span className="inline-block font-mono text-xs tracking-wide text-wine-400">HACKTIVATION ENERGY</span>
                   <span className="mt-2 block">
                     The effort a newcomer spends before their first useful commit.
                     Lower is better, so we grind it down: clone a repo, run the
