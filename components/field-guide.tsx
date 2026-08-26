@@ -3,8 +3,9 @@
 import { useEffect } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { Root, Pin, Animation, Waypoint } from '@/lib/scrollytelling'
+import { Root, Pin, Animation } from '@/lib/scrollytelling'
 import { PARCHMENT, LOAM } from '@/lib/field-controller'
+import { bindStakeLighting, scrollToPlate } from '@/lib/stakes'
 import { Reveal } from '@/components/reveal'
 import { SealMark } from '@/components/botanical/seal-mark'
 
@@ -127,21 +128,23 @@ const FIELD_PLATE =
  * and the FAQ read on night to the close of the book.
  */
 function jumpToRequirement(index: number) {
-  const el = document.getElementById('guide-bar')
-  if (!el) return
-  const pin = el.querySelector('[data-pin]')
-  const room = pin ? pin.getBoundingClientRect().height - window.innerHeight : 0
-  // four plates: plate i frames at i/3 of the room's scrubbed travel
-  const target = el.getBoundingClientRect().top + window.scrollY + Math.max(room, 0) * (index / 3)
-  const lenis = (window as Window & { __lenis?: { scrollTo: (t: number, o?: object) => void } }).__lenis
-  if (lenis) {
-    lenis.scrollTo(target, { duration: 1.4 })
-  } else {
-    window.scrollTo({ top: target, behavior: 'smooth' })
-  }
+  scrollToPlate('guide-bar', '#guide-bar [data-bar-stack]', index, REQUIREMENTS.length)
 }
 
 export function FieldGuide() {
+  // stake + plate lighting and aria-current, measured from the real stack
+  // (see lib/stakes) — the old schedule fired on a leftover five-beat grid
+  // whose last stake lit at 56% of a room where plate four frames at 100%
+  useEffect(() =>
+    bindStakeLighting({
+      rootId: 'guide-bar',
+      stackSel: '#guide-bar [data-bar-stack]',
+      stakeAttr: 'data-bar-stake',
+      litAttrs: ['data-bar-num'],
+      count: REQUIREMENTS.length,
+      gsapScrollTrigger: ScrollTrigger,
+    }), [])
+
   // the bar's plate stack travels its own scrollable height inside the
   // window, measured — the tiers-stack grammar, one room later in the book
   useEffect(() => {
@@ -180,6 +183,7 @@ export function FieldGuide() {
       return () => {
         ScrollTrigger.removeEventListener('refreshInit', fit)
         ctx.revert()
+        frame.style.height = ''
       }
     })
     return () => mm.revert()
@@ -329,7 +333,7 @@ export function FieldGuide() {
                       <article
                         key={r.n}
                         data-bar-plate={r.n}
-                        className={`flex min-h-[280px] flex-col justify-center p-8 sm:p-10 ${FIELD_PLATE} [@media(min-width:768px)_and_(max-height:699px)]:min-h-0 [@media(min-width:768px)_and_(max-height:699px)]:p-6`}
+                        className={`flex min-h-[280px] flex-col justify-center p-8 sm:p-10 ${FIELD_PLATE} [@media(min-width:768px)_and_(max-height:699.9px)]:min-h-0 [@media(min-width:768px)_and_(max-height:699.9px)]:p-6`}
                       >
                         <span
                           data-bar-num={r.n}
@@ -398,34 +402,8 @@ export function FieldGuide() {
           </section>
         </Pin>
 
-        {/* each plate lights as it frames: number turns wine, stake follows.
-            From-states are loam-toned — the room sits on stable night. */}
-        {REQUIREMENTS.map((r, i) => (
-          <Waypoint
-            key={r.n}
-            at={i * 18 + 2}
-            tween={{
-              target: `[data-bar-num="${r.n}"]`,
-              fromTo: [
-                { backgroundColor: 'transparent', borderColor: 'rgba(90,66,39,0.9)', color: 'rgba(184,162,132,0.9)' },
-                { backgroundColor: 'rgba(150,58,104,0.18)', borderColor: '#b05a81', color: '#f0e4c8', duration: 2 },
-              ],
-            }}
-          />
-        ))}
-        {REQUIREMENTS.map((r, i) => (
-          <Waypoint
-            key={`stake-${r.n}`}
-            at={i * 18 + 4}
-            tween={{
-              target: `[data-bar-stake="${r.n}"]`,
-              fromTo: [
-                { borderColor: 'rgba(90,66,39,0.6)' },
-                { borderColor: 'rgba(176,90,129,0.7)', duration: 2 },
-              ],
-            }}
-          />
-        ))}
+        {/* plates and stakes light through bindStakeLighting's
+             data-lit toggles — the styles live in globals.css */}
       </Root>
 
       {/* movement three: the ledger and the asked-often, on night */}

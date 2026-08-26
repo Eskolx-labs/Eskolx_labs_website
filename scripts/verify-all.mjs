@@ -134,6 +134,20 @@ const sealState = (page) => page.evaluate(() => {
     minContrast = Math.min(minContrast, (await fieldState(page)).contrast)
   }
   check('desktop: ink snap never below 3.2:1 across the dusk turn', minContrast >= 3.2, `min ${minContrast}:1`)
+  // the reverse ramp too: the hero's LOAM->PARCHMENT turn flips at a
+  // different crossover than the dusk's, and only walking both proves the
+  // per-pair snap holds in both directions
+  const heroRoom = await page.evaluate(() => {
+    const pin = document.querySelector('#top [data-pin]')
+    return { top: pin.getBoundingClientRect().top + window.scrollY, travel: pin.offsetHeight - window.innerHeight }
+  })
+  let minReverse = 99
+  for (let i = 0; i <= 10; i++) {
+    await page.evaluate(({ top, travel, i }) => { window.__lenis?.scrollTo(top + travel * (i / 10), { immediate: true }) }, { top: heroRoom.top, travel: heroRoom.travel, i })
+    await page.waitForTimeout(220)
+    minReverse = Math.min(minReverse, (await fieldState(page)).contrast)
+  }
+  check('desktop: reverse ramp (cover lift) stays above 3.2:1', minReverse >= 3.2, `min ${minReverse}:1`)
   check('desktop: nav CTA renamed', await page.evaluate(() => document.querySelector('header a.btn-wine')?.textContent.includes('Eskolx on GitHub')))
   check('desktop: no horizontal overflow', await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
   await page.close()
@@ -173,17 +187,27 @@ const sealState = (page) => page.evaluate(() => {
     const tiers = document.querySelectorAll('#tiers [role=group] button').length
     return bar === 4 && tiers >= 4
   }))
-  // tap-to-jump: tap 04, room should reach its end
-  await scrollToSel(page, '#guide-bar')
-  await page.waitForTimeout(400)
-  await page.evaluate(() => [...document.querySelectorAll('#guide-bar [role=group] button')][3].click())
-  await page.waitForTimeout(1800)
-  check('phone: tap 04 jumps to requirement 4', await page.evaluate(() => {
-    const pin = document.querySelector('#guide-bar [data-pin]')
-    const top = pin.getBoundingClientRect().top + window.scrollY
-    const travel = pin.offsetHeight - window.innerHeight
-    return Math.abs(window.scrollY - (top + travel)) < travel * 0.08
-  }))
+  // tap-to-jump on both rooms: the jump lands where the measured fraction
+  // says its plate frames
+  for (const room of ['guide-bar', 'tiers']) {
+    const stackSel = room === 'tiers' ? '[data-tier-stack]' : '[data-bar-stack]'
+    await scrollToSel(page, `#${room}`)
+    await page.waitForTimeout(400)
+    await page.evaluate(({ room }) => [...document.querySelectorAll(`#${room} [role=group] button`)][3].click(), { room })
+    await page.waitForTimeout(1800)
+    const landed = await page.evaluate(({ room, stackSel }) => {
+      const pin = document.querySelector(`#${room} [data-pin]`)
+      const top = pin.getBoundingClientRect().top + window.scrollY
+      const travel = pin.offsetHeight - window.innerHeight
+      const near = Math.abs(window.scrollY - (top + travel))
+      const stack = document.querySelector(`#${room} ${stackSel}`)
+      const frame = stack.parentElement
+      const m = new DOMMatrixReadOnly(getComputedStyle(stack).transform === 'none' ? 'matrix(1,0,0,1,0,0)' : getComputedStyle(stack).transform)
+      const framedLast = -m.f >= stack.scrollHeight - frame.clientHeight - 4
+      return { nearEnd: near < travel * 0.08, framedLast }
+    }, { room, stackSel })
+    check(`phone: ${room} tap 04 lands on plate 4`, landed.framedLast && landed.nearEnd)
+  }
   await scrollPin(page, '#seal-flood [data-pin]', 0.4)
   await page.waitForTimeout(400)
   const sealMid = await sealState(page)
@@ -292,6 +316,58 @@ const sealState = (page) => page.evaluate(() => {
   const page = await newPage([1440, 900])
   check('content: vault linked twice', await page.evaluate(() => document.querySelectorAll('a[href*="Eskolx-Open-Knowledge"]').length >= 2))
   check('content: 404 page exists in build', fs.existsSync(path.join(OUT, '404.html')))
+  // FAQ accordions open for real
+  check('content: FAQ details open on click', await page.evaluate(async () => {
+    const d = document.querySelector('#guide-ledger details')
+    d.querySelector('summary').click()
+    await new Promise((r) => setTimeout(r, 100))
+    return d.open
+  }))
+  // the book-close rule draws at the very end
+  await page.evaluate(() => window.__lenis?.scrollTo(document.documentElement.scrollHeight, { immediate: true }))
+  await page.waitForTimeout(900)
+  check('desktop: close-rule drawn at book end', await page.evaluate(() => {
+    const el = document.querySelector('[data-close-rule]')
+    if (!el) return false
+    const m = new DOMMatrixReadOnly(getComputedStyle(el).transform === 'none' ? 'matrix(1,0,0,1,0,0)' : getComputedStyle(el).transform)
+    return m.a > 0.9
+  }))
+  // turning-chapter headings ride the field ink: visible at their entry
+  await page.evaluate(() => {
+    const el = document.getElementById('community')
+    window.__lenis?.scrollTo(el.getBoundingClientRect().top + window.scrollY - window.innerHeight * 0.5, { immediate: true })
+  })
+  await page.waitForTimeout(700)
+  check('content: harvest heading rides field ink', await page.evaluate(() => {
+    const h = [...document.querySelectorAll('h2')].find((e) => e.textContent.includes('harvest table'))
+    const fieldInk = getComputedStyle(document.body).getPropertyValue('--field-ink').trim()
+    return getComputedStyle(h).color === fieldInk
+  }))
+  await page.close()
+}
+
+// ---- band boundaries ------------------------------------------------------
+{
+  // The JS bands and CSS guards pair fractionally (700/699.99, 500/499.99)
+  // so zoomed or display-scaled viewports always land in one band. These
+  // boundary heights are where a mismatch would strand a reader between
+  // bands with frozen pins and no timelines.
+  const page = await newPage([1440, 699])
+  check('band 699h: tier rooms pinned', await page.evaluate(() =>
+    ['#tiers', '#guide-bar', '#seal-flood'].every((id) => getComputedStyle(document.querySelector(`${id} [data-pin] > div > div`)).position === 'sticky')))
+  check('band 699h: hero room collapsed to flow', await page.evaluate(() =>
+    getComputedStyle(document.querySelector('#top [data-pin] > div > div')).position === 'static'))
+  await page.setViewportSize({ width: 1440, height: 700 })
+  await page.waitForTimeout(1000)
+  check('band 700h: hero pinned again', await page.evaluate(() =>
+    getComputedStyle(document.querySelector('#top [data-pin] > div > div')).position === 'sticky'))
+  await page.evaluate(() => {
+    const el = document.getElementById('tiers')
+    window.__lenis?.scrollTo(el.getBoundingClientRect().top + window.scrollY + 300, { immediate: true })
+  })
+  await page.waitForTimeout(600)
+  check('band 700h: trellis scrubs after crossing up', await page.evaluate(() =>
+    getComputedStyle(document.querySelector('#tiers [data-tier-stack]')).transform !== 'none'))
   await page.close()
 }
 

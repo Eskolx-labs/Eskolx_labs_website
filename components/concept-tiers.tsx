@@ -3,8 +3,9 @@
 import { useEffect } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { Root, Pin, Animation, Waypoint } from '@/lib/scrollytelling'
+import { Root, Pin, Animation } from '@/lib/scrollytelling'
 import { LOAM } from '@/lib/field-controller'
+import { bindStakeLighting, scrollToPlate } from '@/lib/stakes'
 
 const TIERS = [
   {
@@ -33,63 +34,23 @@ const TIERS = [
   },
 ]
 
-const STAKE_AT = [0, 25, 50, 75]
 // module-level so the Root's timeline effect never sees a fresh object
 const TIERS_FIELD = { from: LOAM, to: LOAM }
-/* the scroll fraction where each tier's plate is fully framed in the pin:
-   the stack travels -75% over the room, so plate i frames at i/3 of it */
-const TIER_FRAME_AT = [0, 33.33, 66.67, 100]
-
-/* each tier fills a quarter of the pinned window; jumping to its top means
-   scrolling to the section top plus the tier's quarter OF THE SCRUBBED ROOM
-   (spacer height minus viewport — the pin's true active range). Honors Lenis
-   when present. */
-function jumpToTier(index: number) {
-  const el = document.getElementById('tiers')
-  if (!el) return
-  const fraction = TIER_FRAME_AT[index] / 100
-  const pin = el.querySelector('[data-pin]')
-  const room = pin ? pin.getBoundingClientRect().height - window.innerHeight : 0
-  const target = el.getBoundingClientRect().top + window.scrollY + Math.max(room, 0) * fraction
-  const lenis = (window as Window & { __lenis?: { scrollTo: (t: number, o?: object) => void } }).__lenis
-  if (lenis) {
-    lenis.scrollTo(target, { duration: 1.4 })
-  } else {
-    window.scrollTo({ top: target, behavior: 'smooth' })
-  }
-}
 
 export function ConceptTiers() {
-  // which stake the rail reports as current, for assistive tech. Written
-  // straight to the DOM on a rAF-throttled scroll listener: a React state
-  // here would re-render the whole chapter mid-scrub, tearing down and
-  // rebuilding every Waypoint tween exactly when the stakes should light.
-  useEffect(() => {
-    let raf = 0
-    const onScroll = () => {
-      if (raf) return
-      raf = requestAnimationFrame(() => {
-        raf = 0
-        const el = document.getElementById('tiers')
-        if (!el) return
-        const pin = el.querySelector<HTMLElement>('[data-pin]')
-        const room = pin ? pin.offsetHeight - window.innerHeight : 1
-        const progress = Math.min(Math.max(-el.getBoundingClientRect().top / Math.max(room, 1), 0), 1)
-        const current = Math.min(TIERS.length, Math.floor(progress * TIERS.length) + 1)
-        el.querySelectorAll<HTMLButtonElement>('[data-stake]').forEach((btn) => {
-          const id = Number(btn.getAttribute('data-stake'))
-          if (id === current) btn.setAttribute('aria-current', 'true')
-          else btn.removeAttribute('aria-current')
-        })
-      })
-    }
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => {
-      window.removeEventListener('scroll', onScroll)
-      cancelAnimationFrame(raf)
-    }
-  }, [])
+  // which stake the rail reports as current, and which plates have framed,
+  // measured from the real stack (see lib/stakes). Written straight to the
+  // DOM on a rAF-throttled scroll listener: a React state here would
+  // re-render the whole chapter mid-scrub, tearing down and rebuilding the
+  // scrub exactly when the stakes should light.
+  useEffect(() =>
+    bindStakeLighting({
+      rootId: 'tiers',
+      stackSel: '#tiers [data-tier-stack]',
+      stakeAttr: 'data-stake',
+      count: TIERS.length,
+      gsapScrollTrigger: ScrollTrigger,
+    }), [])
 
   // the stack travels exactly its own scrollable height, measured — so the
   // fourth tier lands framed no matter how tall the plates run.
@@ -131,6 +92,7 @@ export function ConceptTiers() {
       return () => {
         ScrollTrigger.removeEventListener('refreshInit', fit)
         ctx.revert()
+        frame.style.height = ''
       }
     })
     return () => mm.revert()
@@ -189,7 +151,7 @@ export function ConceptTiers() {
                   key={tier.id}
                   type="button"
                   data-stake={tier.id}
-                  onClick={() => jumpToTier(i)}
+                  onClick={() => scrollToPlate('tiers', '#tiers [data-tier-stack]', i, TIERS.length)}
                   aria-label={`Go to ${tier.name}`}
                   className="tabular flex h-11 w-11 items-center justify-center rounded-full border border-loam-700/70 bg-loam-900/60 font-mono text-sm text-cream-400"
                 >
@@ -216,7 +178,7 @@ export function ConceptTiers() {
                       key={tier.id}
                       type="button"
                       data-stake={tier.id}
-                      onClick={() => jumpToTier(i)}
+                      onClick={() => scrollToPlate('tiers', '#tiers [data-tier-stack]', i, TIERS.length)}
                       aria-label={`Jump to ${tier.name}`}
                       className="flex items-center gap-4 rounded-sm border border-loam-700/70 bg-loam-900/60 p-4 text-left transition-colors hover:border-loam-700 hover:bg-loam-850/70"
                     >
@@ -286,47 +248,6 @@ export function ConceptTiers() {
       </Pin>
 
 
-      {/* each tier lights its stake as it arrives */}
-      {TIERS.map((tier, i) => (
-        <Waypoint
-          key={tier.id}
-          at={STAKE_AT[i]}
-          tween={{
-            target: `[data-stake="${tier.id}"]`,
-            to: {
-              borderColor: 'rgba(176,90,129,0.6)',
-              backgroundColor: 'rgba(56,36,18,0.9)',
-            },
-            duration: 0.3,
-          }}
-        />
-      ))}
-      {TIERS.map((tier, i) => (
-        <Waypoint
-          key={`num-${tier.id}`}
-          at={STAKE_AT[i]}
-          tween={{
-            target: `[data-stake-num="${tier.id}"]`,
-            to: {
-              borderColor: '#b05a81',
-              backgroundColor: '#7c2c54',
-              color: '#f0e4c8',
-            },
-            duration: 0.3,
-          }}
-        />
-      ))}
-      {TIERS.map((tier, i) => (
-        <Waypoint
-          key={`name-${tier.id}`}
-          at={STAKE_AT[i]}
-          tween={{
-            target: `[data-stake-name="${tier.id}"]`,
-            to: { color: '#f0e4c8' },
-            duration: 0.3,
-          }}
-        />
-      ))}
     </Root>
     </>
   )

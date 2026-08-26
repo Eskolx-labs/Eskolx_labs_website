@@ -161,15 +161,17 @@
 }
 
 @layer components {
-  /* print-tooth grain over the whole page, one fixed layer */
+  /* print-tooth grain over the whole page, one fixed layer. No blend mode:
+     mix-blend-mode forces a full-page composite of a moving document every
+     frame — the single worst scroll-jank source this page ever had. The
+     speckle tile carries its own tooth at plain alpha instead. */
   .grain::before {
     content: '';
     position: fixed;
     inset: 0;
     z-index: 60;
     pointer-events: none;
-    opacity: 0.05;
-    mix-blend-mode: multiply;
+    opacity: 0.06;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
@@ -178,7 +180,7 @@
      500-699px heights (short desktop windows) — their content cannot fit a
      100vh shell. Tier scenes carry data-pin-mobile and keep their shortened
      rooms there; the JS gates in scrollytelling.tsx read the same queries. */
-  @media (max-height: 699px) {
+  @media (max-height: 699.9px) {
     [data-pin]:not([data-pin-mobile]),
     [data-pin]:not([data-pin-mobile]) > div {
       height: auto !important;
@@ -189,7 +191,7 @@
       overflow: visible !important;
     }
   }
-  @media (max-height: 499px) {
+  @media (max-height: 499.9px) {
     [data-pin],
     [data-pin] > div {
       height: auto !important;
@@ -231,6 +233,41 @@
   }
   .field-line-soft {
     border-color: var(--field-line-soft);
+  }
+
+  /* plate-room stakes: lighting is cumulative and measured (lib/stakes
+     toggles data-lit as each plate takes the window), not tweened — one
+     attribute flip per change instead of twelve scrubbed tweens per room */
+  #tiers [data-stake],
+  #tiers [data-stake-num],
+  #tiers [data-stake-name],
+  [data-bar-num],
+  [data-bar-stake] {
+    transition:
+      border-color 0.3s,
+      background-color 0.3s,
+      color 0.3s;
+  }
+  #tiers [data-stake][data-lit] {
+    border-color: rgb(176 90 129 / 0.6);
+    background-color: rgb(56 36 18 / 0.9);
+  }
+  /* a lit stake re-inks its own numeral and label */
+  #tiers [data-stake][data-lit] [data-stake-num] {
+    border-color: #b05a81;
+    background-color: #7c2c54;
+    color: #f0e4c8;
+  }
+  #tiers [data-stake][data-lit] [data-stake-name] {
+    color: #f0e4c8;
+  }
+  [data-bar-num][data-lit] {
+    background-color: rgb(150 58 104 / 0.18);
+    border-color: #b05a81;
+    color: #f0e4c8;
+  }
+  [data-bar-stake][data-lit] {
+    border-color: rgb(176 90 129 / 0.7);
   }
 
   /* letterpress buttons: plate with double hairline, presses on actuation */

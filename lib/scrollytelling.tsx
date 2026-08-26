@@ -95,10 +95,14 @@ export function Root({
     const mm = gsap.matchMedia()
     mm.add(
       {
+        // bounds come in fractional pairs (700/699.99, 768/767.99,
+        // 500/499.99) so zoomed or scaled viewports reporting heights like
+        // 699.5 always match exactly one band — integer pairs left whole
+        // pixel ranges where nothing built and every pin froze solid
         desktop: '(min-width: 768px) and (min-height: 700px)',
-        smallDesktop: '(min-width: 768px) and (min-height: 500px) and (max-height: 699px)',
-        portraitMobile: '(max-width: 767px) and (min-height: 500px)',
-        tiny: '(max-height: 499px)',
+        smallDesktop: '(min-width: 768px) and (min-height: 500px) and (max-height: 699.9px)',
+        portraitMobile: '(max-width: 767.9px) and (min-height: 500px)',
+        tiny: '(max-height: 499.9px)',
         reduce: '(prefers-reduced-motion: reduce)',
       },
       (ctx) => {
@@ -288,7 +292,7 @@ export function Pin({ height, mobileHeight, pinMobile = false, children, classNa
   // the globals.css guard collapses everything below 500px and every
   // non-tier pin under 700px.
   const spacer = pinMobile
-    ? 'max-md:[height:var(--pin-height-mobile,auto)] [@media(min-width:768px)_and_(max-height:699px)]:[height:var(--pin-height-mobile,auto)] [height:var(--pin-height)]'
+    ? 'max-md:[height:var(--pin-height-mobile,auto)] [@media(min-width:768px)_and_(max-height:699.9px)]:[height:var(--pin-height-mobile,auto)] [height:var(--pin-height)]'
     : '[height:var(--pin-height)] max-md:h-auto'
   const shell = pinMobile
     ? 'sticky top-0 h-screen overflow-hidden'

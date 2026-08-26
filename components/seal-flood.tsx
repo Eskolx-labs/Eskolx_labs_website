@@ -29,12 +29,17 @@ export function SealFlood() {
       mobilePins
     >
       <Pin height="260vh" mobileHeight="180vh" pinMobile>
-        <section className="relative flex h-full items-center justify-center overflow-hidden">
+        {/* column layout: in the pinned shell the label is absolute and the
+            seal centers alone; when reduced motion collapses the room, the
+            label stacks above the emblem as ordinary flow */}
+        <section className="relative flex h-full flex-col items-center justify-center overflow-hidden">
           {/* the label is on stage at progress 0 — the room opens with its
-              caption already set, and lifts away as the stamp presses home */}
+              caption already set, and lifts away as the stamp presses home.
+              Absolute only while motion runs: in a collapsed auto-height
+              shell a top-[18%] absolute would float over the emblem. */}
           <p
             data-flood-label
-            className="absolute top-[18%] font-mono text-[11px] uppercase tracking-[0.35em] field-ink-soft"
+            className="mb-8 font-mono text-[11px] uppercase tracking-[0.35em] field-ink-soft motion-safe:absolute motion-safe:top-[18%] motion-safe:mb-0"
           >
             The seal of the lab · est. in open source
           </p>

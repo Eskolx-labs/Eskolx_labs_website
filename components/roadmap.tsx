@@ -79,8 +79,10 @@ export function Roadmap() {
 
             {/* the open stage: three beats share one place, no frame */}
             <div className="relative mt-8 min-h-0 flex-1 md:mt-10">
-              {/* vine rail draws past the chapter nodes */}
-              <div aria-hidden="true" className="absolute bottom-6 left-[19px] top-1 hidden w-px md:block">
+              {/* vine rail draws past the chapter nodes. Decorative only, and
+                  absolute against a shell that reduced motion collapses — so
+                  it exists only while motion runs. */}
+              <div aria-hidden="true" className="absolute bottom-6 left-[19px] top-1 hidden w-px motion-safe:md:block">
                 <Animation target="[data-vine-rail]" start={2} end={88} fromTo={[{ scaleY: 0 }, { scaleY: 1, ease: 'power1.inOut' }]}>
                   <span data-vine-rail className="block h-full w-full origin-top bg-parchment-ink/25" />
                 </Animation>
@@ -94,7 +96,7 @@ export function Roadmap() {
                   data-vine-node={i}
                   aria-hidden="true"
                   style={{ top: `${14 + i * 30}%` }}
-                  className="absolute left-[14px] hidden h-[11px] w-[11px] rounded-full border-2 border-parchment-ink/40 bg-parchment transition-colors duration-300 md:block"
+                  className="absolute left-[14px] hidden h-[11px] w-[11px] rounded-full border-2 border-parchment-ink/40 bg-parchment transition-colors duration-300 motion-safe:md:block"
                 />
               ))}
               {[0, 1, 2].map((i) => (

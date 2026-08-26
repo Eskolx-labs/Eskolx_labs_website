@@ -30,18 +30,59 @@ export const LOAM: FieldPair = {
 
 const KEYS = ['bg', 'ink', 'soft', 'line'] as const
 
-// the ink snap: the background lerps the whole turn, but text colors hold
-// their from-field until the background passes the luminance crossover
-// (~55% of the turn), then re-ink to the to-field in one step. Reason: a
-// lerped ink crosses the background's midpoint luminance — dark ink on
-// lightening tan reads ~4:1, cream on mid-tan ~2:1, and a gradual ink
-// passes straight through the crossover, sitting near-invisible for half
-// of every turn. Held-then-snapped keeps both sides of the flip at 3.3:1
-// or better; the one-step re-ink reads as the spread being re-pressed.
-const INK_FLIP_AT = 0.55
+// The ink snap: the background lerps the whole turn, but text colors hold
+// their from-field until the background passes the luminance crossover,
+// then re-ink to the to-field in one step. Reason: a lerped ink crosses
+// the background's midpoint luminance — dark ink on lightening tan reads
+// ~4:1, cream on mid-tan ~2:1, and a gradual ink passes straight through
+// the crossover, sitting near-invisible for half of every turn.
+// Held-then-snapped keeps both sides of the flip readable; the one-step
+// re-ink reads as the spread being re-pressed.
+//
+// The crossover depends on which way the field turns (measured on this
+// palette set: parchment→loam flips at t≈0.54, loam→parchment at t≈0.46 —
+// a fixed 0.55 left the dawn direction at 2.86:1, below AA large-text),
+// so each pair computes its own flip point once at registration.
+function relativeLuminance([r, g, b]: [number, number, number]): number {
+  const ch = (v: number) => {
+    const x = v / 255
+    return x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4)
+  }
+  return 0.2126 * ch(r) + 0.7152 * ch(g) + 0.0722 * ch(b)
+}
 
-function inkProgress(t: number): number {
-  return t < INK_FLIP_AT ? 0 : 1
+function contrast(a: [number, number, number], b: [number, number, number]): number {
+  const la = relativeLuminance(a)
+  const lb = relativeLuminance(b)
+  return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05)
+}
+
+// smallest t where switching to the to-field ink beats holding the
+// from-field ink against the turning background
+function crossoverFlip(from: FieldPair, to: FieldPair): number {
+  const bgA = rgb(from.bg)
+  const bgB = rgb(to.bg)
+  const inkFrom = rgb(from.ink)
+  const inkTo = rgb(to.ink)
+  const mix = (a: [number, number, number], b: [number, number, number], t: number): [number, number, number] => [
+    Math.round(a[0] + (b[0] - a[0]) * t),
+    Math.round(a[1] + (b[1] - a[1]) * t),
+    Math.round(a[2] + (b[2] - a[2]) * t),
+  ]
+  let lo = 0
+  let hi = 1
+  // g crosses from negative to positive exactly once on these ramps
+  if (
+    contrast(inkTo, mix(bgA, bgB, 0)) >= contrast(inkFrom, mix(bgA, bgB, 0))
+  ) return 0
+  for (let i = 0; i < 24; i++) {
+    const mid = (lo + hi) / 2
+    const bg = mix(bgA, bgB, mid)
+    const gain = contrast(inkTo, bg) - contrast(inkFrom, bg)
+    if (gain < 0) lo = mid
+    else hi = mid
+  }
+  return (lo + hi) / 2
 }
 const VAR_NAMES: Record<(typeof KEYS)[number], string> = {
   bg: '--field-bg',
@@ -55,6 +96,7 @@ type Zone = {
   el: HTMLElement
   from: FieldPair
   to: FieldPair
+  flip: number
   pinned: boolean
   top: number
   height: number
@@ -72,8 +114,8 @@ function rgb(hex: string): [number, number, number] {
   return [(n >> 16) & 255, (n >> 8) & 255, n & 255]
 }
 
-function lerpPair(a: FieldPair, b: FieldPair, t: number): string[] {
-  const inkT = inkProgress(t)
+function lerpPair(a: FieldPair, b: FieldPair, t: number, flip: number): string[] {
+  const inkT = t < flip ? 0 : 1
   const out: string[] = []
   for (const k of KEYS) {
     const p = k === 'bg' ? t : inkT
@@ -148,10 +190,17 @@ function paint() {
 
   const [start, end] = turnWindow(zone, vh)
   const p = Math.min(Math.max((window.scrollY - start) / Math.max(end - start, 1), 0), 1)
-  const stamp = `${zone.id}:${p.toFixed(4)}`
+  // quantize the turn to 1/64 steps before writing: each write dirties the
+  // whole document (four custom properties on body), so continuous writes
+  // re-styled every element on every scroll frame. Sixty-four steps across
+  // a full-screen ramp is under ~4 RGB units per hop — invisible — while
+  // write frequency during a slow seam crawl drops by an order of
+  // magnitude.
+  const pq = Math.round(p * 64) / 64
+  const stamp = `${zone.id}:${pq}`
   if (stamp === lastStamp) return
   lastStamp = stamp
-  const values = lerpPair(zone.from, zone.to, p)
+  const values = lerpPair(zone.from, zone.to, pq, zone.flip)
   for (let i = 0; i < KEYS.length; i++) {
     document.body.style.setProperty(VAR_NAMES[KEYS[i]], values[i])
   }
@@ -164,7 +213,15 @@ function schedule() {
 function ensureListeners() {
   if (initialized) return
   initialized = true
-  reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  const reducedMq = window.matchMedia('(prefers-reduced-motion: reduce)')
+  // track the preference live: a reader toggling it mid-session must not
+  // leave the controller on the wrong path until reload
+  reducedMq.addEventListener('change', (e) => {
+    reduced = e.matches
+    dirty = true
+    lastStamp = ''
+    schedule()
+  })
   window.addEventListener('scroll', schedule, { passive: true })
   window.addEventListener('resize', () => {
     dirty = true
@@ -184,9 +241,14 @@ function ensureListeners() {
   schedule()
 }
 
-export function registerZone(zone: Omit<Zone, 'top' | 'height'>) {
+export function registerZone(zone: Omit<Zone, 'flip' | 'top' | 'height'>) {
   ensureListeners()
-  zones.set(zone.id, { ...zone, top: 0, height: 0 } as Zone)
+  zones.set(zone.id, {
+    ...zone,
+    flip: crossoverFlip(zone.from, zone.to),
+    top: 0,
+    height: 0,
+  } as Zone)
   dirty = true
   schedule()
 }

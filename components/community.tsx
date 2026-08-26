@@ -142,17 +142,17 @@ export function Community() {
       <div ref={stageRef} className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <Animation target="[data-harvest-head]" start={6} end={94} fromTo={[{ y: 34 }, { y: -22 }]}>
           <div data-harvest-head className="max-w-3xl">
-            <h2 className="display text-[clamp(2rem,3.8vw,3.2rem)] leading-tight text-parchment-ink">
+            <h2 className="display text-[clamp(2rem,3.8vw,3.2rem)] leading-tight field-ink">
               The harvest table
             </h2>
-            <p className="mt-4 max-w-xl text-lg leading-relaxed text-parchment-ink/75">
+            <p className="mt-4 max-w-xl text-lg leading-relaxed text-[color-mix(in_srgb,var(--field-ink)_75%,transparent)]">
               Follow the code, the research, and the conversation across every
               channel.
             </p>
           </div>
         </Animation>
 
-        <div data-harvest-rule className="mt-12 h-px origin-left bg-parchment-ink/25" />
+        <div data-harvest-rule className="mt-12 h-px origin-left bg-[color-mix(in_srgb,var(--field-ink)_25%,transparent)]" />
 
         <div className="mt-6 grid gap-6 md:grid-cols-3">
           {PRIMARY.map((c, i) => (

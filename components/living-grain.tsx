@@ -56,8 +56,12 @@ export function LivingGrain() {
     let running = true
     let inkCache = ''
     let inkAt = 0
+    let lastDraw = 0
     const fibers: Fiber[] = []
-    const dpr = Math.min(window.devicePixelRatio || 1, 2)
+    // night frames cost the same and read dimmer; drift slower there
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.5)
+    const FRAME_MIN = 33
+    const FRAME_MIN_NIGHT = 50
 
     const resize = () => {
       w = window.innerWidth
@@ -96,17 +100,27 @@ export function LivingGrain() {
       if (!v || v === inkCache) return
       inkCache = v
       const m = v.match(/(\d+),\s*(\d+),\s*(\d+)/)
-      if (m) inkRGB = [+m[1], +m[2], +m[3]]
+      if (m) {
+        inkRGB = [+m[1], +m[2], +m[3]]
+        const lum =
+          (0.2126 * inkRGB[0] + 0.7152 * inkRGB[1] + 0.0722 * inkRGB[2]) / 255
+        frameMin = lum < 0.35 ? FRAME_MIN_NIGHT : FRAME_MIN
+      }
     }
 
+    let frameMin = FRAME_MIN
     const tick = () => {
       if (!running) return
+      raf = requestAnimationFrame(tick)
       const t = performance.now()
       sampleInk(t)
+      if (t - lastDraw < frameMin) return
+      lastDraw = t
       const lenis = (window as unknown as { __lenis?: { velocity: number } }).__lenis
       const vel = lenis ? lenis.velocity : 0
       const boost = Math.max(-14, Math.min(14, vel * 0.55))
       ctx2d.clearRect(0, 0, w, h)
+      ctx2d.fillStyle = `rgb(${inkRGB[0]}, ${inkRGB[1]}, ${inkRGB[2]})`
       for (const f of fibers) {
         f.phase += 0.008
         f.x += f.vx + Math.sin(f.phase) * 0.18 + boost * 0.045
@@ -116,10 +130,11 @@ export function LivingGrain() {
         if (f.x < -4) f.x = w + 4
         if (f.x > w + 4) f.x = -4
         const stretch = 1 + Math.min(Math.abs(boost) * 0.16, 2.6)
-        ctx2d.fillStyle = `rgba(${inkRGB[0]}, ${inkRGB[1]}, ${inkRGB[2]}, ${f.alpha})`
+        ctx2d.globalAlpha = f.alpha
         ctx2d.fillRect(f.x, f.y, f.s * stretch, f.s)
       }
-      raf = requestAnimationFrame(tick)
+      ctx2d.globalAlpha = 1
+      ctx2d.fillStyle = `rgb(${inkRGB[0]}, ${inkRGB[1]}, ${inkRGB[2]})`
     }
     raf = requestAnimationFrame(tick)
 

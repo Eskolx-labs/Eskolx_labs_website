@@ -54,7 +54,11 @@ export function Hero() {
   // re-measure after late font swaps or resizes without feedback drift.
   useEffect(() => {
     const mm = gsap.matchMedia()
-    mm.add('(prefers-reduced-motion: no-preference) and (min-width: 768px)', () => {
+    // the dock and the nav's logo-hide are one contract: a tall pinned hero.
+    // The nav gate carries (min-height: 700px); without it here the mark
+    // flew onto an empty rail slot on short desktop windows while the real
+    // logo sat beside it — two wordmarks on one rail.
+    mm.add('(prefers-reduced-motion: no-preference) and (min-width: 768px) and (min-height: 700px)', () => {
       const wrapper = markRef.current
       const mark = wrapper?.querySelector('[data-hero-mark]')
       const navLogo = document.querySelector<HTMLAnchorElement>('header a[href="#top"]')
@@ -104,7 +108,7 @@ export function Hero() {
       field={{ from: LOAM, to: PARCHMENT }}
     >
       <Pin height="300vh">
-        <section className="relative flex h-full flex-col items-center justify-center gap-12 overflow-hidden px-4 pt-24 pb-20 sm:px-6 [@media(min-width:768px)_and_(max-height:899px)]:gap-8 [@media(min-width:768px)_and_(max-height:899px)]:pb-10 [@media(min-width:768px)_and_(max-height:899px)]:pt-16 [@media(min-width:768px)_and_(min-height:900px)]:gap-16 [@media(min-width:768px)_and_(min-height:900px)]:py-0">
+        <section className="relative flex h-full flex-col items-center justify-center gap-12 overflow-hidden px-4 pt-24 pb-20 sm:px-6 [@media(min-width:768px)_and_(max-height:899.9px)]:gap-8 [@media(min-width:768px)_and_(max-height:899.9px)]:pb-10 [@media(min-width:768px)_and_(max-height:899.9px)]:pt-16 [@media(min-width:768px)_and_(min-height:900px)]:gap-16 [@media(min-width:768px)_and_(min-height:900px)]:py-0">
           <div ref={markRef} className="pointer-events-none z-10 flex items-center gap-[0.55em]">
             <div data-hero-mark className="flex items-center gap-[0.85em] text-[clamp(3.25rem,13vw,10rem)]">
               <span className="font-script field-ink leading-none">

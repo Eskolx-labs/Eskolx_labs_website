@@ -26,7 +26,7 @@ const collectResults = () => ({
 
 const browser = await chromium.launch({
   executablePath: '/usr/bin/chromium',
-  args: ['--no-sandbox', '--force-prefers-reduced-motion'],
+  args: ['--no-sandbox'],
 });
 
 async function desktop() {

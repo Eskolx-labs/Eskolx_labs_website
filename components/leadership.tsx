@@ -31,10 +31,10 @@ export function Leadership() {
     >
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <Reveal className="max-w-3xl">
-          <h2 className="display text-[clamp(2rem,3.8vw,3.2rem)] leading-tight text-cream-100" data-reveal-item>
+          <h2 className="display text-[clamp(2rem,3.8vw,3.2rem)] leading-tight field-ink" data-reveal-item>
             The keepers of the root
           </h2>
-          <p className="mt-4 max-w-xl text-lg leading-relaxed text-cream-200/80" data-reveal-item>
+          <p className="mt-4 max-w-xl text-lg leading-relaxed text-[color-mix(in_srgb,var(--field-ink)_80%,transparent)]" data-reveal-item>
             Leadership and governance. Two people tend the direction; everyone
             else tends the code.
           </p>
@@ -72,7 +72,7 @@ export function Leadership() {
             href="https://github.com/eskolx-labs"
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-2 font-serif text-[15px] text-cream-200/85 underline-offset-4 transition-colors hover:text-cream-100 hover:underline hover:decoration-gold-leaf/60"
+            className="inline-flex items-center gap-2 font-serif text-[15px] text-[color-mix(in_srgb,var(--field-ink)_85%,transparent)] underline-offset-4 transition-colors hover:text-[var(--field-ink)] hover:underline hover:decoration-gold-leaf/60"
           >
             Find us in the commit log
             <svg viewBox="0 0 14 14" className="h-3 w-3" aria-hidden="true">
