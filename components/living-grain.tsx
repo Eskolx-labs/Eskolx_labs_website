@@ -54,6 +54,7 @@ export function LivingGrain() {
     let h = 0
     let raf = 0
     let running = true
+    let lastDraw = 0
     let inkCache = ''
     let inkAt = 0
     let lastDraw = 0
@@ -107,6 +108,7 @@ export function LivingGrain() {
         frameMin = lum < 0.35 ? FRAME_MIN_NIGHT : FRAME_MIN
       }
     }
+    sampleInk(0)
 
     let frameMin = FRAME_MIN
     const tick = () => {
@@ -118,6 +120,12 @@ export function LivingGrain() {
       lastDraw = t
       const lenis = (window as unknown as { __lenis?: { velocity: number } }).__lenis
       const vel = lenis ? lenis.velocity : 0
+      // the fibers drift slowly enough that a capped frame rate reads
+      // identically: ~30fps under the scroll's wind, a lazy 20 at rest,
+      // leaving the display's full frame budget to the scrubbed chapters
+      const interval = Math.abs(vel) > 0.05 ? 33 : 50
+      if (t - lastDraw < interval) return
+      lastDraw = t
       const boost = Math.max(-14, Math.min(14, vel * 0.55))
       ctx2d.clearRect(0, 0, w, h)
       ctx2d.fillStyle = `rgb(${inkRGB[0]}, ${inkRGB[1]}, ${inkRGB[2]})`

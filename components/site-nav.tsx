@@ -70,25 +70,57 @@ export function SiteNav() {
   }, [open])
 
   useEffect(() => {
-    const onScroll = () => {
+    let raf = 0
+    // section tops are geometry, not per-event work: measured here and on
+    // the events that can shift them, never inside the scroll handler
+    let tops: Array<[string, number]> = []
+    const measure = () => {
+      tops = NAV_LINKS.map((link) => {
+        const el = document.getElementById(link.href.slice(1))
+        return [
+          link.href.slice(1),
+          el ? el.getBoundingClientRect().top + window.scrollY : Number.POSITIVE_INFINITY,
+        ]
+      })
+    }
+    const evaluate = () => {
+      raf = 0
       setGrounded(window.scrollY > 24)
       // the reader's place: the last spread whose top has crossed the
       // upper-third reading line owns the rail's gold mark
       const probe = window.scrollY + window.innerHeight * 0.38
       let current: string | null = null
-      for (const link of NAV_LINKS) {
-        const el = document.getElementById(link.href.slice(1))
-        if (el && el.offsetTop <= probe) current = link.href.slice(1)
+      for (const [id, top] of tops) {
+        if (top <= probe) current = id
       }
       setActiveId(current)
     }
-    const onResize = () => setResizeTick(t => t + 1)
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
+    // scroll storms coalesce to one evaluation per frame
+    const schedule = () => {
+      if (!raf) raf = requestAnimationFrame(evaluate)
+    }
+    const remeasure = () => {
+      measure()
+      schedule()
+    }
+    const onResize = () => {
+      setResizeTick((t) => t + 1)
+      remeasure()
+    }
+    measure()
+    evaluate()
+    window.addEventListener('scroll', schedule, { passive: true })
     window.addEventListener('resize', onResize)
+    window.addEventListener('load', remeasure)
+    document.fonts?.ready.then(remeasure)
+    gsap.registerPlugin(ScrollTrigger)
+    ScrollTrigger.addEventListener('refresh', remeasure)
     return () => {
-      window.removeEventListener('scroll', onScroll)
+      cancelAnimationFrame(raf)
+      window.removeEventListener('scroll', schedule)
       window.removeEventListener('resize', onResize)
+      window.removeEventListener('load', remeasure)
+      ScrollTrigger.removeEventListener('refresh', remeasure)
     }
   }, [])
 
