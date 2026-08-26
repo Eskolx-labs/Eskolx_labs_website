@@ -21,6 +21,7 @@ const PRIMARY = [
   {
     icon: GithubIcon,
     name: 'GitHub',
+    cta: 'Open GitHub',
     handle: 'github.com/eskolx-labs',
     desc: 'Open-source repositories & codebase docs',
     href: 'https://github.com/eskolx-labs',
@@ -28,6 +29,7 @@ const PRIMARY = [
   {
     icon: TelegramIcon,
     name: 'Telegram',
+    cta: 'Open Telegram',
     handle: 't.me/eskolx_labs',
     desc: 'Community chat & builder updates',
     href: 'https://t.me/eskolx_labs',
@@ -35,6 +37,7 @@ const PRIMARY = [
   {
     icon: LinkedinIcon,
     name: 'LinkedIn',
+    cta: 'Open LinkedIn',
     handle: 'linkedin.com/company/eskolx_labs',
     desc: 'Technical announcements & talent recruitment',
     href: 'https://linkedin.com/company/eskolx_labs',
@@ -183,7 +186,7 @@ export function Community() {
                 <p className="mt-3 text-copy leading-relaxed text-parchment-ink/75">{c.desc}</p>
                 <div className="mt-auto pt-6">
                   <span className="inline-flex items-center gap-2 font-mono text-kicker uppercase tracking-[0.28em] text-parchment-ink/55 transition-colors duration-200 group-hover:text-wine-600">
-                    Telegram
+                    {c.cta}
                     <svg
                       viewBox="0 0 14 14"
                       className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-0.5"

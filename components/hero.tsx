@@ -184,7 +184,7 @@ export function Hero() {
                   className="btn-plate btn-wine text-base"
                 >
                   <GithubIcon className="h-5 w-5" />
-                  Explore GitHub
+                  Explore the repos
                 </a>
                 <a
                   href="https://t.me/eskolx_labs"

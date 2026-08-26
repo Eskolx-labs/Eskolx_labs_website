@@ -6,8 +6,8 @@ import { Reveal } from '@/components/reveal'
 import { SealMark } from '@/components/botanical/seal-mark'
 
 const LINKS = [
-  { label: 'Open-Source Code', href: 'https://github.com/eskolx-labs' },
-  { label: 'Builder Chat', href: 'https://t.me/eskolx_labs' },
+  { label: 'GitHub', href: 'https://github.com/eskolx-labs' },
+  { label: 'Telegram', href: 'https://t.me/eskolx_labs' },
   { label: 'Guide', href: '#fieldguide' },
 ]
 
