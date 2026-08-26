@@ -41,16 +41,11 @@ const ASKS: {
 }[] = [
   {
     n: '01',
-    title: 'Working Python',
-    body: 'That is the whole entry bar. You need to read and write it without hand-holding.',
+    title: 'What you bring',
+    body: 'Working Python and class statistics — that is the whole entry bar. Every function starts in books and research papers, and your notes from that reading are part of the work.',
   },
   {
     n: '02',
-    title: 'Read before you write',
-    body: 'Every function starts in books and research papers, and your notes from that reading are part of the work.',
-  },
-  {
-    n: '03',
     title: 'Notes go public',
     body: 'They land in the open vault under MIT, with your name on them. The notes build the knowledge base, and you are one of its authors. Start with',
     linkText: 'the open study vault',
@@ -58,19 +53,19 @@ const ASKS: {
     after: '.',
   },
   {
-    n: '04',
+    n: '03',
     title: 'Small, fast teams',
     body: 'Few people, short cycles, real milestones. Everyone ships, and review stays close.',
   },
   {
-    n: '05',
+    n: '04',
     title: 'Finish by teaching',
     body: 'The loop ends when you can explain what you built. The best explanations get published on this site.',
   },
 ]
 
 const STATUS = [
-  { k: 'Status', v: 'Actively maintained.' },
+  { k: 'Status', v: 'Actively maintained. Last push Aug 24, 2026.' },
   { k: 'Code', v: 'github.com/eskolx-labs', href: 'https://github.com/eskolx-labs' },
   {
     k: 'Current goal',
@@ -346,7 +341,7 @@ export function FieldGuide() {
         field={{ from: LOAM, to: LOAM }}
         mobilePins
       >
-        <Pin height="300vh" mobileHeight="220vh" pinMobile>
+        <Pin height="260vh" mobileHeight="190vh" pinMobile>
           <section className="relative flex h-full flex-col justify-center overflow-hidden px-0 pt-20">
             <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           {/* room furniture: static, never a viewport Reveal — a Reveal
@@ -358,7 +353,7 @@ export function FieldGuide() {
               What we ask of you
             </h2>
             <p className="mt-4 max-w-xl text-lg leading-relaxed field-ink-soft">
-              The mission sets the bar. Here it is, plainly: five things,
+              The mission sets the bar. Here it is, plainly: four things,
               and that is the whole filter.
             </p>
           </div>

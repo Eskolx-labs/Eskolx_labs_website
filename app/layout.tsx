@@ -38,25 +38,25 @@ const kaushan = localFont({
   display: 'swap',
 })
 
-const TITLE = 'Eskolx Labs · Good Soil. Great Minds. Abundant Impact.'
+const TITLE = 'Eskolx Labs · Learn deep, build expertise.'
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'),
   title: TITLE,
   description:
-    'Open-source statistical infrastructure and package development. We translate theoretical mathematical formulas into modular, open-source Python automation tools built from scratch.',
+    'An open-source lab where you rebuild the statistical libraries everyone takes for granted, from scratch, in pure Python. Read the papers, write the code, explain it publicly. MIT, everything public.',
   openGraph: {
     type: 'website',
     siteName: 'Eskolx Labs',
     title: TITLE,
     description:
-      'Open-source statistical infrastructure and package development, built from scratch in pure Python.',
+      'Rebuild the statistical libraries everyone takes for granted, from scratch, in pure Python. Learn deep, build expertise.',
   },
   twitter: {
     card: 'summary',
     title: TITLE,
     description:
-      'Open-source statistical infrastructure and package development, built from scratch in pure Python.',
+      'Rebuild the statistical libraries everyone takes for granted, from scratch, in pure Python. Learn deep, build expertise.',
   },
 }
 

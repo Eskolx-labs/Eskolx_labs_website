@@ -84,7 +84,7 @@ export function Hero() {
             scrollTrigger: {
               trigger: '#top',
               start: 'top top',
-              end: () => `+=${(room() - window.innerHeight) * 0.24}`,
+              end: () => `+=${(room() - window.innerHeight) * 0.2}`,
               scrub: true,
               invalidateOnRefresh: true,
             },
@@ -102,14 +102,14 @@ export function Hero() {
       start="top top"
       end="bottom bottom"
       scrub={true}
-      field={{ from: LOAM, to: PARCHMENT, turnAt: [0.92, 1] }}
+      field={{ from: LOAM, to: PARCHMENT, turnAt: [0.9, 1] }}
       mobilePins
     >
       {/* the cover joins the mobile pin tier: phones and short windows get
           the full lift room - night holds, the motto performs, the mission
           rises, and the field turns across the content-empty tail. A pinned
           shell also never scrolls under the nav. */}
-      <Pin height="400vh" mobileHeight="260vh" pinMobile>
+      <Pin height="300vh" mobileHeight="220vh" pinMobile>
         <section className="relative flex h-full flex-col items-center justify-center gap-10 overflow-hidden px-4 pt-24 pb-20 max-md:gap-6 max-md:pt-20 max-md:pb-12 sm:px-6 [@media(min-width:768px)_and_(max-height:899.9px)]:gap-7 [@media(min-width:768px)_and_(max-height:899.9px)]:pb-10 [@media(min-width:768px)_and_(max-height:899.9px)]:pt-16">
           <div ref={markRef} className="pointer-events-none z-10 flex items-center gap-[0.55em]">
             <div data-hero-mark className="flex items-center gap-[0.85em] text-[clamp(3.25rem,13vw,10rem)]">
@@ -135,8 +135,8 @@ export function Hero() {
               <span className="block overflow-hidden">
                 <Animation
                   target="[data-motto-wording]"
-                  start={24}
-                  end={36}
+                  start={20}
+                  end={30}
                   fromTo={[{ yPercent: 120 }, { yPercent: 0 }]}
                 >
                   <span data-motto-wording className="display block whitespace-nowrap text-[clamp(2.6rem,7.5vw,5.75rem)] leading-[1.04] field-ink">
@@ -149,8 +149,8 @@ export function Hero() {
               <span className="block overflow-hidden">
                 <Animation
                   target="[data-motto-promise]"
-                  start={58}
-                  end={68}
+                  start={46}
+                  end={54}
                   fromTo={[{ yPercent: 120 }, { yPercent: 0 }]}
                 >
                   <span data-motto-promise className="display block text-[clamp(1.5rem,3.6vw,2.6rem)] leading-[1.15] field-ink-soft">
@@ -168,27 +168,27 @@ export function Hero() {
                 widths: Learn 2.535em, Deep 2.283em, word gap 0.24em. */}
             <Animation
               target="[data-motto-learn]"
-              start={48}
-              end={58}
+              start={40}
+              end={48}
               fromTo={[{ x: '2.52em' }, { x: '0em' }]}
             />
             <Animation
               target="[data-motto-deep]"
-              start={48}
-              end={58}
+              start={40}
+              end={48}
               fromTo={[{ x: '-2.78em' }, { x: '0em' }]}
             />
             {/* the trade: as the words slide past each other they dip and
                 lift around one another, then settle level - a handoff, not
                 a collision */}
-            <Animation target="[data-motto-learn]" start={48} end={53} to={{ y: '0.18em' }} />
-            <Animation target="[data-motto-learn]" start={53} end={58} to={{ y: '0em' }} />
-            <Animation target="[data-motto-deep]" start={48} end={53} to={{ y: '-0.18em' }} />
-            <Animation target="[data-motto-deep]" start={53} end={58} to={{ y: '0em' }} />
+            <Animation target="[data-motto-learn]" start={40} end={44} to={{ y: '0.18em' }} />
+            <Animation target="[data-motto-learn]" start={44} end={48} to={{ y: '0em' }} />
+            <Animation target="[data-motto-deep]" start={40} end={44} to={{ y: '-0.18em' }} />
+            <Animation target="[data-motto-deep]" start={44} end={48} to={{ y: '0em' }} />
             <Animation
               target="[data-motto-ing]"
-              start={42}
-              end={52}
+              start={34}
+              end={42}
               fromTo={[
                 { x: '0em', y: '0em', rotation: 0, autoAlpha: 1 },
                 { x: '0.6em', y: '-0.85em', rotation: 14, autoAlpha: 0, ease: 'power2.in' },
@@ -204,8 +204,8 @@ export function Hero() {
                   <span key={i} className="block overflow-hidden">
                     <Animation
                       target={`[data-hero-line="${i}"]`}
-                      start={70 + i * 2.7}
-                      end={76 + i * 2.7}
+                      start={58 + i * 2.5}
+                      end={63 + i * 2.5}
                       fromTo={[{ yPercent: 118 }, { yPercent: 0 }]}
                     >
                       <span data-hero-line={i} className="block">
@@ -224,7 +224,7 @@ export function Hero() {
               </span>
             </h1>
 
-            <Animation target="[data-hero-sub]" start={78} end={84} fromTo={[{ y: 24, opacity: 0 }, { y: 0, opacity: 1 }]}>
+            <Animation target="[data-hero-sub]" start={66} end={72} fromTo={[{ y: 24, opacity: 0 }, { y: 0, opacity: 1 }]}>
               <p
                 data-hero-sub
                 className="mx-auto mt-7 max-w-xl text-lg leading-relaxed field-ink-soft max-md:mt-5 max-md:text-base"
@@ -236,7 +236,7 @@ export function Hero() {
               </p>
             </Animation>
 
-            <Animation target="[data-hero-cta]" start={80} end={86} fromTo={[{ y: 20, opacity: 0 }, { y: 0, opacity: 1 }]}>
+            <Animation target="[data-hero-cta]" start={68} end={74} fromTo={[{ y: 20, opacity: 0 }, { y: 0, opacity: 1 }]}>
               <div data-hero-cta className="mt-9 flex flex-col items-center justify-center gap-3.5 sm:flex-row sm:flex-wrap">
                 <a
                   href="https://github.com/eskolx-labs"
@@ -266,7 +266,7 @@ export function Hero() {
           {/* the whole spread lifts away before the field turns: the cover
               reads on settled night, empties, then the page-turn runs in
               the tail (turnAt 0.92-1) over nothing but the mark's fade */}
-          <Animation target="[data-hero-copy]" start={86} end={93} to={{ y: -64, opacity: 0 }} />
+          <Animation target="[data-hero-copy]" start={82} end={90} to={{ y: -64, opacity: 0 }} />
 
           <Animation target="[data-hero-cue]" start={0} end={8} to={{ opacity: 0 }}>
             <a
@@ -289,7 +289,7 @@ export function Hero() {
 
           <Animation
             target="[data-hero-mark]"
-            start={92}
+            start={90}
             end={100}
             to={{ autoAlpha: 0 }}
           />

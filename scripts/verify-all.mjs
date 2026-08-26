@@ -237,10 +237,10 @@ const sealState = (page) => page.evaluate(() => {
     const travel = stack.scrollHeight - frame.clientHeight
     return travel === 0 || -m.f >= travel - 4
   }))
-  check('phone: stake strips render (5 + 4)', await page.evaluate(() => {
+  check('phone: stake strips render (4 + 4)', await page.evaluate(() => {
     const bar = document.querySelectorAll('#guide-bar [role=group] button').length
     const tiers = document.querySelectorAll('#tiers [role=group] button').length
-    return bar === 5 && tiers >= 4
+    return bar === 4 && tiers >= 4
   }))
   // tap-to-jump on both rooms: the jump lands where the measured fraction
   // says its plate frames
@@ -263,26 +263,9 @@ const sealState = (page) => page.evaluate(() => {
       const framedLast = frac >= 0.96
       return { nearEnd: near < travel * 0.08, framedLast, frac }
     }, { room, stackSel })
-    // tiers has four plates (tap 04 = last, fraction 1.0); guide-bar has
-    // five (tap 04 lands at 3/4 of the stack travel, and the tap-05 check
-    // below covers its last plate)
-    const expected = room === 'tiers' ? 1 : 0.75
+    // both rooms have four plates; tap 04 lands on the last plate
+    const expected = 1
     check(`phone: ${room} tap 04 lands on plate 4`, Math.abs(landed.frac - expected) < 0.08)
-  }
-  // the guide-bar room grew a fifth ask; tap 05 must land on the last plate
-  {
-    const stackSel = '#guide-bar [data-bar-stack]'
-    const landed = await page.evaluate(async ({ stackSel }) => {
-      const travel = document.querySelector(stackSel).scrollHeight - document.querySelector(stackSel).parentElement.clientHeight
-      const btn = document.querySelectorAll('#guide-bar [role=group] button')[4]
-      btn.click()
-      await new Promise((r) => setTimeout(r, 1800))
-      const m = new DOMMatrixReadOnly(getComputedStyle(document.querySelector(stackSel)).transform)
-      const nearEnd = Math.abs(-m.f - travel) < travel * 0.08
-      const framedLast = document.querySelector('#guide-bar [data-bar-plate="05"]').getBoundingClientRect().top >= 0
-      return { nearEnd, framedLast }
-    }, { stackSel })
-    check('phone: guide-bar tap 05 lands on plate 5', landed.framedLast && landed.nearEnd)
   }
   await scrollPin(page, '#seal-flood [data-pin]', 0.4)
   await page.waitForTimeout(400)

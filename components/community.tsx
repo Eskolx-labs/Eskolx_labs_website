@@ -203,34 +203,22 @@ export function Community() {
         </div>
 
         <Reveal className="mt-6" end="top 70%">
-          <ul className="grid grid-cols-2 gap-4 sm:grid-cols-5">
-            {SECONDARY.map((c) => (
-              <li key={c.name} data-reveal-item>
+          <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-parchment-ink/60" data-reveal-item>
+            <span className="font-mono text-kicker uppercase tracking-label text-parchment-ink/45">Also on</span>
+            {SECONDARY.map((c, i) => (
+              <span key={c.name} className="font-serif text-parchment-ink/70">
+                {i > 0 && <span aria-hidden="true"> · </span>}
                 <a
                   href={c.href}
                   target="_blank"
                   rel="noreferrer"
-                  className="group flex items-center gap-3 rounded-sm border border-parchment-ink/25 bg-parchment px-4 py-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-gold-leaf/60"
+                  className="underline-offset-4 transition-colors hover:text-wine-600 hover:underline hover:decoration-gold-leaf/60"
                 >
-                  <c.icon className="h-[18px] w-[18px] shrink-0 text-parchment-ink/60 transition-colors duration-200 group-hover:text-wine-600" />
-                  <span className="truncate font-serif text-sm text-parchment-ink/85">{c.name}</span>
+                  {c.name}
                 </a>
-              </li>
+              </span>
             ))}
-          </ul>
-        </Reveal>
-
-        <Reveal className="mt-10" y={22}>
-          <a
-            href="https://t.me/eskolx_labs"
-            target="_blank"
-            rel="noreferrer"
-            className="btn-plate btn-wine"
-            data-reveal-item
-          >
-            <TelegramIcon className="h-5 w-5" />
-            Join the community on Telegram
-          </a>
+          </p>
         </Reveal>
       </div>
     </Root>
