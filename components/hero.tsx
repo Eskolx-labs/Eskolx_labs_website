@@ -121,7 +121,7 @@ export function Hero() {
           <div
             ref={copyRef}
             data-hero-copy
-            className="z-10 max-w-3xl px-4 text-center md:mx-auto md:w-full [@media(min-width:768px)_and_(min-height:900px)]:absolute [@media(min-width:768px)_and_(min-height:900px)]:bottom-[6%] [@media(min-width:768px)_and_(min-height:900px)]:left-0 [@media(min-width:768px)_and_(min-height:900px)]:right-0"
+            className="z-10 max-w-3xl px-4 text-center md:mx-auto md:w-full motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:absolute motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:bottom-[6%] motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:left-0 motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:right-0"
           >
             <h1
               className="display text-[clamp(2.4rem,5.6vw,4.6rem)] leading-[1.06] field-ink"
@@ -199,7 +199,7 @@ export function Hero() {
             <a
               data-hero-cue
               href="#ecosystem"
-              className="relative z-10 mt-10 flex items-center justify-center gap-3 text-sm field-ink-soft transition-colors hover:field-ink md:mx-auto md:w-fit [@media(min-width:768px)_and_(min-height:900px)]:absolute [@media(min-width:768px)_and_(min-height:900px)]:bottom-7 [@media(min-width:768px)_and_(min-height:900px)]:left-1/2 [@media(min-width:768px)_and_(min-height:900px)]:mt-0 [@media(min-width:768px)_and_(min-height:900px)]:-translate-x-1/2"
+              className="relative z-10 mt-10 flex items-center justify-center gap-3 text-sm field-ink-soft transition-colors hover:field-ink md:mx-auto md:w-fit motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:absolute motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:bottom-7 motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:left-1/2 motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:mt-0 motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:-translate-x-1/2"
             >
               <span>Scroll to open the almanac</span>
               <svg viewBox="0 0 16 20" className="h-4 w-4" aria-hidden="true">

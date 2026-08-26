@@ -201,6 +201,21 @@
     }
   }
 
+  /* reduced motion: the Root builds no scrubbed timelines, so the pins have
+     nothing to do — collapse them to flow everywhere, or reduced-motion
+     readers scroll through hundreds of vh of frozen sticky rooms. */
+  @media (prefers-reduced-motion: reduce) {
+    [data-pin],
+    [data-pin] > div {
+      height: auto !important;
+    }
+    [data-pin] > div > div {
+      position: static !important;
+      height: auto !important;
+      overflow: visible !important;
+    }
+  }
+
   /* field utilities: every surface tints from the current field */
   .field-bg {
     background-color: var(--field-bg);

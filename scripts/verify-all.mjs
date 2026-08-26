@@ -1,0 +1,311 @@
+/*
+ * The full regression suite. Run `pnpm build` first, then `pnpm test`.
+ * Serves out/ on an in-process port, walks the book at five viewports
+ * across both motion paths, and fails loudly on any broken promise:
+ * pins, scrubs, the ink snap, room openings, touch framing, tap
+ * targets, resize reactivity, reduced-motion fallbacks.
+ */
+import { createRequire } from 'module'
+import { fileURLToPath } from 'url'
+import http from 'http'
+import fs from 'fs'
+import path from 'path'
+const require = createRequire(import.meta.url)
+const { chromium } = require('playwright-core')
+
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
+const OUT = path.join(ROOT, 'out')
+const PORT = 3177
+const BASE = `http://127.0.0.1:${PORT}`
+const EXE = process.env.CHROME_PATH || '/usr/bin/chromium'
+
+if (!fs.existsSync(path.join(OUT, 'index.html'))) {
+  console.error('out/index.html missing — run `pnpm build` first')
+  process.exit(1)
+}
+
+// ---- tiny static server -------------------------------------------------
+const MIME = { html: 'text/html', js: 'text/javascript', css: 'text/css', svg: 'image/svg+xml', woff2: 'font/woff2' }
+const server = http.createServer((req, res) => {
+  const p = path.join(OUT, req.url === '/' ? 'index.html' : req.url.split('?')[0])
+  fs.readFile(p, (err, data) => {
+    if (err) { res.statusCode = 404; res.end('no'); return }
+    res.setHeader('Content-Type', MIME[p.split('.').pop()] || 'application/octet-stream')
+    res.end(data)
+  })
+})
+await new Promise((r) => server.listen(PORT, r))
+
+// ---- harness ------------------------------------------------------------
+const results = []
+const check = (name, pass, detail = '') => {
+  results.push({ name, pass, detail })
+  console.log(`${pass ? 'PASS' : 'FAIL'}  ${name}${detail ? ` — ${detail}` : ''}`)
+}
+const consoleErrors = []
+const watch = (page, label) => {
+  page.on('console', (m) => { if (m.type() === 'error') consoleErrors.push(`[${label}] ${m.text().slice(0, 100)}`) })
+  page.on('pageerror', (e) => consoleErrors.push(`[${label}] ${String(e).slice(0, 100)}`))
+}
+const browser = await chromium.launch({ executablePath: EXE })
+const newPage = async (vp) => {
+  const page = await browser.newPage({ viewport: { width: vp[0], height: vp[1] } })
+  watch(page, `${vp[0]}x${vp[1]}`)
+  await page.goto(BASE, { waitUntil: 'networkidle' })
+  await page.waitForTimeout(1400)
+  return page
+}
+const scrollPin = (page, sel, f) => page.evaluate(({ sel, f }) => {
+  const el = document.querySelector(sel)
+  const top = el.getBoundingClientRect().top + window.scrollY
+  window.__lenis?.scrollTo(top + Math.max(el.offsetHeight - window.innerHeight, 10) * f, { immediate: true })
+}, { sel, f })
+const scrollToSel = (page, sel) => page.evaluate((s) => {
+  const el = document.querySelector(s)
+  window.__lenis?.scrollTo(el.getBoundingClientRect().top + window.scrollY, { immediate: true })
+}, sel)
+const fieldState = (page) => page.evaluate(() => {
+  const lum = (s) => {
+    const [r, g, b] = s.match(/\d+/g).map(Number).map((v) => {
+      const x = v / 255
+      return x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4)
+    })
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b
+  }
+  const bg = getComputedStyle(document.body).getPropertyValue('--field-bg').trim()
+  const ink = getComputedStyle(document.body).getPropertyValue('--field-ink').trim()
+  const a = lum(bg); const b = lum(ink)
+  return { bg, ink, contrast: (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05) }
+})
+const sealState = (page) => page.evaluate(() => {
+  const s = document.querySelector('[data-flood-seal]')
+  const m = new DOMMatrixReadOnly(getComputedStyle(s).transform === 'none' ? 'matrix(1,0,0,1,0,0)' : getComputedStyle(s).transform)
+  return { scale: m.a, opacity: +getComputedStyle(s).opacity }
+})
+
+// ---- desktop 1440x900 ----------------------------------------------------
+{
+  const vp = [1440, 900]
+  const page = await newPage(vp)
+  check('desktop: hero headline scrub-driven at rest', await page.evaluate(() => getComputedStyle(document.querySelector('[data-hero-line="0"]')).transform !== 'none'))
+  check('desktop: night cover at top', (await fieldState(page)).bg.toLowerCase().includes('36, 20, 7'))
+  await scrollPin(page, '#tiers [data-pin]', 0.5)
+  await page.waitForTimeout(500)
+  check('desktop: trellis stack scrubs', await page.evaluate(() => getComputedStyle(document.querySelector('#tiers [data-tier-stack]')).transform !== 'none'))
+  await scrollPin(page, '#guide-bar [data-pin]', 0.5)
+  await page.waitForTimeout(500)
+  check('desktop: bar stack scrubs', await page.evaluate(() => getComputedStyle(document.querySelector('#guide-bar [data-bar-stack]')).transform !== 'none'))
+  await scrollPin(page, '#seal-flood [data-pin]', 0.5)
+  await page.waitForTimeout(500)
+  const sealMid = await sealState(page)
+  check('desktop: seal zooms mid-flood', sealMid.scale > 5 && sealMid.opacity === 1, `scale ${sealMid.scale}`)
+  await scrollPin(page, '#seal-flood [data-pin]', 1)
+  await page.waitForTimeout(500)
+  const sealEnd = await sealState(page)
+  check('desktop: seal releases at flood end', sealEnd.opacity === 0)
+  // room openings: first beat on stage at progress 0
+  await scrollToSel(page, '#ecosystem')
+  await page.waitForTimeout(400)
+  check('desktop: identity opens on its heading', await page.evaluate(() => {
+    const h = [...document.querySelectorAll('h2')].find((e) => e.textContent.includes('Eshcol Identity'))
+    return h && +getComputedStyle(h).opacity === 1
+  }))
+  await scrollToSel(page, '#roadmap')
+  await page.waitForTimeout(400)
+  check('desktop: method opens on phase 1', await page.evaluate(() => {
+    const t = [...document.querySelectorAll('h3')].find((e) => e.textContent.includes('Basic statistical packages'))
+    return t && +getComputedStyle(t.closest('[data-rm-unit], div')).opacity === 1
+  }))
+  await scrollToSel(page, '#seal-flood')
+  await page.waitForTimeout(400)
+  check('desktop: flood opens on its label', await page.evaluate(() => {
+    const l = document.querySelector('[data-flood-label]')
+    return l && +getComputedStyle(l).opacity === 1
+  }))
+  // ink snap: sample the guide-dusk turn, no step below 3.2
+  const { top, span } = await page.evaluate(() => {
+    const el = document.querySelector('#guide-dusk')
+    return { top: el.getBoundingClientRect().top + window.scrollY - window.innerHeight, span: el.offsetHeight + window.innerHeight }
+  })
+  let minContrast = 99
+  for (let i = 0; i <= 10; i++) {
+    await page.evaluate(({ top, span, i }) => { window.scrollTo(0, top + span * (i / 10)); window.dispatchEvent(new Event('scroll')) }, { top, span, i })
+    await page.waitForTimeout(220)
+    minContrast = Math.min(minContrast, (await fieldState(page)).contrast)
+  }
+  check('desktop: ink snap never below 3.2:1 across the dusk turn', minContrast >= 3.2, `min ${minContrast}:1`)
+  check('desktop: nav CTA renamed', await page.evaluate(() => document.querySelector('header a.btn-wine')?.textContent.includes('Eskolx on GitHub')))
+  check('desktop: no horizontal overflow', await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
+  await page.close()
+}
+
+// ---- phone 390x844 -------------------------------------------------------
+{
+  const vp = [390, 844]
+  const page = await newPage(vp)
+  const pinActive = (sel) => page.evaluate((s) => {
+    const h = getComputedStyle(document.querySelector(`${s} [data-pin] > div`)).height
+    return h.includes('vh') || parseInt(h) > window.innerHeight
+  }, sel)
+  check('phone: trellis pin active', await pinActive('#tiers'))
+  check('phone: bar pin active', await pinActive('#guide-bar'))
+  check('phone: flood pin active', await pinActive('#seal-flood'))
+  await scrollPin(page, '#tiers [data-pin]', 1)
+  await page.waitForTimeout(400)
+  check('phone: trellis reaches tier 4', await page.evaluate(() => {
+    const stack = document.querySelector('#tiers [data-tier-stack]')
+    const frame = stack.parentElement
+    const m = new DOMMatrixReadOnly(getComputedStyle(stack).transform === 'none' ? 'matrix(1,0,0,1,0,0)' : getComputedStyle(stack).transform)
+    const travel = stack.scrollHeight - frame.clientHeight
+    return travel === 0 || -m.f >= travel - 4
+  }))
+  await scrollPin(page, '#guide-bar [data-pin]', 1)
+  await page.waitForTimeout(400)
+  check('phone: bar reaches requirement 4', await page.evaluate(() => {
+    const stack = document.querySelector('#guide-bar [data-bar-stack]')
+    const frame = stack.parentElement
+    const m = new DOMMatrixReadOnly(getComputedStyle(stack).transform === 'none' ? 'matrix(1,0,0,1,0,0)' : getComputedStyle(stack).transform)
+    const travel = stack.scrollHeight - frame.clientHeight
+    return travel === 0 || -m.f >= travel - 4
+  }))
+  check('phone: stake strips render (4 + 4)', await page.evaluate(() => {
+    const bar = document.querySelectorAll('#guide-bar [role=group] button').length
+    const tiers = document.querySelectorAll('#tiers [role=group] button').length
+    return bar === 4 && tiers >= 4
+  }))
+  // tap-to-jump: tap 04, room should reach its end
+  await scrollToSel(page, '#guide-bar')
+  await page.waitForTimeout(400)
+  await page.evaluate(() => [...document.querySelectorAll('#guide-bar [role=group] button')][3].click())
+  await page.waitForTimeout(1800)
+  check('phone: tap 04 jumps to requirement 4', await page.evaluate(() => {
+    const pin = document.querySelector('#guide-bar [data-pin]')
+    const top = pin.getBoundingClientRect().top + window.scrollY
+    const travel = pin.offsetHeight - window.innerHeight
+    return Math.abs(window.scrollY - (top + travel)) < travel * 0.08
+  }))
+  await scrollPin(page, '#seal-flood [data-pin]', 0.4)
+  await page.waitForTimeout(400)
+  const sealMid = await sealState(page)
+  check('phone: seal zooms and stays visible', sealMid.scale > 2 && sealMid.opacity === 1, `scale ${sealMid.scale}`)
+  check('phone: plate windows use overflow clip', await page.evaluate(() =>
+    ['tiers', 'guide-bar'].every((id) => {
+      const stack = document.querySelector(`#${id} [data-tier-stack], #${id} [data-bar-stack]`)
+      return stack && getComputedStyle(stack.parentElement).overflow === 'clip'
+    })))
+  check('phone: guide body text 16px', await page.evaluate(() => {
+    const dd = document.querySelector('#guide-ledger dd')
+    return dd && getComputedStyle(dd).fontSize === '16px'
+  }))
+  check('phone: vault links present', await page.evaluate(() => document.querySelectorAll('a[href*="Eskolx-Open-Knowledge"]').length >= 2))
+  check('phone: marquee scrubs', await page.evaluate(async () => {
+    const el = [...document.querySelectorAll('div')].find((d) => d.className.includes && String(d.className).includes('w-max'))
+    window.__lenis?.scrollTo(el.getBoundingClientRect().top + window.scrollY - window.innerHeight * 0.5, { immediate: true })
+    await new Promise((r) => setTimeout(r, 600))
+    return getComputedStyle(el).transform !== 'none'
+  }))
+  check('phone: no horizontal overflow', await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
+  await page.close()
+}
+
+// ---- short desktop 960x540 ----------------------------------------------
+{
+  const vp = [960, 540]
+  const page = await newPage(vp)
+  check('short: hero reads flow (headline visible)', await page.evaluate(() => {
+    const line = document.querySelector('[data-hero-line="0"]')
+    return getComputedStyle(line).transform === 'none' && +getComputedStyle(line).opacity === 1
+  }))
+  check('short: hero shell not sticky', await page.evaluate(() => getComputedStyle(document.querySelector('#top [data-pin] > div > div')).position === 'static'))
+  check('short: nav logo visible', await page.evaluate(() => {
+    const el = document.querySelector('header a[href="#top"]')
+    return el && getComputedStyle(el).visibility === 'visible'
+  }))
+  check('short: tier rooms stay pinned', await page.evaluate(() =>
+    ['#tiers', '#guide-bar', '#seal-flood'].every((id) => getComputedStyle(document.querySelector(`${id} [data-pin] > div > div`)).position === 'sticky')))
+  check('short: roadmap phases not superimposed', await page.evaluate(() => {
+    const beats = [...document.querySelectorAll('[data-rm-beat]')]
+    const tops = beats.map((b) => b.getBoundingClientRect().top + window.scrollY)
+    return tops.every((t, i) => i === 0 || t - tops[i - 1] > 50)
+  }))
+  check('short: no horizontal overflow', await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
+  await page.close()
+}
+
+// ---- landscape 844x390 ---------------------------------------------------
+{
+  const vp = [844, 390]
+  const page = await newPage(vp)
+  check('landscape: every pin collapses', await page.evaluate(() =>
+    ['#top', '#tiers', '#guide-bar', '#seal-flood', '#roadmap'].every((id) => getComputedStyle(document.querySelector(`${id} [data-pin] > div > div`)).position === 'static')))
+  check('landscape: no horizontal overflow', await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
+  await page.close()
+}
+
+// ---- resize reactivity ---------------------------------------------------
+{
+  const page = await newPage([1440, 900])
+  await page.setViewportSize({ width: 960, height: 540 })
+  await page.waitForTimeout(1000)
+  await page.evaluate("window.__lenis?.scrollTo(0, { immediate: true })")
+  await page.waitForTimeout(600)
+  check('resize: desktop->short rebuilds (headline static)', await page.evaluate(() => getComputedStyle(document.querySelector('[data-hero-line="0"]')).transform === 'none'))
+  await page.evaluate("(() => { const el = document.querySelector('#tiers [data-pin]'); const top = el.getBoundingClientRect().top + window.scrollY; window.__lenis?.scrollTo(top + 300, { immediate: true }) })()")
+  await page.waitForTimeout(600)
+  check('resize: short trellis still scrubs', await page.evaluate(() => getComputedStyle(document.querySelector('#tiers [data-tier-stack]')).transform !== 'none'))
+  await page.setViewportSize({ width: 1440, height: 900 })
+  await page.waitForTimeout(1000)
+  await page.evaluate("window.__lenis?.scrollTo(0, { immediate: true })")
+  await page.waitForTimeout(600)
+  check('resize: back to desktop restores the masked rise', await page.evaluate(() => getComputedStyle(document.querySelector('[data-hero-line="0"]')).transform !== 'none'))
+  await page.close()
+}
+
+// ---- reduced motion ------------------------------------------------------
+{
+  const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' })
+  const page = await ctx.newPage()
+  watch(page, 'reduced')
+  await page.goto(BASE, { waitUntil: 'networkidle' })
+  await page.waitForTimeout(1200)
+  check('reduced: hero headline static visible', await page.evaluate(() => getComputedStyle(document.querySelector('[data-hero-line="0"]')).transform === 'none' && +getComputedStyle(document.querySelector('[data-hero-line="0"]')).opacity === 1))
+  check('reduced: pins collapsed', await page.evaluate(() => getComputedStyle(document.querySelector('#top [data-pin] > div > div')).position === 'static'))
+  check('reduced: origin plate visible', await page.evaluate(() => {
+    const p = document.querySelector('[data-id-plate="0"]')
+    return p && +getComputedStyle(p).opacity === 1
+  }))
+  await page.evaluate("(() => { const el = document.querySelector('#guide-dusk'); window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY + el.offsetHeight) })()")
+  await page.waitForTimeout(600)
+  const night = await page.evaluate(() => {
+    const raw = getComputedStyle(document.body).getPropertyValue('--field-bg').trim()
+    const nums = raw.startsWith('#')
+      ? [1, 3, 5].map((i) => parseInt(raw.slice(i, i + 2), 16)).join(', ')
+      : raw.match(/\d+/g).join(', ')
+    return `rgb(${nums})`
+  })
+  check('reduced: night chapters read loam', night === 'rgb(36, 20, 7)', night)
+  await ctx.close()
+}
+
+// ---- content --------------------------------------------------------------
+{
+  const page = await newPage([1440, 900])
+  check('content: vault linked twice', await page.evaluate(() => document.querySelectorAll('a[href*="Eskolx-Open-Knowledge"]').length >= 2))
+  check('content: 404 page exists in build', fs.existsSync(path.join(OUT, '404.html')))
+  await page.close()
+}
+
+await browser.close()
+server.close()
+
+const failed = results.filter((r) => !r.pass)
+console.log(`\n${results.length - failed.length}/${results.length} checks passed`)
+if (consoleErrors.length) {
+  console.log(`console errors: ${consoleErrors.length}`)
+  for (const e of consoleErrors.slice(0, 5)) console.log('  ', e)
+}
+if (failed.length) {
+  console.log('FAILURES:')
+  for (const f of failed) console.log('  -', f.name, f.detail)
+  process.exit(1)
+}
