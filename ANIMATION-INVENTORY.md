@@ -5,7 +5,7 @@ site, its nature, what the craft community does with this kind of motion, and a
 different angle on it. One entry at a time gets deep research + implementation;
 this file is the map.
 
-Progress: #2 motto (done pre-pass), #3 mission (done), #1 hero cover (done), #4 seal flood (removed — carried no content), #5 roadmap (done), #6 concept tiers (done), #7 origin story (done), #8 field guide (done), #9 community (done), #10 footer (done), #11 marquee (done), #12 reveal (in progress).
+Progress: #2 motto (done pre-pass), #3 mission (done), #1 hero cover (done), #4 seal flood (removed — carried no content), #5 roadmap (done), #6 concept tiers (done), #7 origin story (done), #8 field guide (done), #9 community (done), #10 footer (done), #11 marquee (done), #12 reveal (done), #13 living grain (in progress).
 
 Legend for "nature":
 - **scrubbed** — driven by scroll progress (GSAP timeline / ScrollTrigger)
@@ -103,7 +103,7 @@ Legend for "nature":
 - **Nature**: scrubbed, generic.
 - **Expert practice**: the "rise in, sink out" is the workhorse; the craft is in *not* using it everywhere — it's the default for every section heading, which flattens the book's rhythm. The best sites reserve the generic reveal for secondary content and give primary moments bespoke beats.
 - **Different angle**: the reveal is opacity+y with power2.out — fine, but it's used on ~15 elements across the site, so the *sameness* is the issue, not the motion itself. Could get a slight blur-in (filter) for a softer register, or a per-element stagger that follows reading order.
-- **STATUS: in progress**
+- **STATUS: DONE** (committed b53099a). The rise is now 24px (down from 34) with a scale 0.985→1 — the book's entrance grammar, matching the trellis and bar settles. Compositor-only (transform + opacity, no filter): the site's performance contract bans blend modes and filters on the moving document, so the blur-in register was rejected on purpose. The keyboard contract is untouched (opacity-only, never autoAlpha). 65/65 regression checks.
 
 ### 13. Living grain — the drifting fibers  (components/living-grain.tsx)
 - **What**: 110 canvas fibers drift like dust; Lenis velocity blows them across the page (boost), shear-stretching them; ink tone tracks the field.
