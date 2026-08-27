@@ -152,30 +152,27 @@ export function OriginStory() {
           const bodyCursor = document.querySelector<HTMLElement>(`[data-tw-cursor="i${i}b"]`)
           const titleEnd = titleEls.length * 0.02
           const bodyStart = titleEnd - 0.01
-          const bodyEnd = bodyStart + bodyEls.length * 0.008
-          const cycle = 0.3 + 0.3 + 0.12
+          const bodyEnd = bodyStart + bodyEls.length * 0.008 + 0.03
           if (titleCursor) {
-            const blinks = Math.max(Math.ceil(titleEnd / cycle), 1)
+            // the blink covers exactly the writing window: its cycle
+            // compresses for short titles so the last blink ends as the
+            // last character lands — the pen lifts at the title's end and
+            // never sits blinking at the finished line while the body
+            // writes below
+            const on = titleEnd * 0.42
+            const delay = titleEnd * 0.16
             tl.fromTo(
               titleCursor,
               { opacity: 1 },
-              { opacity: 0.15, duration: 0.3, repeat: blinks, yoyo: true, repeatDelay: 0.12 },
+              { opacity: 0.15, duration: on, repeat: 1, yoyo: true, repeatDelay: delay },
               0,
             )
             titleEls.forEach((ch, j) => {
               tl.to(titleCursor, { x: ch.offsetLeft + ch.offsetWidth, duration: 0.02, ease: 'power1.out' }, j * 0.02)
             })
-            // the pen hands off as the title ends: it lifts here while the
-            // body cursor takes over below — the hand never stops writing.
-            // The fade spans from the title's end to the blink's last
-            // cycle, so it wins the opacity conflict while it runs and the
-            // blink can never yoyo the pen back under the finished line.
-            const fadeEnd = blinks * cycle
-            tl.to(
-              titleCursor,
-              { opacity: 0, duration: Math.max(fadeEnd - titleEnd, 0.12), ease: 'power1.out' },
-              titleEnd,
-            )
+            // the pen lifts as the last character lands — a quick fade, so
+            // it is gone before the body is well underway
+            tl.to(titleCursor, { opacity: 0, duration: 0.1, ease: 'power1.out' }, titleEnd)
           }
           if (bodyCursor) {
             // the pen steps down to the paragraph's first word, rides the

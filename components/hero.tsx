@@ -93,18 +93,23 @@ export function Hero() {
             <a
               data-hero-cue
               href="#motto"
-              className="relative z-10 mt-12 flex items-center justify-center gap-3 text-sm field-ink-soft transition-colors hover:field-ink max-md:mt-8 md:mx-auto md:w-fit"
+              className="group relative z-10 mt-14 flex flex-col items-center gap-2.5 text-sm field-ink-soft transition-colors hover:field-ink max-md:mt-10"
+              aria-label="Scroll to open the almanac"
             >
               <span>Scroll to open the almanac</span>
-              <svg viewBox="0 0 16 20" className="h-4 w-4" aria-hidden="true">
-                <path
-                  d="M8 2 V16 M3.5 11.5 L8 16.5 L12.5 11.5"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.6"
-                  strokeLinecap="round"
-                />
-              </svg>
+              <span
+                aria-hidden="true"
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-field-ink/30 transition-colors group-hover:border-field-ink/70 hero-cue-bounce"
+              >
+                <svg viewBox="0 0 16 20" className="h-4 w-4" fill="none" aria-hidden="true">
+                  <path
+                    d="M8 2 V16 M3.5 11.5 L8 16.5 L12.5 11.5"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              </span>
             </a>
           </Animation>
 

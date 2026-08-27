@@ -442,6 +442,22 @@
   background: var(--wine-500);
   opacity: 0;
 }
+
+/* the cover's scroll cue: a gentle bounce that invites the reader
+   down — compositor-only, and still under reduced motion's kill
+   switch */
+@keyframes hero-cue-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(6px);
+  }
+}
+.hero-cue-bounce {
+  animation: hero-cue-bounce 2.2s ease-in-out infinite;
+}
 }
 
 /* anchor jumps clear the fixed rail */

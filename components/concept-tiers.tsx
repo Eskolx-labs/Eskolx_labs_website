@@ -105,37 +105,31 @@ export function ConceptTiers() {
         })
         // the stage lifts away in the room's tail: the stack finishes its
         // travel at a different room fraction at every viewport (measured:
-        // 0.89 at 1440x900, 1.19 at 1024x768, 2.7 on phones), so the exit
-        // is sized from the real geometry — it starts as the last plate
-        // frames and hands the stage to the dawn seam, never idling on a
-        // finished plate. The lift is a hair of y with the fade, the
-        // book's exit grammar.
+        // 0.69 at 1440x900 with the 300vh room, past the room's end on
+        // phones), so the exit is sized from the real geometry — the last
+        // plate holds its reading window, then the stage hands off to the
+        // dawn seam. When the stack never finishes inside the room
+        // (phones), there is no dead tail to fill, so the stage stays
+        // with tier 4 in the window.
         const stage = document.querySelector<HTMLElement>('[data-tier-stage]')
         if (stage) {
-          gsap.fromTo(stage, { y: 0, opacity: 1 }, {
-            y: -48,
-            opacity: 0,
-            ease: 'power1.in',
-            scrollTrigger: {
-              trigger: '#tiers [data-pin]',
-              start: () => {
-                const pin = document.querySelector('#tiers [data-pin]') as HTMLElement
-                const room = Math.max(pin.offsetHeight - window.innerHeight, 1)
-                const travel = Math.max(stack.scrollHeight - frame.clientHeight, 0)
-                const finish = Math.min(travel / room, 1)
-                return `top+=${room * Math.min(finish + 0.02, 0.97)} top`
+          const room = () =>
+            Math.max((document.querySelector('#tiers [data-pin]') as HTMLElement).offsetHeight - window.innerHeight, 1)
+          const travel = () => Math.max(stack.scrollHeight - frame.clientHeight, 0)
+          if (travel() / room() < 0.95) {
+            gsap.fromTo(stage, { y: 0, opacity: 1 }, {
+              y: -48,
+              opacity: 0,
+              ease: 'power1.in',
+              scrollTrigger: {
+                trigger: '#tiers [data-pin]',
+                start: () => `top+=${room() * Math.min(travel() / room() + 0.05, 0.97)} top`,
+                end: () => `top+=${room() * 0.97} top`,
+                scrub: true,
+                invalidateOnRefresh: true,
               },
-              end: () => {
-                const pin = document.querySelector('#tiers [data-pin]') as HTMLElement
-                const room = Math.max(pin.offsetHeight - window.innerHeight, 1)
-                const travel = Math.max(stack.scrollHeight - frame.clientHeight, 0)
-                const finish = Math.min(travel / room, 1)
-                return `top+=${room * Math.min(finish + 0.1, 1)} top`
-              },
-              scrub: true,
-              invalidateOnRefresh: true,
-            },
-          })
+            })
+          }
         }
       })
       ScrollTrigger.refresh()
@@ -178,7 +172,7 @@ export function ConceptTiers() {
         field={TIERS_FIELD}
         mobilePins
       >
-      <Pin height="255vh" mobileHeight="170vh" pinMobile>
+      <Pin height="300vh" mobileHeight="170vh" pinMobile>
         <section className="relative flex h-full flex-col overflow-hidden">
           {/* the stage lifts away in the room's tail — sized from the real
               geometry in the stack-travel effect, because the stack

@@ -31,7 +31,7 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
     let lenis: Lenis | null = null
     if (!reduced) {
       lenis = new Lenis({
-        duration: 0.7,
+        duration: 1.0,
         easing: (t) => 1 - Math.pow(2, -10 * t),
         smoothWheel: true,
         anchors: true,
