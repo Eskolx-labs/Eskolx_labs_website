@@ -141,30 +141,53 @@ export function OriginStory() {
           const tl = gsap.timeline({ paused: true, defaults: { ease: 'none' } })
           if (titleEls.length) tl.fromTo(titleEls, { opacity: 0 }, { opacity: 1, duration: 0.05, stagger: 0.026 })
           if (bodyEls.length) tl.fromTo(bodyEls, { opacity: 0 }, { opacity: 1, duration: 0.04, stagger: 0.011 }, '>-0.01')
-          // the cursor rides the writing: it slides to each character as
-          // it appears (the char's own stagger beat), blinks while the
-          // hand writes, and fades as the last word lands — the pen lifts
-          // off the page. The blink is finite (it covers exactly the
-          // writing window), so the timeline stays reversible — no kill,
-          // no stuck cursor.
-          const cursor = document.querySelector<HTMLElement>(`[data-tw-cursor="i${i}t"]`)
-          if (cursor) {
-            const writeEnd = titleEls.length * 0.026 + bodyEls.length * 0.011
-            const cycle = 0.3 + 0.3 + 0.12
-            const blinks = Math.max(Math.ceil(writeEnd / cycle), 1)
+          // the pen rides the writing: the title cursor slides to each
+          // character as it appears and lifts as the title ends; the body
+          // cursor takes over and rides the words (tracking their lines,
+          // since the body wraps) until the last word lands — the pen
+          // lifts off the page. Both blinks are finite (they cover
+          // exactly their writing windows), so the timeline stays
+          // reversible — no kill, no stuck cursor.
+          const titleCursor = document.querySelector<HTMLElement>(`[data-tw-cursor="i${i}t"]`)
+          const bodyCursor = document.querySelector<HTMLElement>(`[data-tw-cursor="i${i}b"]`)
+          const titleEnd = titleEls.length * 0.026
+          const bodyStart = titleEnd - 0.01
+          const bodyEnd = bodyStart + bodyEls.length * 0.011
+          const cycle = 0.3 + 0.3 + 0.12
+          if (titleCursor) {
+            const blinks = Math.max(Math.ceil(titleEnd / cycle), 1)
             tl.fromTo(
-              cursor,
+              titleCursor,
               { opacity: 1 },
               { opacity: 0.15, duration: 0.3, repeat: blinks, yoyo: true, repeatDelay: 0.12 },
               0,
             )
-            // the pen tip: slide to just past each char as it lands —
-            // back-to-back (duration = the stagger interval) so the pen
-            // rides the writing instead of jumping ahead
             titleEls.forEach((ch, j) => {
-              tl.to(cursor, { x: ch.offsetLeft + ch.offsetWidth, duration: 0.026, ease: 'power1.out' }, j * 0.026)
+              tl.to(titleCursor, { x: ch.offsetLeft + ch.offsetWidth, duration: 0.026, ease: 'power1.out' }, j * 0.026)
             })
-            tl.to(cursor, { opacity: 0, duration: 0.25, ease: 'power1.out' }, writeEnd)
+            // the fade sits AFTER the blink's last cycle, so the blink
+            // never yoyo's the pen back under the finished line
+            tl.to(titleCursor, { opacity: 0, duration: 0.25, ease: 'power1.out' }, blinks * cycle)
+          }
+          if (bodyCursor) {
+            // the body writes fast (14 words), so its blink is quicker —
+            // the pen hovers a beat over the last word, then lifts
+            const bodyCycle = 0.2 + 0.2 + 0.08
+            const blinks = Math.max(Math.ceil((bodyEnd - bodyStart) / bodyCycle), 1)
+            tl.fromTo(
+              bodyCursor,
+              { opacity: 1 },
+              { opacity: 0.15, duration: 0.2, repeat: blinks, yoyo: true, repeatDelay: 0.08 },
+              bodyStart,
+            )
+            bodyEls.forEach((w, j) => {
+              tl.to(
+                bodyCursor,
+                { x: w.offsetLeft + w.offsetWidth, y: w.offsetTop, duration: 0.011, ease: 'power1.out' },
+                bodyStart + j * 0.011,
+              )
+            })
+            tl.to(bodyCursor, { opacity: 0, duration: 0.25, ease: 'power1.out' }, bodyStart + blinks * bodyCycle)
           }
           ScrollTrigger.create({
             trigger: '#ecosystem [data-pin]',
@@ -245,7 +268,7 @@ export function OriginStory() {
                       </h3>
 
                       <p className="mt-4 max-w-[62ch] font-serif text-base leading-relaxed text-parchment-ink/80 sm:text-lg">
-                        <Typed id={`i${i}b`} text={card.body} unit="word" />
+                        <Typed id={`i${i}b`} text={card.body} unit="word" cursor />
                       </p>
 
                       {/* the wax dot presses once the plate is written */}
