@@ -50,6 +50,7 @@ Legend for "nature":
 - **Nature**: scrubbed, mostly fade/slide + one draw.
 - **Expert practice**: the "one stage, three beats" pattern is strong; the craft is in *secondary motion* — the vine rail drawing is the spine, and the nodes lighting should feel *caused* by the rail reaching them (a node should light as the rail passes, with a small pop, not a color lerp). The phase units rise with power2.out but no anticipation or overshoot; the rule draws before the unit with no overlap.
 - **Different angle**: the numerals are opacity+color only — they could slide along the rail like a cursor. The vine rail is a single scaleY — a draw with a slight overshoot (back.out) or a two-segment draw (stem then tendril) would feel grown, not stretched. The exit is a plain rise — it could echo the cover's hand-off.
+- **STATUS: in progress**
 
 ### 6. Concept tiers — the trellis stack  (components/concept-tiers.tsx)
 - **What**: the plate stack travels its own scrollable height (scrubbed y, linear); the rail drifts y:14 across the pin; stake lighting via data-lit toggles (bindStakeLighting); phone stake strip + progress hairline (scaleX via CSS class toggle).
