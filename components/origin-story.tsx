@@ -142,17 +142,14 @@ export function OriginStory() {
           if (titleEls.length) tl.fromTo(titleEls, { opacity: 0 }, { opacity: 1, duration: 0.05, stagger: 0.026 })
           if (bodyEls.length) tl.fromTo(bodyEls, { opacity: 0 }, { opacity: 1, duration: 0.04, stagger: 0.011 }, '>-0.01')
           // the pen rides the writing: the title cursor slides to each
-          // character as it appears and lifts as the title ends; the body
-          // cursor takes over and rides the words (tracking their lines,
-          // since the body wraps) until the last word lands — the pen
-          // lifts off the page. Both blinks are finite (they cover
-          // exactly their writing windows), so the timeline stays
-          // reversible — no kill, no stuck cursor.
+          // character as it appears and lifts as the title ends — the
+          // pen lifts off the page. The body writes without a cursor
+          // (the title's blink is the hand; the body is its echo). The
+          // blink is finite (it covers exactly the title's writing
+          // window), so the timeline stays reversible — no kill, no
+          // stuck cursor.
           const titleCursor = document.querySelector<HTMLElement>(`[data-tw-cursor="i${i}t"]`)
-          const bodyCursor = document.querySelector<HTMLElement>(`[data-tw-cursor="i${i}b"]`)
           const titleEnd = titleEls.length * 0.026
-          const bodyStart = titleEnd - 0.01
-          const bodyEnd = bodyStart + bodyEls.length * 0.011
           const cycle = 0.3 + 0.3 + 0.12
           if (titleCursor) {
             const blinks = Math.max(Math.ceil(titleEnd / cycle), 1)
@@ -168,26 +165,6 @@ export function OriginStory() {
             // the fade sits AFTER the blink's last cycle, so the blink
             // never yoyo's the pen back under the finished line
             tl.to(titleCursor, { opacity: 0, duration: 0.25, ease: 'power1.out' }, blinks * cycle)
-          }
-          if (bodyCursor) {
-            // the body writes fast (14 words), so its blink is quicker —
-            // the pen hovers a beat over the last word, then lifts
-            const bodyCycle = 0.2 + 0.2 + 0.08
-            const blinks = Math.max(Math.ceil((bodyEnd - bodyStart) / bodyCycle), 1)
-            tl.fromTo(
-              bodyCursor,
-              { opacity: 1 },
-              { opacity: 0.15, duration: 0.2, repeat: blinks, yoyo: true, repeatDelay: 0.08 },
-              bodyStart,
-            )
-            bodyEls.forEach((w, j) => {
-              tl.to(
-                bodyCursor,
-                { x: w.offsetLeft + w.offsetWidth, y: w.offsetTop, duration: 0.011, ease: 'power1.out' },
-                bodyStart + j * 0.011,
-              )
-            })
-            tl.to(bodyCursor, { opacity: 0, duration: 0.25, ease: 'power1.out' }, bodyStart + blinks * bodyCycle)
           }
           ScrollTrigger.create({
             trigger: '#ecosystem [data-pin]',
@@ -268,7 +245,7 @@ export function OriginStory() {
                       </h3>
 
                       <p className="mt-4 max-w-[62ch] font-serif text-base leading-relaxed text-parchment-ink/80 sm:text-lg">
-                        <Typed id={`i${i}b`} text={card.body} unit="word" cursor />
+                        <Typed id={`i${i}b`} text={card.body} unit="word" />
                       </p>
 
                       {/* the wax dot presses once the plate is written */}
