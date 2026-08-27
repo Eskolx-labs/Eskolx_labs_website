@@ -113,16 +113,16 @@ export function Hero() {
         <section className="relative flex h-full flex-col items-center justify-center gap-10 overflow-hidden px-4 pt-24 pb-20 max-md:gap-6 max-md:pt-20 max-md:pb-12 sm:px-6 [@media(min-width:768px)_and_(max-height:899.9px)]:gap-7 [@media(min-width:768px)_and_(max-height:899.9px)]:pb-10 [@media(min-width:768px)_and_(max-height:899.9px)]:pt-16">
           <div
             ref={markRef}
-            className="pointer-events-none z-10 flex items-center gap-[0.55em] motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:absolute motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:left-1/2 motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:top-[19%] motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:-translate-x-1/2"
+            className="pointer-events-none z-10 flex items-center gap-[0.55em] motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:absolute motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:left-1/2 motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:top-[8%] motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:-translate-x-1/2"
           >
-            <div data-hero-mark className="flex items-center gap-[0.85em] text-[clamp(3.25rem,13vw,10rem)]">
+            <div data-hero-mark className="flex items-center gap-[0.85em] text-[clamp(2.75rem,6vw,5rem)]">
               <span className="font-script field-ink leading-none">
                 Eskolx Labs
               </span>
               <SealMark
                 label="Eskolx Labs seal"
                 data-hero-lockseal
-                className="h-[0.62em] w-[0.62em] translate-y-[0.06em] text-[clamp(3.25rem,13vw,10rem)]"
+                className="h-[0.62em] w-[0.62em] translate-y-[0.06em] text-[clamp(2.75rem,6vw,5rem)]"
               />
             </div>
           </div>
@@ -134,7 +134,7 @@ export function Hero() {
               loading state. */}
           <div
             data-motto
-            className="z-10 w-full select-none px-4 text-center max-md:px-2 motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:absolute motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:inset-x-0 motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:top-[42%] motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:-translate-y-1/2"
+            className="z-10 w-full select-none px-4 text-center max-md:px-2 motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:absolute motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:inset-x-0 motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:top-[34%] motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:-translate-y-1/2"
             aria-hidden="true"
           >
             <span className="block whitespace-nowrap">
@@ -151,7 +151,7 @@ export function Hero() {
 
           <div
             data-hero-copy
-            className="z-10 w-full max-w-3xl px-4 text-center max-md:px-2 motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:absolute motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:bottom-[9%] motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:left-0 motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:right-0"
+            className="z-10 w-full max-w-3xl px-4 text-center max-md:px-2 motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:absolute motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:bottom-[12%] motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:left-0 motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:right-0"
           >
             {/* the mission rises directly beneath the promise: one column.
                 On tall desktop the motto stage owns the center and the copy
@@ -313,7 +313,7 @@ export function Hero() {
               href="https://github.com/eskolx-labs"
               target="_blank"
               rel="noreferrer"
-              className="relative z-10 mt-5 inline-flex items-center gap-2 rounded-sm border border-field-ink/30 px-4 py-2 text-sm text-field-ink transition-colors hover:border-field-ink hover:bg-field-ink/5 max-md:mt-4 max-md:!opacity-100 max-md:!visible motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:absolute motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:bottom-[4%] motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:left-1/2 motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:-translate-x-1/2 motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:mt-0"
+              className="relative z-10 mt-5 inline-flex items-center gap-2 rounded-sm border border-field-ink/30 px-4 py-2 text-sm text-field-ink transition-colors hover:border-field-ink hover:bg-field-ink/5 max-md:mt-4 max-md:!opacity-100 max-md:!visible motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:absolute motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:bottom-[2%] motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:left-1/2 motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:-translate-x-1/2 motion-safe:[@media(min-width:768px)_and_(min-height:900px)]:mt-0"
             >
               <GithubIcon className="h-4 w-4" />
               Explore the repos
