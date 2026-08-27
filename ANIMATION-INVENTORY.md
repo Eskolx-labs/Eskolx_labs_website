@@ -5,7 +5,7 @@ site, its nature, what the craft community does with this kind of motion, and a
 different angle on it. One entry at a time gets deep research + implementation;
 this file is the map.
 
-Progress: #2 motto (done pre-pass), #3 mission (done), #1 hero cover (done), #4 seal flood (removed — carried no content), #5 roadmap (done), #6 concept tiers (done), #7 origin story (done), #8 field guide (done), #9 community (done), #10 footer (in progress).
+Progress: #2 motto (done pre-pass), #3 mission (done), #1 hero cover (done), #4 seal flood (removed — carried no content), #5 roadmap (done), #6 concept tiers (done), #7 origin story (done), #8 field guide (done), #9 community (done), #10 footer (done), #11 marquee (in progress).
 
 Legend for "nature":
 - **scrubbed** — driven by scroll progress (GSAP timeline / ScrollTrigger)
@@ -85,7 +85,7 @@ Legend for "nature":
 - **Nature**: scrubbed.
 - **Expert practice**: the close rule is the "book shuts" moment — power1.inOut is linear-ish; a power2.inOut with a *hold* at the end (the rule arriving as the last page settles) would read as a deliberate close.
 - **Different angle**: the seal stamp here (scale 2) matches the hero (2.2) — good register. The footer is the last spread; the close rule could *complete* the nav's reading rule (they're the same gold hairline language) — a nice bookend if the two share timing language.
-- **STATUS: in progress**
+- **STATUS: DONE** (committed 6897914). The seal stamps (power4.in, the cover's register), then the paper gives a hair (1.03) and settles — the same follow-through the cover opening got, closing the book the way it opened. The close rule draws with power2.out — the gold hairline arrives with a settle instead of sliding. Verified: seal stamps to 1.0, gives to 1.027, settles back to 1.0; 65/65 regression checks.
 
 ---
 
