@@ -5,11 +5,22 @@ import { PARCHMENT, LOAM } from '@/lib/field-controller'
 
 /*
  * The motto spread: the day field, dead-centered, and one word owns the
- * page at rest - "DeepLearning", the buzzword, all in one compound. Only
- * when you scroll does it decompose: the "ing" peels off and dies, Deep
- * and Learn trade back into the thesis "Learn Deep", and "build
- * expertise." settles beneath. Then the whole spread lifts away and the
- * field turns to night for the thesis spread.
+ * page at rest - "DeepLearning", the buzzword, all in one compound. The
+ * performance is four beats, strictly in order, all scrubbed to scroll:
+ *
+ * 1. The settle: the compound sharpens into focus on the page, pressed
+ *    in from slightly small and low.
+ * 2. The pluck: the ing is gripped, tensed, then flicked away alone -
+ *    anticipation first, then an accelerating arc up and right, gone
+ *    before anything else moves.
+ * 3. The crossing: Deep ducks under Learn and slides to the back while
+ *    Learn steps over it into the front - a handoff with weight, not a
+ *    swap. Anticipation, the pass, then a landing with overshoot.
+ * 4. The pop: only after the words have settled does "build expertise."
+ *    pop in beneath with a back.out overshoot and resolve to rest.
+ *
+ * Then the whole spread lifts away and the field turns to night for the
+ * thesis spread.
  *
  * The swap slides are em-based on purpose: every motto span shares one
  * font-size, so em offsets are exact ratios that survive any viewport
@@ -51,48 +62,85 @@ export function Motto() {
             </span>
           </h1>
 
-          {/* the decomposition, in em offsets so any viewport scales it:
-              at rest the words read DeepLearning, one sharp compound.
-              Scrolling, the ing peels off and dies, Learn and Deep trade
-              back into the motto - which is now earned - and the promise
-              rises under them. Offsets are measured IM Fell widths:
-              Learn 2.5em, Deep 2.26em, word gap 0.24em. */}
+          {/* the performance, in em offsets so any viewport scales it.
+              Four beats, strictly in order, all scrubbed to scroll.
+
+              Beat 1 (0-10) the settle: the compound presses in from
+              slightly small and low - the page's first breath.
+
+              Beat 2 (12-26) the pluck: grip, tense, flick. The ing
+              pulls back a hair, then arcs away alone - x and y carry
+              different eases so the path curves, and the rotation and
+              shrink sell the release. Deep does not move yet.
+
+              Beat 3 (28-50) the crossing: anticipation, the pass, the
+              landing. Deep squashes down and ducks under while Learn
+              stretches up and steps over - a handoff with weight, not
+              a swap. The whole line breathes as they pass, and both
+              settle back to the line with a soft overshoot.
+
+              Beat 4 (52-62) the pop: only after the words have settled
+              does "build expertise." land beneath with a back.out
+              spring and resolve to rest.
+
+              Offsets are measured IM Fell widths: Learn 2.5em, Deep
+              2.26em, word gap 0.24em. */}
+          {/* Beat 1: the settle */}
           <Animation
-            target="[data-motto-ing]"
-            start={10}
-            end={24}
+            target="[data-motto-wording]"
+            start={0}
+            end={10}
             fromTo={[
-              { x: '0em', autoAlpha: 1 },
-              { x: '2.6em', y: '-0.85em', rotation: 14, autoAlpha: 0, ease: 'power2.in' },
+              { scale: 0.94, y: '0.15em', opacity: 0.8 },
+              { scale: 1, y: '0em', opacity: 1, ease: 'power2.out' },
             ]}
           />
-          {/* the trade-back: Learn and Deep slide apart into the thesis,
-              dipping and lifting around one another - a handoff, not a
-              collision */}
+          {/* Beat 2: the pluck - anticipation, then the flick */}
           <Animation
-            target="[data-motto-learn]"
+            target="[data-motto-ing]"
             start={12}
-            end={26}
-            fromTo={[{ x: '2.5em' }, { x: '0em' }]}
+            end={15}
+            fromTo={[
+              { x: '0em', y: '0em', scale: 1, autoAlpha: 1 },
+              { x: '-0.06em', y: '0.1em', scale: 1.08, ease: 'power1.out' },
+            ]}
           />
+          <Animation target="[data-motto-ing]" start={15} end={26} to={{ x: '1.7em', ease: 'power2.out' }} />
+          <Animation target="[data-motto-ing]" start={15} end={26} to={{ y: '-1.5em', ease: 'power2.out' }} />
+          <Animation target="[data-motto-ing]" start={15} end={26} to={{ rotation: 26, scale: 0.08, autoAlpha: 0, ease: 'power2.in' }} />
+          {/* Beat 3: the crossing - anticipation, the pass, the landing */}
+          <Animation target="[data-motto-deep]" start={28} end={33} to={{ y: '0.12em', scaleY: 0.9, rotation: -3, ease: 'power1.out' }} />
+          <Animation target="[data-motto-learn]" start={28} end={33} to={{ y: '-0.12em', scaleY: 1.08, rotation: 2, ease: 'power1.out' }} />
           <Animation
             target="[data-motto-deep]"
-            start={12}
-            end={26}
-            fromTo={[{ x: '-2.74em' }, { x: '0em' }]}
+            start={33}
+            end={45}
+            fromTo={[{ x: '-2.74em' }, { x: '0em', ease: 'power2.inOut' }]}
           />
-          <Animation target="[data-motto-learn]" start={12} end={18} to={{ y: '0.18em' }} />
-          <Animation target="[data-motto-learn]" start={18} end={26} to={{ y: '0em' }} />
-          <Animation target="[data-motto-deep]" start={12} end={18} to={{ y: '-0.18em' }} />
-          <Animation target="[data-motto-deep]" start={18} end={26} to={{ y: '0em' }} />
-          {/* the promise is not on the stage at rest - the buzzword owns
-              the page. It rises only as the words settle into the motto. */}
+          <Animation
+            target="[data-motto-learn]"
+            start={33}
+            end={45}
+            fromTo={[{ x: '2.5em' }, { x: '0em', ease: 'power2.inOut' }]}
+          />
+          <Animation target="[data-motto-deep]" start={45} end={50} to={{ y: '0.05em', scaleY: 1, rotation: 0, ease: 'power2.out' }} />
+          <Animation target="[data-motto-deep]" start={50} end={53} to={{ y: '0em' }} />
+          <Animation target="[data-motto-learn]" start={45} end={50} to={{ y: '-0.05em', scaleY: 1, rotation: 0, ease: 'power2.out' }} />
+          <Animation target="[data-motto-learn]" start={50} end={53} to={{ y: '0em' }} />
+          {/* the line breathes: a micro-push as the words pass */}
+          <Animation target="[data-motto-wording]" start={33} end={40} to={{ scale: 1.015 }} />
+          <Animation target="[data-motto-wording]" start={40} end={50} to={{ scale: 1 }} />
+          {/* Beat 4: the pop - the promise lands with a spring */}
           <Animation
             target="[data-motto-promise]"
-            start={16}
-            end={28}
-            fromTo={[{ opacity: 0 }, { opacity: 1, ease: 'power2.out' }]}
+            start={52}
+            end={58}
+            fromTo={[
+              { y: '0.7em', scale: 0.85, opacity: 0 },
+              { y: '0em', scale: 1.05, opacity: 1, ease: 'back.out(1.6)' },
+            ]}
           />
+          <Animation target="[data-motto-promise]" start={58} end={62} to={{ scale: 1, ease: 'power1.out' }} />
 
           {/* the whole spread lifts away before the field turns to night */}
           <Animation
