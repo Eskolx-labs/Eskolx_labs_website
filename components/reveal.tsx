@@ -43,11 +43,16 @@ export function Reveal({
     const targets = items.length > 0 ? Array.from(items) : [el]
     const ctx = gsap.context(() => {
       gsap.registerPlugin(ScrollTrigger)
+      // opacity-only, never autoAlpha: visibility:hidden removes content
+      // from the tab order, so the footer links and FAQ rows were
+      // unreachable by keyboard until their reveal fired. With opacity
+      // alone a Tab lands on the hidden link, the browser scrolls it
+      // into view, and the trigger fires — the content reveals on focus.
       gsap.fromTo(
         targets,
-        { autoAlpha: 0, y },
+        { opacity: 0, y },
         {
-          autoAlpha: 1,
+          opacity: 1,
           y: 0,
           ease: 'power2.out',
           stagger,

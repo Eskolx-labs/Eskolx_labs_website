@@ -1,4 +1,3 @@
-import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import localFont from 'next/font/local'
 import { SmoothScroll } from '@/lib/motion'
@@ -39,25 +38,25 @@ const kaushan = localFont({
   display: 'swap',
 })
 
-const TITLE = 'Eskolx Labs · Good Soil. Great Minds. Abundant Impact.'
+const TITLE = 'Eskolx Labs · Learn deep, build expertise.'
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'),
   title: TITLE,
   description:
-    'Open-source statistical infrastructure and package development. We translate theoretical mathematical formulas into modular, open-source Python automation tools built from scratch.',
+    'An open-source lab where you rebuild the statistical libraries everyone takes for granted, from scratch, in pure Python. Read the papers, write the code, explain it publicly. MIT, everything public.',
   openGraph: {
     type: 'website',
     siteName: 'Eskolx Labs',
     title: TITLE,
     description:
-      'Open-source statistical infrastructure and package development, built from scratch in pure Python.',
+      'Rebuild the statistical libraries everyone takes for granted, from scratch, in pure Python. Learn deep, build expertise.',
   },
   twitter: {
     card: 'summary',
     title: TITLE,
     description:
-      'Open-source statistical infrastructure and package development, built from scratch in pure Python.',
+      'Rebuild the statistical libraries everyone takes for granted, from scratch, in pure Python. Learn deep, build expertise.',
   },
 }
 
@@ -83,10 +82,15 @@ as the year's entry, scrolls through pinned scenes where the page flips
 to the night-spread and back, watches the four-tier trellis and the
 three-month method advance with the scroll, and joins GitHub or Telegram
 at the harvest table.
-FIRST VIEWPORT: parchment day-spread; giant serif headline "Good soil.
-Great minds. Abundant impact." with "Abundant" in wine italic rising in
-on load; the single vermilion seal stamps mid-pin; a scroll cue at the
-foot.
+FIRST VIEWPORT: loam night-spread; the script wordmark holds dead
+center, big and alone — the cover's only word. Scrolling, it lifts away
+and the field turns to day, where the motto spread owns the page:
+"DeepLearning" at rest decomposes — the "ing" peels, Deep and Learn
+trade into "Learn deep", and "build expertise." settles. Then the
+field turns to night again for the thesis spread: "The only way to
+understand something is to build it." rises line by line, centered,
+with the pitch and the doors beneath. The resting cover carries the
+wordmark, a scroll cue, and one quiet CTA.
 FORM: the Observatory Almanac, the pick card of the direction roll (seed
 839e0b7c), chosen over the assigned Illuminated Codex; raised by declined
 challengers: one-law generation (rain-garden), no empty fields (gallery
@@ -111,7 +115,6 @@ export default function RootLayout({
         <SmoothScroll>{children}</SmoothScroll>
         <LivingGrain />
         <DebugHud />
-        {process.env.NODE_ENV === 'production' && process.env.VERCEL === '1' && <Analytics />}
       </body>
     </html>
   )

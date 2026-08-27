@@ -1,5 +1,7 @@
 import { SiteNav } from '@/components/site-nav'
 import { Hero } from '@/components/hero'
+import { Motto } from '@/components/motto'
+import { Mission } from '@/components/mission'
 import { OriginStory } from '@/components/origin-story'
 import { ConceptTiers } from '@/components/concept-tiers'
 import { Roadmap } from '@/components/roadmap'
@@ -18,6 +20,8 @@ export default function Page() {
       <InkPress />
       <main>
         <Hero />
+        <Motto />
+        <Mission />
         <OriginStory />
         <ConceptTiers />
         <Roadmap />

@@ -17,14 +17,14 @@ const TIERS = [
   {
     id: 2,
     name: 'Modeling & Classical Machine Learning (from scratch)',
-    concepts: ['Modeling on our own primitives', 'Assumption checks', 'Feature diagnostics', 'Reference comparison against the famous implementations'],
+    concepts: ['Modeling on our own packages', 'Assumption checks', 'Feature diagnostics', 'Reference comparison against the famous implementations'],
     goal: 'After the basics, modeling and classical machine learning built on what we grew ourselves. Assumption checks and test selection wired end to end, every method backed by the paper it came from.',
   },
   {
     id: 3,
     name: 'Advanced Applied Machine Learning (from scratch)',
     concepts: ['Neural networks', 'Modern architectures', 'Time series & stationarity', 'Design of Experiments'],
-    goal: 'Advanced data science next, still from scratch. Dense methodology enters as reading and leaves as tested, documented code that participants can explain line by line.',
+    goal: 'Next comes advanced data science, still from scratch. You read the papers, then write tested, documented code you can explain line by line.',
   },
   {
     id: 4,
@@ -135,7 +135,7 @@ export function ConceptTiers() {
         field={TIERS_FIELD}
         mobilePins
       >
-      <Pin height="420vh" mobileHeight="240vh" pinMobile>
+      <Pin height="255vh" mobileHeight="170vh" pinMobile>
         <section className="relative flex h-full flex-col overflow-hidden">
           <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center px-4 pt-16 sm:px-6 lg:px-8">
             {/* room furniture: static inside the pinned shell (see the
@@ -200,7 +200,7 @@ export function ConceptTiers() {
                     <span>
                       <span
                         data-stake-name={tier.id}
-                        className="block font-serif text-[15px] font-medium text-cream-200/70"
+                        className="block font-serif text-copy font-medium text-cream-200/70"
                       >
                         {tier.name.replace(' (from scratch)', '')}
                       </span>
@@ -220,7 +220,7 @@ export function ConceptTiers() {
                   {TIERS.map((tier) => (
                     <div key={tier.id} className="p-7 sm:p-9">
                       <div className="rule-ornament">
-                        <span data-tier-kicker={tier.id} className="font-mono text-xs tracking-[0.18em] text-gold-leaf">
+                        <span data-tier-kicker={tier.id} className="font-mono text-kicker tracking-label text-gold-leaf">
                           TIER {tier.id}
                         </span>
                       </div>
@@ -231,7 +231,7 @@ export function ConceptTiers() {
 
                       <ul className="mt-7 space-y-2.5">
                         {tier.concepts.map((c) => (
-                          <li key={c} className="flex items-center gap-3 text-[15px] text-cream-100/90">
+                          <li key={c} className="flex items-center gap-3 text-copy text-cream-100/90">
                             <svg viewBox="0 0 14 14" className="h-3.5 w-3.5 shrink-0 text-wine-400" aria-hidden="true">
                               <path
                                 d="M2 7.5 L5.5 11 L12 3"

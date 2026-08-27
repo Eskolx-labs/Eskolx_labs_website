@@ -87,7 +87,7 @@ const sealState = (page) => page.evaluate(() => {
 {
   const vp = [1440, 900]
   const page = await newPage(vp)
-  check('desktop: hero headline scrub-driven at rest', await page.evaluate(() => getComputedStyle(document.querySelector('[data-hero-line="0"]')).transform !== 'none'))
+  check('desktop: thesis lines scrub-driven at rest', await page.evaluate(() => getComputedStyle(document.querySelector('[data-mission-line="0"]')).transform !== 'none'))
   check('desktop: night cover at top', (await fieldState(page)).bg.toLowerCase().includes('36, 20, 7'))
   await scrollPin(page, '#tiers [data-pin]', 0.5)
   await page.waitForTimeout(500)
@@ -95,6 +95,21 @@ const sealState = (page) => page.evaluate(() => {
   await scrollPin(page, '#guide-bar [data-pin]', 0.5)
   await page.waitForTimeout(500)
   check('desktop: bar stack scrubs', await page.evaluate(() => getComputedStyle(document.querySelector('#guide-bar [data-bar-stack]')).transform !== 'none'))
+
+  // plate rooms end their travel inside the room: a pinned stage that
+  // freezes for the last third is a room that overpaid for its plate
+  check('desktop: tier room ends its travel by 95%', await page.evaluate(() => {
+    const stack = document.querySelector('#tiers [data-tier-stack]')
+    const pin = document.querySelector('#tiers [data-pin]')
+    const travel = stack.scrollHeight - stack.parentElement.clientHeight
+    return travel / (pin.offsetHeight - innerHeight) < 0.95
+  }))
+  check('desktop: bar room ends its travel by 95%', await page.evaluate(() => {
+    const stack = document.querySelector('#guide-bar [data-bar-stack]')
+    const pin = document.querySelector('#guide-bar [data-pin]')
+    const travel = stack.scrollHeight - stack.parentElement.clientHeight
+    return travel / (pin.offsetHeight - innerHeight) < 0.95
+  }))
   await scrollPin(page, '#seal-flood [data-pin]', 0.5)
   await page.waitForTimeout(500)
   const sealMid = await sealState(page)
@@ -149,8 +164,8 @@ const sealState = (page) => page.evaluate(() => {
   }
   check('desktop: reverse ramp (cover lift) stays above 3.2:1', minReverse >= 3.2, `min ${minReverse}:1`)
   check('desktop: nav CTA renamed', await page.evaluate(() => document.querySelector('header a.btn-wine')?.textContent.includes('Eskolx on GitHub')))
-  check('desktop: hero CTAs single-line', await page.evaluate(() => {
-    const btn = document.querySelector('[data-hero-cta] a')
+  check('desktop: thesis CTAs single-line', await page.evaluate(() => {
+    const btn = document.querySelector('[data-mission-cta] a')
     return btn && btn.getBoundingClientRect().height < 64
   }))
   // keepers and harvest sit on settled night — never mid-lerp
@@ -215,7 +230,7 @@ const sealState = (page) => page.evaluate(() => {
     return bg.startsWith('rgb(236, 225, 198')
   }))
   check('phone: headline rises with the scroll', await page.evaluate(() =>
-    getComputedStyle(document.querySelector('[data-hero-line="0"]')).transform !== 'none'))
+    getComputedStyle(document.querySelector('[data-mission-line="0"]')).transform !== 'none'))
   check('phone: trellis pin active', await pinActive('#tiers'))
   check('phone: bar pin active', await pinActive('#guide-bar'))
   check('phone: flood pin active', await pinActive('#seal-flood'))
@@ -230,7 +245,22 @@ const sealState = (page) => page.evaluate(() => {
   }))
   await scrollPin(page, '#guide-bar [data-pin]', 1)
   await page.waitForTimeout(400)
-  check('phone: bar reaches requirement 4', await page.evaluate(() => {
+  // the roadmap and identity chapters are deliberately NOT in the mobile
+  // pin tier: their tall plates clip a phone shell, so they flow below md
+  check('phone: roadmap and identity flow (no pinned shell)', await page.evaluate(() =>
+    getComputedStyle(document.querySelector('#roadmap [data-pin] > div > div')).position === 'static' &&
+    getComputedStyle(document.querySelector('#ecosystem [data-pin] > div > div')).position === 'static'))
+  // the resting cover carries one quiet action so a non-scroller is never stuck
+  check('phone: resting cover CTA present', await page.evaluate(async () => {
+    await window.__lenis?.scrollTo(0, { immediate: true })
+    await new Promise((r) => setTimeout(r, 200))
+    const a = document.querySelector('[data-resting-cta]')
+    return a && a.offsetHeight > 30 && +getComputedStyle(a).opacity > 0.9
+  }))
+  check('phone: bar reaches requirement 4', await page.evaluate(async () => {
+    const pin = document.querySelector('#guide-bar [data-pin]')
+    await window.__lenis?.scrollTo(pin.getBoundingClientRect().top + scrollY + (pin.offsetHeight - innerHeight), { immediate: true })
+    await new Promise((r) => setTimeout(r, 300))
     const stack = document.querySelector('#guide-bar [data-bar-stack]')
     const frame = stack.parentElement
     const m = new DOMMatrixReadOnly(getComputedStyle(stack).transform === 'none' ? 'matrix(1,0,0,1,0,0)' : getComputedStyle(stack).transform)
@@ -258,10 +288,14 @@ const sealState = (page) => page.evaluate(() => {
       const stack = document.querySelector(`#${room} ${stackSel}`)
       const frame = stack.parentElement
       const m = new DOMMatrixReadOnly(getComputedStyle(stack).transform === 'none' ? 'matrix(1,0,0,1,0,0)' : getComputedStyle(stack).transform)
-      const framedLast = -m.f >= stack.scrollHeight - frame.clientHeight - 4
-      return { nearEnd: near < travel * 0.08, framedLast }
+      const maxTravel = stack.scrollHeight - frame.clientHeight
+      const frac = Math.min(-m.f / maxTravel, 1)
+      const framedLast = frac >= 0.96
+      return { nearEnd: near < travel * 0.08, framedLast, frac }
     }, { room, stackSel })
-    check(`phone: ${room} tap 04 lands on plate 4`, landed.framedLast && landed.nearEnd)
+    // both rooms have four plates; tap 04 lands on the last plate
+    const expected = 1
+    check(`phone: ${room} tap 04 lands on plate 4`, Math.abs(landed.frac - expected) < 0.08)
   }
   await scrollPin(page, '#seal-flood [data-pin]', 0.4)
   await page.waitForTimeout(400)
@@ -320,8 +354,8 @@ const sealState = (page) => page.evaluate(() => {
   const page = await newPage(vp)
   check('short: hero pinned with its phone room', await page.evaluate(() =>
     getComputedStyle(document.querySelector('#top [data-pin] > div > div')).position === 'sticky'))
-  check('short: cover lines masked until scrolled', await page.evaluate(() =>
-    getComputedStyle(document.querySelector('[data-hero-line="0"]')).transform !== 'none'))
+  check('short: thesis lines masked until scrolled', await page.evaluate(() =>
+    getComputedStyle(document.querySelector('[data-mission-line="0"]')).transform !== 'none'))
   check('short: nav logo visible', await page.evaluate(() => {
     const el = document.querySelector('header a[href="#top"]')
     return el && getComputedStyle(el).visibility === 'visible'
@@ -354,9 +388,9 @@ const sealState = (page) => page.evaluate(() => {
   await page.waitForTimeout(1000)
   await page.evaluate("window.__lenis?.scrollTo(0, { immediate: true })")
   await page.waitForTimeout(600)
-  check('resize: desktop->short rebuilds (hero re-pinned, lines masked)', await page.evaluate(() =>
+  check('resize: desktop->short rebuilds (thesis re-pinned, lines masked)', await page.evaluate(() =>
     getComputedStyle(document.querySelector('#top [data-pin] > div > div')).position === 'sticky' &&
-    getComputedStyle(document.querySelector('[data-hero-line="0"]')).transform !== 'none'))
+    getComputedStyle(document.querySelector('[data-mission-line="0"]')).transform !== 'none'))
   await page.evaluate("(() => { const el = document.querySelector('#tiers [data-pin]'); const top = el.getBoundingClientRect().top + window.scrollY; window.__lenis?.scrollTo(top + 300, { immediate: true }) })()")
   await page.waitForTimeout(600)
   check('resize: short trellis still scrubs', await page.evaluate(() => getComputedStyle(document.querySelector('#tiers [data-tier-stack]')).transform !== 'none'))
@@ -364,7 +398,7 @@ const sealState = (page) => page.evaluate(() => {
   await page.waitForTimeout(1000)
   await page.evaluate("window.__lenis?.scrollTo(0, { immediate: true })")
   await page.waitForTimeout(600)
-  check('resize: back to desktop restores the masked rise', await page.evaluate(() => getComputedStyle(document.querySelector('[data-hero-line="0"]')).transform !== 'none'))
+  check('resize: back to desktop restores the masked rise', await page.evaluate(() => getComputedStyle(document.querySelector('[data-mission-line="0"]')).transform !== 'none'))
   await page.close()
 }
 
@@ -375,7 +409,7 @@ const sealState = (page) => page.evaluate(() => {
   watch(page, 'reduced')
   await page.goto(BASE, { waitUntil: 'networkidle' })
   await page.waitForTimeout(1200)
-  check('reduced: hero headline static visible', await page.evaluate(() => getComputedStyle(document.querySelector('[data-hero-line="0"]')).transform === 'none' && +getComputedStyle(document.querySelector('[data-hero-line="0"]')).opacity === 1))
+  check('reduced: hero headline static visible', await page.evaluate(() => getComputedStyle(document.querySelector('[data-mission-line="0"]')).transform === 'none' && +getComputedStyle(document.querySelector('[data-mission-line="0"]')).opacity === 1))
   check('reduced: wordmark clears the nav', await page.evaluate(() => {
     const mark = document.querySelector('[data-hero-mark]').getBoundingClientRect()
     const nav = document.querySelector('header a[href="#top"]').getBoundingClientRect()
@@ -404,12 +438,15 @@ const sealState = (page) => page.evaluate(() => {
   const page = await newPage([1440, 900])
   check('content: vault linked twice', await page.evaluate(() => document.querySelectorAll('a[href*="Eskolx-Open-Knowledge"]').length >= 2))
   check('content: 404 page exists in build', fs.existsSync(path.join(OUT, '404.html')))
-  // FAQ accordions open for real
-  check('content: FAQ details open on click', await page.evaluate(async () => {
-    const d = document.querySelector('#guide-ledger details')
-    d.querySelector('summary').click()
-    await new Promise((r) => setTimeout(r, 100))
-    return d.open
+  // FAQ rows unfold on a grid-rows transition (button + aria-expanded)
+  check('content: FAQ answer unfolds on click', await page.evaluate(async () => {
+    const row = document.querySelector('#guide-ledger [data-reveal-item]:has(button[aria-controls^="faq-answer"])')
+    const btn = row.querySelector('button')
+    const panel = document.getElementById(btn.getAttribute('aria-controls'))
+    const closedH = panel.getBoundingClientRect().height
+    btn.click()
+    await new Promise((r) => setTimeout(r, 450))
+    return btn.getAttribute('aria-expanded') === 'true' && closedH < 2 && panel.getBoundingClientRect().height > 20
   }))
   // the book-close rule draws at the very end
   await page.evaluate(() => window.__lenis?.scrollTo(document.documentElement.scrollHeight, { immediate: true }))

@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { Root, Pin, Animation } from '@/lib/scrollytelling'
@@ -31,7 +31,7 @@ const DONTs = [
   },
 ]
 
-const REQUIREMENTS: {
+const ASKS: {
   n: string
   title: string
   body: string
@@ -41,31 +41,31 @@ const REQUIREMENTS: {
 }[] = [
   {
     n: '01',
-    title: 'Working Python',
-    body: 'You do not need to be senior. You do need to read and write it without hand-holding.',
+    title: 'What you bring',
+    body: 'Working Python and class statistics — that is the whole entry bar. Every function starts in books and research papers, and your notes from that reading are part of the work.',
   },
   {
     n: '02',
-    title: 'Patience for sources',
-    body: 'Every function starts as a book chapter or a paper. If that sounds tedious, this is not your lab.',
-  },
-  {
-    n: '03',
-    title: 'Small-team pace',
-    body: 'Few people, fast cycles, real milestones. Everyone ships.',
-  },
-  {
-    n: '04',
-    title: 'Teaching instinct',
-    body: 'The loop ends when you can explain what you built. Explanations worth publishing go into',
+    title: 'Notes go public',
+    body: 'They land in the open vault under MIT, with your name on them. The notes build the knowledge base, and you are one of its authors. Start with',
     linkText: 'the open study vault',
     href: 'https://github.com/Eskolx-labs/Eskolx-Open-Knowledge',
     after: '.',
   },
+  {
+    n: '03',
+    title: 'Small, fast teams',
+    body: 'Few people, short cycles, real milestones. Everyone ships, and review stays close.',
+  },
+  {
+    n: '04',
+    title: 'Finish by teaching',
+    body: 'The loop ends when you can explain what you built. The best explanations get published on this site.',
+  },
 ]
 
 const STATUS = [
-  { k: 'Status', v: 'Actively maintained.' },
+  { k: 'Status', v: 'Actively maintained. Last push Aug 24, 2026.' },
   { k: 'Code', v: 'github.com/eskolx-labs', href: 'https://github.com/eskolx-labs' },
   {
     k: 'Current goal',
@@ -114,6 +114,53 @@ const FAQ: {
   },
 ]
 
+/* one asked-often row. The answer unfolds on a grid-rows transition rather
+   than snapping: the + icon has always rotated through the opening, so the
+   panel itself now performs the same confident deceleration. The answer
+   stays in the DOM either way — closed is 0fr, not display:none. */
+function FaqRow({ item, index }: { item: (typeof FAQ)[number]; index: number }) {
+  const [open, setOpen] = useState(false)
+  return (
+    <div className="border-t border-[color-mix(in_srgb,var(--field-line)_45%,transparent)] first:border-t-0" data-reveal-item>
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        aria-controls={`faq-answer-${index}`}
+        className="flex w-full cursor-pointer items-center justify-between gap-6 px-5 py-4 text-left transition-colors hover:bg-[color-mix(in_srgb,var(--field-ink)_5%,transparent)]"
+      >
+        <span className="font-serif text-[16px] font-medium leading-snug field-ink">{item.q}</span>
+        <span
+          className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--field-line)_90%,transparent)] text-[color:var(--field-ink-soft)] transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${open ? 'rotate-45' : ''}`}
+        >
+          <svg viewBox="0 0 12 12" className="h-3 w-3" aria-hidden="true">
+            <path d="M6 1 V11 M1 6 H11" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+          </svg>
+        </span>
+      </button>
+      <div
+        id={`faq-answer-${index}`}
+        className={`grid transition-[grid-template-rows,opacity] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${open ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}
+      >
+        <div className="overflow-hidden">
+          <p className="max-w-[72ch] px-5 pb-5 text-[16px] leading-relaxed text-[color-mix(in_srgb,var(--field-ink)_80%,transparent)]">
+            {item.a}
+            {item.href && (
+              <>
+                {' '}
+                <a href={item.href} target="_blank" rel="noreferrer" className="text-wine-400 underline decoration-gold-leaf/40 underline-offset-4 transition-colors hover:text-wine-300">
+                  {item.linkText}
+                </a>
+                {item.after}
+              </>
+            )}
+          </p>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 // plates on the turning field: surfaces tint from the field vars, so a
 // plate is parchment-papered at the top of the turn and loam-dark by its
 // end while ink and background move together and contrast never drops
@@ -128,7 +175,7 @@ const FIELD_PLATE =
  * and the FAQ read on night to the close of the book.
  */
 function jumpToRequirement(index: number) {
-  scrollToPlate('guide-bar', '#guide-bar [data-bar-stack]', index, REQUIREMENTS.length)
+  scrollToPlate('guide-bar', '#guide-bar [data-bar-stack]', index, ASKS.length)
 }
 
 export function FieldGuide() {
@@ -141,7 +188,7 @@ export function FieldGuide() {
       stackSel: '#guide-bar [data-bar-stack]',
       stakeAttr: 'data-bar-stake',
       litAttrs: ['data-bar-num'],
-      count: REQUIREMENTS.length,
+      count: ASKS.length,
       gsapScrollTrigger: ScrollTrigger,
     }), [])
 
@@ -211,7 +258,7 @@ export function FieldGuide() {
           <Animation target="[data-fg-seal]" start={3} end={9} fromTo={[{ scale: 1.35, rotate: -12, opacity: 0, transformOrigin: '50% 50%' }, { scale: 1, rotate: -6, opacity: 1, ease: 'power4.in' }]} />
           <Reveal className="flex flex-wrap items-end justify-between gap-6">
             <div className="max-w-2xl" data-fg-head>
-              <p className="font-mono text-xs uppercase tracking-[0.22em] text-wine-600" data-reveal-item>
+              <p className="font-mono text-kicker uppercase tracking-label text-wine-600" data-reveal-item>
                 The field guide
               </p>
               <h2 className="display mt-4 text-[clamp(2rem,3.8vw,3.2rem)] leading-tight text-parchment-ink" data-reveal-item>
@@ -237,7 +284,7 @@ export function FieldGuide() {
               <h3 className="display text-xl text-parchment-ink">What we do</h3>
               <ul className="mt-6 space-y-4">
                 {DOES.map((d) => (
-                  <li key={d} className="flex gap-3.5 text-[15px] max-md:text-base leading-relaxed text-parchment-ink/85">
+                  <li key={d} className="flex gap-3.5 text-copy max-md:text-base leading-relaxed text-parchment-ink/85">
                     <svg viewBox="0 0 14 14" className="mt-1 h-3.5 w-3.5 shrink-0 text-wine-600" aria-hidden="true">
                       <path d="M2 7.5 L5.5 11 L12 3" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
@@ -255,8 +302,8 @@ export function FieldGuide() {
                       <path d="M3 3 L11 11 M11 3 L3 11" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                     </svg>
                     <span>
-                      <span className="block text-[15px] max-md:text-base font-medium leading-relaxed text-parchment-ink/85">{d.t}</span>
-                      <span className="mt-1 block max-w-[52ch] text-[15px] max-md:text-base leading-relaxed text-parchment-ink/70">{d.d}</span>
+                      <span className="block text-copy max-md:text-base font-medium leading-relaxed text-parchment-ink/85">{d.t}</span>
+                      <span className="mt-1 block max-w-[52ch] text-copy max-md:text-base leading-relaxed text-parchment-ink/70">{d.d}</span>
                     </span>
                   </li>
                 ))}
@@ -294,7 +341,7 @@ export function FieldGuide() {
         field={{ from: LOAM, to: LOAM }}
         mobilePins
       >
-        <Pin height="300vh" mobileHeight="220vh" pinMobile>
+        <Pin height="215vh" mobileHeight="150vh" pinMobile>
           <section className="relative flex h-full flex-col justify-center overflow-hidden px-0 pt-20">
             <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           {/* room furniture: static, never a viewport Reveal — a Reveal
@@ -303,18 +350,18 @@ export function FieldGuide() {
               reveal window lands at the pin's end */}
           <div className="max-w-3xl">
             <h2 className="display text-[clamp(2rem,3.8vw,3.2rem)] leading-tight field-ink">
-              What it takes to join
+              What we ask of you
             </h2>
             <p className="mt-4 max-w-xl text-lg leading-relaxed field-ink-soft">
-              The mission sets the bar. Here it is, plainly — four things,
-              no hidden fifth.
+              The mission sets the bar. Here it is, plainly: four things,
+              and that is the whole filter.
             </p>
           </div>
 
               {/* the phone stake strip: jump-to-requirement below lg; the
               lighting waypoints hit these buttons and the hidden rail */}
           <div className="mt-8 flex items-center justify-center gap-3 lg:hidden" role="group" aria-label="Joining requirements">
-            {REQUIREMENTS.map((r, i) => (
+            {ASKS.map((r, i) => (
               <button
                 key={r.n}
                 type="button"
@@ -337,7 +384,7 @@ export function FieldGuide() {
                   style={{ overflow: 'clip' }}
                 >
                   <div data-bar-stack className="will-change-transform max-md:transform-none">
-                    {REQUIREMENTS.map((r) => (
+                    {ASKS.map((r) => (
                       <article
                         key={r.n}
                         data-bar-plate={r.n}
@@ -372,7 +419,7 @@ export function FieldGuide() {
                 {/* the rail: four stakes, one per plate, lighting as the
                     stack frames them — the trellis rail, restated */}
                 <div className="hidden flex-col gap-3 lg:flex" role="group" aria-label="Joining requirements">
-                  {REQUIREMENTS.map((r) => (
+                  {ASKS.map((r) => (
                     <div
                       key={r.n}
                       data-bar-stake={r.n}
@@ -384,28 +431,16 @@ export function FieldGuide() {
                       >
                         {r.n}
                       </span>
-                      <span className="font-serif text-[15px] max-md:text-base leading-tight field-ink-soft" data-bar-stake-name={r.n}>
+                      <span className="font-serif text-copy max-md:text-base leading-tight field-ink-soft" data-bar-stake-name={r.n}>
                         {r.title}
                       </span>
                     </div>
                   ))}
-                  <p className="mt-2 max-w-[38ch] font-mono text-[11px] uppercase leading-relaxed tracking-[0.14em] field-ink-soft motion-reduce:hidden">
+                  <p className="mt-2 max-w-[38ch] font-mono text-kicker uppercase leading-relaxed tracking-label-snug field-ink-soft motion-reduce:hidden">
                     Scroll — the bar reads top to bottom
                   </p>
                 </div>
               </div>
-
-              {/* hacktivation energy: the definition stamps as the bar closes */}
-              <Animation target="[data-fg-hack]" start={84} end={92} fromTo={[{ scale: 1.5, rotate: -7, opacity: 0 }, { scale: 1, rotate: 0, opacity: 1, ease: 'power4.in' }]}>
-                <p data-fg-hack className="mx-auto mt-10 max-w-2xl text-center text-[15px] max-md:text-base leading-relaxed text-[color-mix(in_srgb,var(--field-ink)_78%,transparent)]">
-                  <span className="inline-block font-mono text-xs tracking-wide text-wine-400">HACKTIVATION ENERGY</span>
-                  <span className="mt-2 block">
-                    The effort a newcomer spends before their first useful commit.
-                    Lower is better, so we grind it down: clone a repo, run the
-                    tests, ship a fix. Setup should never be the hard part.
-                  </span>
-                </p>
-              </Animation>
             </div>
           </section>
         </Pin>
@@ -425,7 +460,7 @@ export function FieldGuide() {
         <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
           <div className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
             {/* status ledger: each row's rule draws itself left to right */}
-            <Reveal className={`rounded-sm p-7 sm:p-9 ${FIELD_PLATE}`} y={24}>
+            <Reveal className={`min-w-0 rounded-sm p-7 sm:p-9 ${FIELD_PLATE}`} y={24}>
               <h3 className="display text-2xl field-ink" data-reveal-item>Where the project stands</h3>
               <dl className="mt-7 space-y-0">
                 {STATUS.map((row, i) => (
@@ -439,8 +474,8 @@ export function FieldGuide() {
                         <span data-status-rule={i} aria-hidden="true" className="absolute left-0 top-0 block h-px w-full origin-left bg-[color-mix(in_srgb,var(--field-line)_90%,transparent)]" />
                       </Animation>
                     )}
-                    <dt className="font-mono text-xs uppercase tracking-[0.16em] field-ink-soft sm:pt-1">{row.k}</dt>
-                    <dd className="text-[15px] max-md:text-base leading-relaxed text-[color-mix(in_srgb,var(--field-ink)_85%,transparent)]">
+                    <dt className="font-mono text-kicker uppercase tracking-label-snug field-ink-soft sm:pt-1">{row.k}</dt>
+                    <dd className="text-copy max-md:text-base leading-relaxed text-[color-mix(in_srgb,var(--field-ink)_85%,transparent)]">
                       {row.href ? (
                         <a href={row.href} target="_blank" rel="noreferrer" className="underline decoration-gold-leaf/40 underline-offset-4 transition-colors hover:text-wine-400 hover:decoration-wine-400/50">
                           {row.v}
@@ -452,47 +487,14 @@ export function FieldGuide() {
                   </div>
                 ))}
               </dl>
-              <a
-                href="https://github.com/eskolx-labs"
-                target="_blank"
-                rel="noreferrer"
-                className="mt-7 inline-flex items-center gap-2 border-t border-[color-mix(in_srgb,var(--field-line)_60%,transparent)] pt-5 text-sm font-medium text-wine-400 underline-offset-4 transition-colors hover:text-wine-300 hover:underline"
-                data-reveal-item
-              >
-                Watch the repos
-                <svg viewBox="0 0 14 14" className="h-3.5 w-3.5" aria-hidden="true">
-                  <path d="M2 7 H12 M8 3 L12 7 L8 11" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </a>
             </Reveal>
 
             {/* asked often, on the facing page */}
             <Reveal className={`rounded-sm p-7 sm:p-9 ${FIELD_PLATE}`} y={24}>
               <h3 className="display text-2xl field-ink" data-reveal-item>Asked often</h3>
               <div className="mt-6 overflow-hidden rounded-sm border border-[color-mix(in_srgb,var(--field-line)_60%,transparent)]">
-                {FAQ.map((item) => (
-                  <details key={item.q} className="group border-t border-[color-mix(in_srgb,var(--field-line)_45%,transparent)] first:border-t-0" data-reveal-item>
-                    <summary className="flex cursor-pointer list-none items-center justify-between gap-6 px-5 py-4 transition-colors hover:bg-[color-mix(in_srgb,var(--field-ink)_5%,transparent)] [&::-webkit-details-marker]:hidden">
-                      <span className="font-serif text-[16px] font-medium leading-snug field-ink">{item.q}</span>
-                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--field-line)_90%,transparent)] text-[color:var(--field-ink-soft)] transition-transform duration-300 group-open:rotate-45">
-                        <svg viewBox="0 0 12 12" className="h-3 w-3" aria-hidden="true">
-                          <path d="M6 1 V11 M1 6 H11" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                        </svg>
-                      </span>
-                    </summary>
-                    <p className="max-w-[74ch] px-5 pb-5 text-[16px] leading-relaxed text-[color-mix(in_srgb,var(--field-ink)_80%,transparent)]">
-                      {item.a}
-                      {item.href && (
-                        <>
-                          {' '}
-                          <a href={item.href} target="_blank" rel="noreferrer" className="text-wine-400 underline decoration-gold-leaf/40 underline-offset-4 transition-colors hover:text-wine-300">
-                            {item.linkText}
-                          </a>
-                          {item.after}
-                        </>
-                      )}
-                    </p>
-                  </details>
+                {FAQ.map((item, i) => (
+                  <FaqRow key={item.q} item={item} index={i} />
                 ))}
               </div>
               <p className="mt-5 text-sm text-[color-mix(in_srgb,var(--field-ink)_70%,transparent)]" data-reveal-item>

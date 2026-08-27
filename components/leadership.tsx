@@ -87,7 +87,7 @@ export function Leadership() {
             href="https://github.com/eskolx-labs"
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-2 font-serif text-[15px] text-[color-mix(in_srgb,var(--field-ink)_85%,transparent)] underline-offset-4 transition-colors hover:text-[var(--field-ink)] hover:underline hover:decoration-gold-leaf/60"
+            className="inline-flex items-center gap-2 font-serif text-copy text-[color-mix(in_srgb,var(--field-ink)_85%,transparent)] underline-offset-4 transition-colors hover:text-[var(--field-ink)] hover:underline hover:decoration-gold-leaf/60"
           >
             Find us in the commit log
             <svg viewBox="0 0 14 14" className="h-3 w-3" aria-hidden="true">
@@ -96,23 +96,6 @@ export function Leadership() {
           </a>
         </div>
 
-        <div className="mt-6 flex flex-col items-start gap-5 rounded-sm border border-loam-700/80 bg-loam-900/70 p-7 sm:flex-row sm:items-center lg:max-w-4xl">
-          <svg viewBox="0 0 40 40" className="h-10 w-10 shrink-0 text-gold-leaf" aria-hidden="true" fill="none">
-            <path d="M20 4 L26.5 15.5 C24.5 18.5 22.5 20 20 20 C17.5 20 15.5 18.5 13.5 15.5 Z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
-            <path d="M20 4 V13" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" opacity="0.6" />
-            <circle cx="20" cy="15.8" r="1.4" fill="currentColor" stroke="none" />
-            <path d="M20 20 V24" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-            <path d="M20 24 C20 28 16.5 29 14 32.5 M20 24 C20 28 23.5 29 26 32.5 M20 24 C19.4 28.5 20.6 30.5 20 34" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-            <path d="M14 32.5 C12.6 33.4 12 34.8 12.2 36.4 M26 32.5 C27.4 33.4 28 34.8 27.8 36.4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" opacity="0.7" />
-          </svg>
-          <div>
-            <p className="font-serif text-[15px] font-medium text-cream-100">Core talent pipeline</p>
-            <p className="mt-1.5 max-w-[68ch] text-[15px] leading-relaxed text-cream-200/80">
-              An internal engineering internship feeding an open-source
-              maintainer pipeline.
-            </p>
-          </div>
-        </div>
       </div>
     </Root>
     </>

@@ -10,6 +10,13 @@
   --font-serif: var(--font-source-serif), Georgia, serif;
   --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
 
+  /* type roles: secondary body copy and the mono kicker. One size per role,
+     named for purpose so new type can't spawn fresh arbitrary values. */
+  --text-copy: 0.9375rem;
+  --text-kicker: 11px;
+  --tracking-label: 0.2em;
+  --tracking-label-snug: 0.16em;
+
   --color-background: var(--field-bg);
   --color-foreground: var(--field-ink);
   --color-card: var(--field-bg);
@@ -142,13 +149,6 @@
     border-radius: var(--radius-sm);
   }
 
-  /* the nav logo is dock-hidden at rest (autoAlpha); a keyboard reader who
-     tabs to it must still see where they are */
-  header a[href='#top']:focus-visible {
-    visibility: visible !important;
-    opacity: 1 !important;
-  }
-
   html {
     scrollbar-color: var(--wine-700) var(--field-bg);
     scrollbar-width: thin;
@@ -161,6 +161,14 @@
 }
 
 @layer components {
+  /* the motto's throwaway particle: hidden in the resting spread (no-JS,
+     reduced motion) where the motto reads "Learn Deep". The scrubbed
+     fromTo overrides visibility when the timeline builds, showing it only
+     for the DeepLearning decomposition beat. */
+  [data-motto-ing] {
+    visibility: hidden;
+  }
+
   /* print-tooth grain over the whole page, one fixed layer. No blend mode:
      mix-blend-mode forces a full-page composite of a moving document every
      frame — the single worst scroll-jank source this page ever had. The

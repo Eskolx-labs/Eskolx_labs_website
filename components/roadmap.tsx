@@ -13,7 +13,7 @@ const PHASES = [
   {
     phase: 'Phase 2',
     title: 'Books and papers before every function',
-    body: 'Every function starts as reading. We work through the books and papers behind each method, record what we learn in an open Obsidian vault, then implement. Participants learn how research is done by doing it.',
+    body: 'Every function starts as a question, not a subject. Why does the Student t-distribution have heavier tails? You chase it through books and papers, write the mathematics, build the naive version, test it, and compare your numbers against the famous implementations until they agree. Notes land in the open vault before code lands in the library.',
     tags: ['Paper → code', 'Open notes', 'Reference comparison'],
   },
   {
@@ -86,7 +86,7 @@ export function Roadmap() {
                 <Animation target="[data-vine-rail]" start={2} end={88} fromTo={[{ scaleY: 0 }, { scaleY: 1, ease: 'power1.inOut' }]}>
                   <span data-vine-rail className="block h-full w-full origin-top bg-parchment-ink/25" />
                 </Animation>
-                <svg viewBox="0 0 24 24" className="absolute -bottom-5 -left-[11px] h-5 w-5 text-parchment-ink/40" fill="none">
+                <svg viewBox="0 0 24 24" aria-hidden="true" className="absolute -bottom-5 -left-[11px] h-5 w-5 text-parchment-ink/40" fill="none">
                   <path d="M12 2 C11.4 7 13.5 10 17 11 M17 11 c3-.8 4.4 1.2 3.2 3 c-1 1.5-3.2 1-3.4-.8" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
                 </svg>
               </div>
@@ -112,7 +112,7 @@ export function Roadmap() {
               ))}
 
               {/* the reader's place: chapter numerals */}
-              <div aria-hidden="true" className="absolute right-0 top-1/2 hidden -translate-y-1/2 flex-col items-end gap-7 font-mono text-[15px] tracking-widest text-parchment-ink/70 lg:flex">
+              <div aria-hidden="true" className="absolute right-0 top-1/2 hidden -translate-y-1/2 flex-col items-end gap-7 font-mono text-sm tracking-widest text-parchment-ink/70 lg:flex">
                 {PHASES.map((p, i) => (
                   <span key={p.phase} data-rm-num={i}>{`0${i + 1}`}</span>
                 ))}
@@ -155,7 +155,7 @@ export function Roadmap() {
                         />
                       )}
                       <div data-rm-unit={i}>
-                        <span className="tabular inline-flex items-center gap-2 rounded-full border border-wine-500/50 bg-wine-600/10 px-3.5 py-1 font-mono text-xs tracking-wide text-wine-600">
+                        <span className="tabular inline-flex items-center gap-2 rounded-full border border-wine-500/50 bg-wine-600/10 px-3.5 py-1 font-mono text-kicker tracking-label text-wine-600">
                           <span className="h-1.5 w-1.5 rounded-full bg-wine-500" />
                           {p.phase}
                         </span>
@@ -169,7 +169,7 @@ export function Roadmap() {
                           {p.tags.map((t) => (
                             <li
                               key={t}
-                              className="rounded-sm border border-parchment-ink/25 px-2.5 py-1 font-mono text-[11px] text-parchment-ink/80"
+                              className="rounded-sm border border-parchment-ink/25 px-2.5 py-1 font-mono text-kicker text-parchment-ink/80"
                             >
                               {t}
                             </li>

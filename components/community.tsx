@@ -21,6 +21,7 @@ const PRIMARY = [
   {
     icon: GithubIcon,
     name: 'GitHub',
+    cta: 'Open GitHub',
     handle: 'github.com/eskolx-labs',
     desc: 'Open-source repositories & codebase docs',
     href: 'https://github.com/eskolx-labs',
@@ -28,6 +29,7 @@ const PRIMARY = [
   {
     icon: TelegramIcon,
     name: 'Telegram',
+    cta: 'Open Telegram',
     handle: 't.me/eskolx_labs',
     desc: 'Community chat & builder updates',
     href: 'https://t.me/eskolx_labs',
@@ -35,6 +37,7 @@ const PRIMARY = [
   {
     icon: LinkedinIcon,
     name: 'LinkedIn',
+    cta: 'Open LinkedIn',
     handle: 'linkedin.com/company/eskolx_labs',
     desc: 'Technical announcements & talent recruitment',
     href: 'https://linkedin.com/company/eskolx_labs',
@@ -62,7 +65,7 @@ export function Community() {
   // The harvest table is the last chapter before a short footer, so its Root
   // timeline's tail can fall past the document's final scroll position —
   // beats scheduled late there strand. Each plate therefore owns a small,
-  // viewport-relative trigger (the hero-dock pattern): the leftmost card
+  // viewport-relative trigger (the nav-CTA pattern): the leftmost card
   // leads and its neighbours cascade as their own boxes cross the same
   // threshold, so the stagger reads left-to-right and always completes.
   useEffect(() => {
@@ -173,17 +176,17 @@ export function Community() {
                   <span
                     data-index={i}
                     aria-hidden="true"
-                    className="mt-1.5 font-mono text-[11px] uppercase tracking-[0.3em] text-parchment-ink/45"
+                    className="mt-1.5 font-mono text-kicker uppercase tracking-[0.3em] text-parchment-ink/45"
                   >
                     No.{i + 1}
                   </span>
                 </div>
-                <h3 className="display mt-5 text-xl text-parchment-ink">{c.name}</h3>
+                <h3 className="display mt-5 text-2xl leading-snug text-parchment-ink">{c.name}</h3>
                 <p className="mt-1 font-mono text-xs tracking-wide text-wine-600">{c.handle}</p>
-                <p className="mt-3 text-[15px] leading-relaxed text-parchment-ink/75">{c.desc}</p>
+                <p className="mt-3 text-copy leading-relaxed text-parchment-ink/75">{c.desc}</p>
                 <div className="mt-auto pt-6">
-                  <span className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.28em] text-parchment-ink/55 transition-colors duration-200 group-hover:text-wine-600">
-                    Telegram
+                  <span className="inline-flex items-center gap-2 font-mono text-kicker uppercase tracking-[0.28em] text-parchment-ink/55 transition-colors duration-200 group-hover:text-wine-600">
+                    {c.cta}
                     <svg
                       viewBox="0 0 14 14"
                       className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-0.5"
@@ -200,34 +203,22 @@ export function Community() {
         </div>
 
         <Reveal className="mt-6" end="top 70%">
-          <ul className="grid grid-cols-2 gap-4 sm:grid-cols-5">
-            {SECONDARY.map((c) => (
-              <li key={c.name} data-reveal-item>
+          <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-[color-mix(in_srgb,var(--field-ink)_70%,transparent)]" data-reveal-item>
+            <span className="font-mono text-kicker uppercase tracking-label text-[color-mix(in_srgb,var(--field-ink)_55%,transparent)]">Also on</span>
+            {SECONDARY.map((c, i) => (
+              <span key={c.name} className="font-serif text-[color-mix(in_srgb,var(--field-ink)_80%,transparent)]">
+                {i > 0 && <span aria-hidden="true"> · </span>}
                 <a
                   href={c.href}
                   target="_blank"
                   rel="noreferrer"
-                  className="group flex items-center gap-3 rounded-sm border border-parchment-ink/25 bg-parchment px-4 py-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-gold-leaf/60"
+                  className="underline-offset-4 transition-colors hover:text-wine-400 hover:underline hover:decoration-gold-leaf/60"
                 >
-                  <c.icon className="h-[18px] w-[18px] shrink-0 text-parchment-ink/60 transition-colors duration-200 group-hover:text-wine-600" />
-                  <span className="truncate font-serif text-sm text-parchment-ink/85">{c.name}</span>
+                  {c.name}
                 </a>
-              </li>
+              </span>
             ))}
-          </ul>
-        </Reveal>
-
-        <Reveal className="mt-10" y={22}>
-          <a
-            href="https://t.me/eskolx_labs"
-            target="_blank"
-            rel="noreferrer"
-            className="btn-plate btn-wine"
-            data-reveal-item
-          >
-            <TelegramIcon className="h-5 w-5" />
-            Join the community on Telegram
-          </a>
+          </p>
         </Reveal>
       </div>
     </Root>
