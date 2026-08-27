@@ -71,6 +71,7 @@ Legend for "nature":
 - **Nature**: scrubbed + CSS micro.
 - **Expert practice**: the wipes are the "curtain" pattern — power2.inOut is the right ease but the two panels wipe with a 10-unit overlap that reads as a single curtain; a *staggered* wipe (second panel starts as the first finishes) reads as two pages. The seal stamp (scale 1.35) is gentler than the hero's (2.2) — inconsistent stamp register across the site.
 - **Different angle**: the status rules draw with power1.inOut (linear-ish) — a power2.out would make each rule *arrive*. The FAQ unfold is a CSS grid-rows transition — the standard modern pattern, but the + icon rotates with the same ease as the panel; a springier icon (back.out) would make the row feel mechanical in the good way.
+- **STATUS: in progress**
 
 ### 9. Community — the harvest table  (components/community.tsx)
 - **What**: head drifts y:34→-22 (6-94); rule draws scaleX (power2.inOut, scrub 0.6); three cards cascade in (y:36, opacity, rotate -1, power2.out) with chip scale 1.55 (power3.in) and index rotate 8; Reveal for the secondary row.
