@@ -5,7 +5,7 @@ site, its nature, what the craft community does with this kind of motion, and a
 different angle on it. One entry at a time gets deep research + implementation;
 this file is the map.
 
-Progress: #2 motto (done pre-pass), #3 mission (done), #1 hero cover (done), #4 seal flood (removed — carried no content), #5 roadmap (done), #6 concept tiers (done), #7 origin story (done), #8 field guide (done), #9 community (done), #10 footer (done), #11 marquee (done), #12 reveal (done), #13 living grain (removed — imperceptible, cost a paint every frame), #14 ink press (in progress).
+Progress: #2 motto (done pre-pass), #3 mission (done), #1 hero cover (done), #4 seal flood (removed — carried no content), #5 roadmap (done), #6 concept tiers (done), #7 origin story (done), #8 field guide (done), #9 community (done), #10 footer (done), #11 marquee (done), #12 reveal (done), #13 living grain (removed — imperceptible, cost a paint every frame), #14 ink press (done — already expert-grade, stale doc fixed), #15 field controller (done — already expert-grade), #16 site nav (in progress).
 
 Legend for "nature":
 - **scrubbed** — driven by scroll progress (GSAP timeline / ScrollTrigger)
@@ -124,6 +124,8 @@ Legend for "nature":
 - **Nature**: system — the machinery every spread reads.
 - **Expert practice**: this is the minimal-goods pattern done carefully (the ink snap is a genuinely expert detail — held-then-snapped ink keeps contrast through the crossover).
 - **Different angle**: the turn is a pure linear lerp of the background. A *slight ease* on the turn (the field accelerating into the turn and settling out) would make each chapter's arrival feel authored — but the controller is deliberately a pure function of scrollY; any easing must stay reversible and position-pure.
+- **STATUS: DONE** (no code change — already expert-grade). Verified: the background lerps continuously (12 quantized steps across the dusk), the ink holds through the luminance crossover then snaps, the seams-only turnAt holds the hero on LOAM through p=0.85, the book-close rule ends on LOAM, reduced motion snaps at chapter midpoints. The easing idea was deliberately rejected: the controller is a pure function of scrollY, and any easing would break reversibility and the measured grammar every spread depends on.
+- **STATUS: in progress**
 
 ---
 

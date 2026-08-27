@@ -158,11 +158,13 @@ export function SiteNav() {
           },
         )
         // one vermilion per spread: the rail's CTA holds back while the
-        // thesis's is on stage, then takes over as the thesis lifts away
-        gsap.set(ctaRef.current, { autoAlpha: 0 })
+        // thesis's is on stage, then steps in as the thesis lifts away —
+        // a small rise with the fade, the book's entrance grammar
+        gsap.set(ctaRef.current, { autoAlpha: 0, y: 8 })
         gsap.to(ctaRef.current, {
           autoAlpha: 1,
-          ease: 'none',
+          y: 0,
+          ease: 'power2.out',
           scrollTrigger: {
             trigger: '#mission',
             start: '50% top',
