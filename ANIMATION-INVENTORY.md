@@ -5,7 +5,7 @@ site, its nature, what the craft community does with this kind of motion, and a
 different angle on it. One entry at a time gets deep research + implementation;
 this file is the map.
 
-Progress: #2 motto (done pre-pass), #3 mission (done), #1 hero cover (done), #4 seal flood (removed — carried no content), #5 roadmap (in progress).
+Progress: #2 motto (done pre-pass), #3 mission (done), #1 hero cover (done), #4 seal flood (removed — carried no content), #5 roadmap (done), #6 concept tiers (in progress).
 
 Legend for "nature":
 - **scrubbed** — driven by scroll progress (GSAP timeline / ScrollTrigger)
@@ -50,7 +50,7 @@ Legend for "nature":
 - **Nature**: scrubbed, mostly fade/slide + one draw.
 - **Expert practice**: the "one stage, three beats" pattern is strong; the craft is in *secondary motion* — the vine rail drawing is the spine, and the nodes lighting should feel *caused* by the rail reaching them (a node should light as the rail passes, with a small pop, not a color lerp). The phase units rise with power2.out but no anticipation or overshoot; the rule draws before the unit with no overlap.
 - **Different angle**: the numerals are opacity+color only — they could slide along the rail like a cursor. The vine rail is a single scaleY — a draw with a slight overshoot (back.out) or a two-segment draw (stem then tendril) would feel grown, not stretched. The exit is a plain rise — it could echo the cover's hand-off.
-- **STATUS: in progress**
+- **STATUS: DONE** (committed 7d755c5). The vine is now the spine: linear draw (2-88) with a wine growth tip riding the leading edge; nodes pop (back.out(2), scale 1.55) as the tip passes them (measured 15/42/69, stable across viewports) and settle — lighting is caused, not scheduled; phases rise as their node pops (power3.out, slight scale); numerals slide along the rail (x ±14); the node CSS transition (GSAP/transition conflict) removed; Waypoint accepts per-tween ease. Verified tip rides the growing edge at every position; 65/65 regression checks.
 
 ### 6. Concept tiers — the trellis stack  (components/concept-tiers.tsx)
 - **What**: the plate stack travels its own scrollable height (scrubbed y, linear); the rail drifts y:14 across the pin; stake lighting via data-lit toggles (bindStakeLighting); phone stake strip + progress hairline (scaleX via CSS class toggle).
