@@ -7,11 +7,20 @@ import { SealMark } from '@/components/botanical/seal-mark'
 /*
  * The interlude between method and people, and our answer to
  * minimal-goods' circle-grow: pinned in a short room, the engraved seal
- * swells past the frame while the page holds the day field steady — the
- * zoom reads as pressing the stamp into parchment, not falling into
- * night. The night turn waits for the keepers chapter past the seam.
- * The label reads first and lifts away; the emblem holds a beat at full
- * flood, then releases.
+ * presses into the page while the field holds day steady — the zoom
+ * reads as pressing the stamp into parchment, not falling into night.
+ * The night turn waits for the keepers chapter past the seam.
+ *
+ * The press, in the book's register:
+ * Beat 1 (10-36) the press comes down: the seal accelerates into the
+ *   frame (power2.in) while the die wears through — the outer frame's
+ *   ink squishes outward and thins as the impact lands.
+ * Beat 2 (36-72) the flood: the ink spreads and the camera settles
+ *   (power2.out) while the vine wears through last.
+ * Beat 3 (78-96) the lift-off: the stamp pulls away with a tilt and
+ *   accelerates off the page.
+ * The label reads first and is pushed aside as the stamp grows past it;
+ * the emblem holds a beat at full flood, then releases.
  */
 export function SealFlood() {
   // the pinned scrub choreographs the whole flood at every size now —
@@ -44,28 +53,42 @@ export function SealFlood() {
             The seal of the lab · est. in open source
           </p>
 
+          {/* the press comes down: the seal accelerates into the frame,
+              then the ink spreads and settles as it floods */}
+          <div data-flood-seal>
+            <SealMark label="Eskolx Labs seal" className="h-32 w-32" />
+          </div>
           <Animation
             target="[data-flood-seal]"
             start={10}
+            end={36}
+            fromTo={[
+              { scale: 1, rotate: -6 },
+              { scale: () => (window.innerWidth < 768 ? 5.5 : 8), rotate: -1, ease: 'power2.in' },
+            ]}
+          />
+          <Animation
+            target="[data-flood-seal]"
+            start={36}
             end={72}
-            fromTo={[{ scale: 1, rotate: -6 }, { scale: () => (window.innerWidth < 768 ? 11 : 16), rotate: 2, ease: 'power1.inOut' }]}
-          >
-            <div data-flood-seal>
-              <SealMark label="Eskolx Labs seal" className="h-32 w-32" />
-            </div>
-          </Animation>
+            fromTo={[
+              { scale: () => (window.innerWidth < 768 ? 5.5 : 8), rotate: -1 },
+              { scale: () => (window.innerWidth < 768 ? 11 : 16), rotate: 2, ease: 'power2.out', immediateRender: false },
+            ]}
+          />
 
-          {/* the stamp dissolves into its own harvest early, while the room
-              is still day-lit: die first, then vine, until only the fruit
-              floods the page — nothing near-black ever covers the spread */}
-          <Animation target="[data-flood-seal] .seal-die" start={20} end={32} to={{ opacity: 0 }} />
-          <Animation target="[data-flood-seal] .seal-vine" start={44} end={60} to={{ opacity: 0 }} />
+          {/* the stamp wears through as it presses: the die's ink squishes
+              outward and thins first, then the vine — nothing near-black
+              ever covers the spread */}
+          <Animation target="[data-flood-seal] .seal-die" start={20} end={32} to={{ opacity: 0, scale: 1.06, ease: 'power1.in' }} />
+          <Animation target="[data-flood-seal] .seal-vine" start={44} end={60} to={{ opacity: 0, scale: 1.04, ease: 'power1.in' }} />
 
-          {/* the label lifts away BEFORE the vine grows past it */}
-          <Animation target="[data-flood-label]" start={22} end={38} to={{ y: -40, opacity: 0 }} />
+          {/* the label is pushed aside as the stamp grows past it */}
+          <Animation target="[data-flood-label]" start={22} end={38} to={{ y: -40, opacity: 0, ease: 'power2.in' }} />
 
-          {/* the emblem releases the frame once the night is set */}
-          <Animation target="[data-flood-seal]" start={78} end={96} to={{ opacity: 0, scale: () => (window.innerWidth < 768 ? 13 : 19) }} />
+          {/* the stamp lifts off once the night is set: it pulls away
+              with a tilt and accelerates off the page */}
+          <Animation target="[data-flood-seal]" start={78} end={96} to={{ opacity: 0, scale: () => (window.innerWidth < 768 ? 13 : 19), rotation: 4, ease: 'power1.in' }} />
         </section>
       </Pin>
     </Root>
