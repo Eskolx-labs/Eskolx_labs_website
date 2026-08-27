@@ -18,22 +18,36 @@ import { GithubIcon } from '@/components/brand-icons'
  * wordmark settled and reading, the cue and the action beneath it.
  */
 export function Hero() {
-  // load-time arrival: the lockup settles and its seal stamps. Everything
-  // else is owned by the scrubbed timeline.
+  // load-time arrival: one choreographed opening — the mark settles, the
+  // seal stamps onto it with a paper-give settle, and a gold hairline
+  // draws beneath, the cover opening with the book's rule language.
+  // Everything else is owned by the scrubbed timeline.
   useEffect(() => {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     if (reduced) return
     const ctx = gsap.context(() => {
-      gsap.fromTo(
+      const tl = gsap.timeline()
+      tl.fromTo(
         '[data-hero-mark]',
-        { autoAlpha: 0, y: 26 },
-        { autoAlpha: 1, y: 0, duration: 0.9, ease: 'power3.out', delay: 0.15 },
+        { autoAlpha: 0, y: 26, scale: 0.98 },
+        { autoAlpha: 1, y: 0, scale: 1, duration: 0.9, ease: 'power3.out' },
       )
-      gsap.fromTo(
-        '[data-hero-lockseal]',
-        { scale: 2.2, rotate: -14 },
-        { scale: 1, rotate: 0, duration: 0.55, ease: 'power4.in', delay: 0.55 },
-      )
+        // the seal stamps onto the settled mark — the site's ink register
+        .fromTo(
+          '[data-hero-lockseal]',
+          { scale: 2.2, rotate: -14 },
+          { scale: 1, rotate: 0, duration: 0.5, ease: 'power4.in' },
+          0.55,
+        )
+        // the paper gives a hair where the stamp landed, then settles
+        .to('[data-hero-lockseal]', { scale: 1.03, duration: 0.12, ease: 'power2.out' })
+        .to('[data-hero-lockseal]', { scale: 1, duration: 0.18, ease: 'power1.out' })
+        .fromTo(
+          '[data-hero-rule]',
+          { scaleX: 0 },
+          { scaleX: 1, duration: 0.6, ease: 'power2.inOut' },
+          0.6,
+        )
     })
     return () => ctx.revert()
   }, [])
@@ -65,6 +79,14 @@ export function Hero() {
               className="h-[0.62em] w-[0.62em] translate-y-[0.06em] text-[clamp(3rem,9vw,7.5rem)]"
             />
           </div>
+
+          {/* the cover's rule: one gold hairline draws beneath the mark as
+              the seal stamps — the book's rule language, opening the cover */}
+          <span
+            data-hero-rule
+            aria-hidden="true"
+            className="pointer-events-none z-10 mt-8 block h-px w-40 origin-left bg-gold-leaf/70 max-md:mt-6"
+          />
 
           {/* the cue yields to the next spread as the reader commits */}
           <Animation target="[data-hero-cue]" start={0} end={12} to={{ opacity: 0 }}>
@@ -103,12 +125,13 @@ export function Hero() {
           </Animation>
 
           {/* the wordmark hands the spread to the motto: it lifts and
-              fades before the field turns to day over the empty cover */}
+              recedes with a slight turn before the field turns to day
+              over the empty cover */}
           <Animation
             target="[data-hero-mark]"
             start={80}
             end={90}
-            to={{ y: -40, autoAlpha: 0 }}
+            to={{ y: -40, scale: 0.97, rotation: -1.2, autoAlpha: 0, ease: 'power1.in' }}
           />
         </section>
       </Pin>
