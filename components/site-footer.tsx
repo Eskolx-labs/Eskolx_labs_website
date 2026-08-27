@@ -23,12 +23,17 @@ export function SiteFooter() {
         <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
           <Reveal className="flex flex-col gap-12 md:flex-row md:items-start md:justify-between">
             <div className="max-w-md">
-              <Animation target="[data-seal]" start={0} end={40} fromTo={[{ scale: 2, opacity: 0, rotate: -14 }, { scale: 1, opacity: 1, rotate: -4, ease: 'power4.in' }]}>
+              {/* the seal stamps onto the settled mark, then the paper
+                  gives a hair where it landed — the cover's register,
+                  closing the book the way it opened */}
+              <Animation target="[data-seal]" start={0} end={36} fromTo={[{ scale: 2, opacity: 0, rotate: -14 }, { scale: 1, opacity: 1, rotate: -4, ease: 'power4.in' }]}>
                 <a href="#top" className="flex items-center gap-3.5">
                   <span className="font-script text-3xl leading-none field-ink">Eskolx Labs</span>
                   <SealMark label="Eskolx Labs seal" className="h-11 w-11 -rotate-4" data-seal />
                 </a>
               </Animation>
+              <Animation target="[data-seal]" start={36} end={40} fromTo={[{ scale: 1 }, { scale: 1.03, ease: 'power2.out', immediateRender: false }]} />
+              <Animation target="[data-seal]" start={40} end={44} fromTo={[{ scale: 1.03 }, { scale: 1, ease: 'power1.out', immediateRender: false }]} />
               <p className="display mt-6 text-[clamp(1.9rem,3vw,2.75rem)] italic leading-[1.15] text-gold-leaf">
                 Learn deep, build&nbsp;expertise.
               </p>
@@ -91,8 +96,10 @@ export function SiteFooter() {
           </Reveal>
 
           {/* the reading rule completes: one gold hairline draws as the book
-              shuts — the rail's progress arriving at its last page */}
-          <Animation target="[data-close-rule]" start={45} end={82} fromTo={[{ scaleX: 0 }, { scaleX: 1, ease: 'power1.inOut' }]}>
+              shuts — the rail's progress arriving at its last page. The
+              draw lands with a settle (power2.out) so the close reads as
+              deliberate, not a slide. */}
+          <Animation target="[data-close-rule]" start={45} end={82} fromTo={[{ scaleX: 0 }, { scaleX: 1, ease: 'power2.out' }]}>
             <span data-close-rule aria-hidden="true" className="mt-14 block h-px w-full origin-left bg-gold-leaf/70" />
           </Animation>
 

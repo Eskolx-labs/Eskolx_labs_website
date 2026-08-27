@@ -85,6 +85,7 @@ Legend for "nature":
 - **Nature**: scrubbed.
 - **Expert practice**: the close rule is the "book shuts" moment — power1.inOut is linear-ish; a power2.inOut with a *hold* at the end (the rule arriving as the last page settles) would read as a deliberate close.
 - **Different angle**: the seal stamp here (scale 2) matches the hero (2.2) — good register. The footer is the last spread; the close rule could *complete* the nav's reading rule (they're the same gold hairline language) — a nice bookend if the two share timing language.
+- **STATUS: in progress**
 
 ---
 
