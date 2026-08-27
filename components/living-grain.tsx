@@ -8,6 +8,15 @@ import { useEffect, useRef, useSyncExternalStore } from 'react'
  * them; at rest they wander like dust in library light. Ink tone tracks
  * the active field so the fibers read on both spreads. Desktop,
  * motion-permitting only; the page never pays for it otherwise.
+ *
+ * The draft is smoothed, not instant: an asymmetric exponential chase
+ * (fast attack ~10/s, slow decay ~3/s) so the surge is tied to the
+ * finger but the tail lingers after you stop — the page breathes. Each
+ * fiber carries its own drag, so light motes surge first and heavy
+ * ones lag: the field shears into a gradient of lag instead of moving
+ * as one rigid sheet. Streaks are stroked lines aligned with each
+ * mote's actual velocity, with a slow per-particle tumble — no
+ * save/restore, no transform state churn.
  */
 
 type Fiber = {
@@ -18,6 +27,9 @@ type Fiber = {
   vx: number
   phase: number
   alpha: number
+  drag: number
+  rot: number
+  vrot: number
 }
 
 const COUNT = 110
@@ -84,6 +96,12 @@ export function LivingGrain() {
         vx: (Math.random() - 0.5) * 0.05,
         phase: Math.random() * Math.PI * 2,
         alpha: 0.04 + Math.random() * 0.08,
+        // per-particle drag: light motes surge first, heavy ones lag —
+        // the field shears into a gradient of lag instead of moving as
+        // one rigid sheet
+        drag: 3 + Math.random() * 7,
+        rot: Math.random() * Math.PI,
+        vrot: (Math.random() - 0.5) * 0.02,
       })
     }
     resize()
@@ -112,28 +130,49 @@ export function LivingGrain() {
     sampleInk()
 
     let frameMin = FRAME_MIN
+    // the smoothed draft: chases the raw Lenis velocity with an
+    // asymmetric exponential — fast attack (the surge is tied to the
+    // finger), slow decay (the tail lingers after you stop). Frame-rate
+    // independent via the exp(-lambda*dt) form.
+    let draft = 0
     const tick = () => {
       if (!running) return
       raf = requestAnimationFrame(tick)
       const t = performance.now()
       if (t - lastDraw < frameMin) return
+      const dt = Math.min((t - lastDraw) / 1000, 0.1)
       lastDraw = t
       const lenis = (window as unknown as { __lenis?: { velocity: number } }).__lenis
       const vel = lenis ? lenis.velocity : 0
-      const boost = Math.max(-14, Math.min(14, vel * 0.55))
+      const target = Math.max(-14, Math.min(14, vel * 0.55))
+      const lambda = Math.abs(target) > Math.abs(draft) ? 10 : 3
+      draft += (target - draft) * (1 - Math.exp(-lambda * dt))
+      if (Math.abs(draft) < 0.5) draft = 0
       ctx2d.clearRect(0, 0, w, h)
       ctx2d.fillStyle = `rgb(${inkRGB[0]}, ${inkRGB[1]}, ${inkRGB[2]})`
+      ctx2d.lineCap = 'round'
       for (const f of fibers) {
         f.phase += 0.008
-        f.x += f.vx + Math.sin(f.phase) * 0.18 + boost * 0.045
-        f.y += f.vy + boost * 0.22
+        f.rot += f.vrot
+        // per-particle response: the draft pulls each mote by its own
+        // drag, so light motes surge first and heavy ones lag
+        const pull = draft * (1 - Math.exp(-f.drag * dt))
+        f.x += f.vx + Math.sin(f.phase) * 0.18 + pull * 0.045
+        f.y += f.vy + pull * 0.22
         if (f.y < -4) f.y = h + 4
         if (f.y > h + 4) f.y = -4
         if (f.x < -4) f.x = w + 4
         if (f.x > w + 4) f.x = -4
-        const stretch = 1 + Math.min(Math.abs(boost) * 0.16, 2.6)
+        // the streak: a stroked line aligned with the mote's actual
+        // velocity plus its slow tumble — no save/restore, no transform
+        // state churn
+        const ang = Math.atan2(f.vy + pull * 0.22, f.vx + Math.sin(f.phase) * 0.18 + pull * 0.045) + f.rot
+        const len = f.s * (1 + Math.min(Math.abs(draft) * 0.16, 2.6))
         ctx2d.globalAlpha = f.alpha
-        ctx2d.fillRect(f.x, f.y, f.s * stretch, f.s)
+        ctx2d.beginPath()
+        ctx2d.moveTo(f.x - Math.cos(ang) * len * 0.5, f.y - Math.sin(ang) * len * 0.5)
+        ctx2d.lineTo(f.x + Math.cos(ang) * len * 0.5, f.y + Math.sin(ang) * len * 0.5)
+        ctx2d.stroke()
       }
       ctx2d.globalAlpha = 1
       ctx2d.fillStyle = `rgb(${inkRGB[0]}, ${inkRGB[1]}, ${inkRGB[2]})`

@@ -110,6 +110,7 @@ Legend for "nature":
 - **Nature**: ambient, canvas, velocity-reactive.
 - **Expert practice**: velocity-reactive ambient layers are the "the page breathes" pattern. The craft: fibers respond to velocity with a linear boost — the best work adds *inertia* (velocity eases in/out, fibers lag then catch up) and *direction* (fibers streak along the scroll axis, not just drift).
 - **Different angle**: the fibers are rectangles with stretch — they could *curl* (a slight rotation aligned with velocity) or *swirl* near the edges. The boost is clamped at ±14 — a gentler curve with a longer tail would feel more like wind than a push.
+- **STATUS: in progress**
 
 ### 14. Ink press — the field turn as wet ink  (components/ink-press.tsx)
 - **What**: on the dawn seam, a fixed overlay of the target color runs through SVG turbulence+displacement; the bite rises (power2.in), settles (power2.out), releases.
