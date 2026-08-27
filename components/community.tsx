@@ -65,7 +65,7 @@ export function Community() {
   // The harvest table is the last chapter before a short footer, so its Root
   // timeline's tail can fall past the document's final scroll position —
   // beats scheduled late there strand. Each plate therefore owns a small,
-  // viewport-relative trigger (the hero-dock pattern): the leftmost card
+  // viewport-relative trigger (the nav-CTA pattern): the leftmost card
   // leads and its neighbours cascade as their own boxes cross the same
   // threshold, so the stagger reads left-to-right and always completes.
   useEffect(() => {

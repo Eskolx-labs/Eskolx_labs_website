@@ -87,7 +87,7 @@ const sealState = (page) => page.evaluate(() => {
 {
   const vp = [1440, 900]
   const page = await newPage(vp)
-  check('desktop: hero headline scrub-driven at rest', await page.evaluate(() => getComputedStyle(document.querySelector('[data-hero-line="0"]')).transform !== 'none'))
+  check('desktop: thesis lines scrub-driven at rest', await page.evaluate(() => getComputedStyle(document.querySelector('[data-mission-line="0"]')).transform !== 'none'))
   check('desktop: night cover at top', (await fieldState(page)).bg.toLowerCase().includes('36, 20, 7'))
   await scrollPin(page, '#tiers [data-pin]', 0.5)
   await page.waitForTimeout(500)
@@ -164,8 +164,8 @@ const sealState = (page) => page.evaluate(() => {
   }
   check('desktop: reverse ramp (cover lift) stays above 3.2:1', minReverse >= 3.2, `min ${minReverse}:1`)
   check('desktop: nav CTA renamed', await page.evaluate(() => document.querySelector('header a.btn-wine')?.textContent.includes('Eskolx on GitHub')))
-  check('desktop: hero CTAs single-line', await page.evaluate(() => {
-    const btn = document.querySelector('[data-hero-cta] a')
+  check('desktop: thesis CTAs single-line', await page.evaluate(() => {
+    const btn = document.querySelector('[data-mission-cta] a')
     return btn && btn.getBoundingClientRect().height < 64
   }))
   // keepers and harvest sit on settled night — never mid-lerp
@@ -230,7 +230,7 @@ const sealState = (page) => page.evaluate(() => {
     return bg.startsWith('rgb(236, 225, 198')
   }))
   check('phone: headline rises with the scroll', await page.evaluate(() =>
-    getComputedStyle(document.querySelector('[data-hero-line="0"]')).transform !== 'none'))
+    getComputedStyle(document.querySelector('[data-mission-line="0"]')).transform !== 'none'))
   check('phone: trellis pin active', await pinActive('#tiers'))
   check('phone: bar pin active', await pinActive('#guide-bar'))
   check('phone: flood pin active', await pinActive('#seal-flood'))
@@ -354,8 +354,8 @@ const sealState = (page) => page.evaluate(() => {
   const page = await newPage(vp)
   check('short: hero pinned with its phone room', await page.evaluate(() =>
     getComputedStyle(document.querySelector('#top [data-pin] > div > div')).position === 'sticky'))
-  check('short: cover lines masked until scrolled', await page.evaluate(() =>
-    getComputedStyle(document.querySelector('[data-hero-line="0"]')).transform !== 'none'))
+  check('short: thesis lines masked until scrolled', await page.evaluate(() =>
+    getComputedStyle(document.querySelector('[data-mission-line="0"]')).transform !== 'none'))
   check('short: nav logo visible', await page.evaluate(() => {
     const el = document.querySelector('header a[href="#top"]')
     return el && getComputedStyle(el).visibility === 'visible'
@@ -388,9 +388,9 @@ const sealState = (page) => page.evaluate(() => {
   await page.waitForTimeout(1000)
   await page.evaluate("window.__lenis?.scrollTo(0, { immediate: true })")
   await page.waitForTimeout(600)
-  check('resize: desktop->short rebuilds (hero re-pinned, lines masked)', await page.evaluate(() =>
+  check('resize: desktop->short rebuilds (thesis re-pinned, lines masked)', await page.evaluate(() =>
     getComputedStyle(document.querySelector('#top [data-pin] > div > div')).position === 'sticky' &&
-    getComputedStyle(document.querySelector('[data-hero-line="0"]')).transform !== 'none'))
+    getComputedStyle(document.querySelector('[data-mission-line="0"]')).transform !== 'none'))
   await page.evaluate("(() => { const el = document.querySelector('#tiers [data-pin]'); const top = el.getBoundingClientRect().top + window.scrollY; window.__lenis?.scrollTo(top + 300, { immediate: true }) })()")
   await page.waitForTimeout(600)
   check('resize: short trellis still scrubs', await page.evaluate(() => getComputedStyle(document.querySelector('#tiers [data-tier-stack]')).transform !== 'none'))
@@ -398,7 +398,7 @@ const sealState = (page) => page.evaluate(() => {
   await page.waitForTimeout(1000)
   await page.evaluate("window.__lenis?.scrollTo(0, { immediate: true })")
   await page.waitForTimeout(600)
-  check('resize: back to desktop restores the masked rise', await page.evaluate(() => getComputedStyle(document.querySelector('[data-hero-line="0"]')).transform !== 'none'))
+  check('resize: back to desktop restores the masked rise', await page.evaluate(() => getComputedStyle(document.querySelector('[data-mission-line="0"]')).transform !== 'none'))
   await page.close()
 }
 
@@ -409,7 +409,7 @@ const sealState = (page) => page.evaluate(() => {
   watch(page, 'reduced')
   await page.goto(BASE, { waitUntil: 'networkidle' })
   await page.waitForTimeout(1200)
-  check('reduced: hero headline static visible', await page.evaluate(() => getComputedStyle(document.querySelector('[data-hero-line="0"]')).transform === 'none' && +getComputedStyle(document.querySelector('[data-hero-line="0"]')).opacity === 1))
+  check('reduced: hero headline static visible', await page.evaluate(() => getComputedStyle(document.querySelector('[data-mission-line="0"]')).transform === 'none' && +getComputedStyle(document.querySelector('[data-mission-line="0"]')).opacity === 1))
   check('reduced: wordmark clears the nav', await page.evaluate(() => {
     const mark = document.querySelector('[data-hero-mark]').getBoundingClientRect()
     const nav = document.querySelector('header a[href="#top"]').getBoundingClientRect()

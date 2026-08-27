@@ -18,7 +18,7 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
     ScrollTrigger.config({ ignoreMobileResize: true })
 
     // web fonts swap in late on real browsers and shift every measured
-    // trigger; refresh once the faces land so pins and docks stay true.
+    // trigger; refresh once the faces land so pins stay true.
     document.fonts?.ready.then(() => ScrollTrigger.refresh())
 
     // the debug HUD's data source; exposed only when the HUD is on so the

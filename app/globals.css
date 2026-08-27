@@ -149,13 +149,6 @@
     border-radius: var(--radius-sm);
   }
 
-  /* the nav logo is dock-hidden at rest (autoAlpha); a keyboard reader who
-     tabs to it must still see where they are */
-  header a[href='#top']:focus-visible {
-    visibility: visible !important;
-    opacity: 1 !important;
-  }
-
   html {
     scrollbar-color: var(--wine-700) var(--field-bg);
     scrollbar-width: thin;
@@ -168,7 +161,7 @@
 }
 
 @layer components {
-  /* the motto's throwaway particle: hidden in the resting cover (no-JS,
+  /* the motto's throwaway particle: hidden in the resting spread (no-JS,
      reduced motion) where the motto reads "Learn Deep". The scrubbed
      fromTo overrides visibility when the timeline builds, showing it only
      for the DeepLearning decomposition beat. */

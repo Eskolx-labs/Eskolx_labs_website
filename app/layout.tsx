@@ -82,11 +82,15 @@ as the year's entry, scrolls through pinned scenes where the page flips
 to the night-spread and back, watches the four-tier trellis and the
 three-month method advance with the scroll, and joins GitHub or Telegram
 at the harvest table.
-FIRST VIEWPORT: loam night-spread; the script wordmark docks into the
-nav while the motto performs — DeepLearning rises, the "ing" peels, the
-words trade into "Learn deep", and "build expertise." settles — then
-the mission lines rise and the field turns to day in the tail. The
-resting cover carries the motto, the mission, and one quiet CTA.
+FIRST VIEWPORT: loam night-spread; the script wordmark holds dead
+center, big and alone — the cover's only word. Scrolling, it lifts away
+and the field turns to day, where the motto spread owns the page:
+"DeepLearning" at rest decomposes — the "ing" peels, Deep and Learn
+trade into "Learn deep", and "build expertise." settles. Then the
+field turns to night again for the thesis spread: "The only way to
+understand something is to build it." rises line by line, centered,
+with the pitch and the doors beneath. The resting cover carries the
+wordmark, a scroll cue, and one quiet CTA.
 FORM: the Observatory Almanac, the pick card of the direction roll (seed
 839e0b7c), chosen over the assigned Illuminated Codex; raised by declined
 challengers: one-law generation (rain-garden), no empty fields (gallery

@@ -120,27 +120,14 @@ export function SiteNav() {
     mark.style.transform = `translateX(${lr.left - nr.left}px) scaleX(${lr.width / 24})`
   }, [activeId, resizeTick])
 
-  // Desktop, motion-permitting: the hero's giant wordmark docks onto this
-  // rail slot, so the real logo stays hidden until the dock completes and
-  // then crossfades in pixel-aligned. The seal turns slowly with the read.
+  // Desktop, motion-permitting: the seal turns slowly with the read, the
+  // reading rule fills, and the rail's CTA holds back while the thesis
+  // spread's own CTA block is on stage.
   useEffect(() => {
     const mm = gsap.matchMedia()
-    // the dock needs a tall pinned hero to dock within; short windows read
-    // the flow layout, where the logo simply stays visible in the rail
     mm.add('(prefers-reduced-motion: no-preference) and (min-width: 768px) and (min-height: 700px)', () => {
       gsap.registerPlugin(ScrollTrigger)
       const ctx = gsap.context(() => {
-        gsap.set(logoRef.current, { autoAlpha: 0 })
-        gsap.to(logoRef.current, {
-          autoAlpha: 1,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: '#top',
-            start: '42% top',
-            end: '52% top',
-            scrub: true,
-          },
-        })
         gsap.fromTo(
           sealRef.current,
           { rotate: 0 },
@@ -171,15 +158,15 @@ export function SiteNav() {
           },
         )
         // one vermilion per spread: the rail's CTA holds back while the
-        // hero's is on stage, then takes over as the hero exits
+        // thesis's is on stage, then takes over as the thesis lifts away
         gsap.set(ctaRef.current, { autoAlpha: 0 })
         gsap.to(ctaRef.current, {
           autoAlpha: 1,
           ease: 'none',
           scrollTrigger: {
-            trigger: '#top',
-            start: '40% bottom',
-            end: '60% bottom',
+            trigger: '#mission',
+            start: '50% top',
+            end: '62% top',
             scrub: true,
           },
         })
