@@ -186,6 +186,13 @@ export function Roadmap() {
                       ) : (
                         <span data-rm-rule={i} className="mb-6 block h-px w-16 origin-left bg-gold-leaf/80" />
                       )}
+                      {/* the dash is a chapter-begin cue: it draws in as
+                          its phase rises and draws back out as the phase
+                          hands the stage — one live dash at any moment,
+                          never a graveyard of marks (the nodes on the vine
+                          stay lit; they are the history, the dash is the
+                          here-and-now) */}
+                      <Animation target={`[data-rm-rule="${i}"]`} start={s + 20} end={s + 26} fromTo={[{ scaleX: 1 }, { scaleX: 0, ease: 'power1.in', immediateRender: false }]} />
                       {i > 0 && (
                         <Animation
                           target={`[data-rm-unit="${i}"]`}
