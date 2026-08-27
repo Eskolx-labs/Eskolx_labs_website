@@ -5,7 +5,7 @@ site, its nature, what the craft community does with this kind of motion, and a
 different angle on it. One entry at a time gets deep research + implementation;
 this file is the map.
 
-Progress: #2 motto (done pre-pass), #3 mission (done), #1 hero cover (done), #4 seal flood (removed — carried no content), #5 roadmap (done), #6 concept tiers (done), #7 origin story (done), #8 field guide (done), #9 community (done), #10 footer (done), #11 marquee (done), #12 reveal (done), #13 living grain (removed — imperceptible, cost a paint every frame), #14 ink press (done — already expert-grade, stale doc fixed), #15 field controller (done — already expert-grade), #16 site nav (done), #17-19 micro (in progress).
+Progress: #2 motto (done pre-pass), #3 mission (done), #1 hero cover (done), #4 seal flood (removed — carried no content), #5 roadmap (done), #6 concept tiers (done), #7 origin story (done), #8 field guide (done), #9 community (done), #10 footer (done), #11 marquee (done), #12 reveal (done), #13 living grain (removed — imperceptible, cost a paint every frame), #14 ink press (done — already expert-grade, stale doc fixed), #15 field controller (done — already expert-grade), #16 site nav (done), #17 buttons (in progress), #18 cards (done in the community pass), #19 links (pending).
 
 Legend for "nature":
 - **scrubbed** — driven by scroll progress (GSAP timeline / ScrollTrigger)
