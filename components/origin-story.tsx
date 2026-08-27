@@ -139,8 +139,8 @@ export function OriginStory() {
           const bodyEls = gsap.utils.toArray<HTMLElement>(`[data-tw^="i${i}b-"]`)
           if (!titleEls.length && !bodyEls.length) return
           const tl = gsap.timeline({ paused: true, defaults: { ease: 'none' } })
-          if (titleEls.length) tl.fromTo(titleEls, { opacity: 0 }, { opacity: 1, duration: 0.05, stagger: 0.026 })
-          if (bodyEls.length) tl.fromTo(bodyEls, { opacity: 0 }, { opacity: 1, duration: 0.04, stagger: 0.011 }, '>-0.01')
+          if (titleEls.length) tl.fromTo(titleEls, { opacity: 0 }, { opacity: 1, duration: 0.04, stagger: 0.02 })
+          if (bodyEls.length) tl.fromTo(bodyEls, { opacity: 0 }, { opacity: 1, duration: 0.03, stagger: 0.008 }, '>-0.01')
           // the pen rides the writing: the title cursor slides to each
           // character as it appears and lifts as the title ends — the
           // pen lifts off the page. The body writes without a cursor
@@ -149,7 +149,7 @@ export function OriginStory() {
           // window), so the timeline stays reversible — no kill, no
           // stuck cursor.
           const titleCursor = document.querySelector<HTMLElement>(`[data-tw-cursor="i${i}t"]`)
-          const titleEnd = titleEls.length * 0.026
+          const titleEnd = titleEls.length * 0.02
           const cycle = 0.3 + 0.3 + 0.12
           if (titleCursor) {
             const blinks = Math.max(Math.ceil(titleEnd / cycle), 1)
@@ -160,7 +160,7 @@ export function OriginStory() {
               0,
             )
             titleEls.forEach((ch, j) => {
-              tl.to(titleCursor, { x: ch.offsetLeft + ch.offsetWidth, duration: 0.026, ease: 'power1.out' }, j * 0.026)
+              tl.to(titleCursor, { x: ch.offsetLeft + ch.offsetWidth, duration: 0.02, ease: 'power1.out' }, j * 0.02)
             })
             // the fade sits AFTER the blink's last cycle, so the blink
             // never yoyo's the pen back under the finished line
@@ -210,11 +210,11 @@ export function OriginStory() {
                   {/* plate entrance — the first plate is already on stage at
                       progress 0, so the room never opens on a blank spread */}
                   {i > 0 && (
-                    <Animation target={`[data-id-plate="${i}"]`} start={s} end={s + 4} fromTo={[{ y: 44, opacity: 0 }, { y: 0, opacity: 1, ease: 'power2.out' }]} />
+                    <Animation target={`[data-id-plate="${i}"]`} start={s} end={s + 3} fromTo={[{ y: 44, opacity: 0 }, { y: 0, opacity: 1, ease: 'power2.out' }]} />
                   )}
                     <article data-id-plate={i} className="plate-frame hatch relative mx-auto max-w-3xl border border-parchment-ink/20 bg-parchment p-8 text-parchment-ink shadow-[0_24px_60px_-30px_rgb(0_0_0/0.45)] sm:p-10 lg:p-12">
                       {/* index numeral */}
-                      <Animation target={`[data-id-num="${i}"]`} start={s + 2} end={s + 5} fromTo={[{ opacity: 0 }, { opacity: 1 }]}>
+                      <Animation target={`[data-id-num="${i}"]`} start={s + 1} end={s + 3} fromTo={[{ opacity: 0 }, { opacity: 1 }]}>
                         <span data-id-num={i} className="tabular absolute right-7 top-7 font-mono text-sm tracking-widest text-parchment-ink/50">
                           {`0${i + 1}`}
                         </span>
@@ -224,8 +224,8 @@ export function OriginStory() {
                           start, slow finish */}
                       <Animation
                         target={`[data-id-icon="${i}"]`}
-                        start={s + 4}
-                        end={s + 9}
+                        start={s + 3}
+                        end={s + 7}
                         fromTo={[{ clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', ease: 'power2.in' }]}
                       >
                         <div data-id-icon={i} className="inline-block text-parchment-ink/85">
@@ -234,7 +234,7 @@ export function OriginStory() {
                       </Animation>
 
                       {/* kicker stamps in before the writing starts */}
-                      <Animation target={`[data-id-kicker="${i}"]`} start={s + 5} end={s + 8} fromTo={[{ scale: 1.6, opacity: 0 }, { scale: 1, opacity: 1, ease: 'power4.in' }]}>
+                      <Animation target={`[data-id-kicker="${i}"]`} start={s + 4} end={s + 6} fromTo={[{ scale: 1.6, opacity: 0 }, { scale: 1, opacity: 1, ease: 'power4.in' }]}>
                         <p data-id-kicker={i} className="mt-6 font-mono text-kicker uppercase tracking-[0.24em] text-wine-700">
                           Identity {`0${i + 1}`}
                         </p>
@@ -249,7 +249,7 @@ export function OriginStory() {
                       </p>
 
                       {/* the wax dot presses once the plate is written */}
-                      <Animation target={`[data-id-stamp="${i}"]`} start={s + 24} end={s + 27} fromTo={[{ scale: 1.7, opacity: 0 }, { scale: 1, opacity: 1, ease: 'power4.in' }]}>
+                      <Animation target={`[data-id-stamp="${i}"]`} start={s + 22} end={s + 24} fromTo={[{ scale: 1.7, opacity: 0 }, { scale: 1, opacity: 1, ease: 'power4.in' }]}>
                         <span data-id-stamp={i} aria-hidden="true" className="absolute bottom-8 right-8 block h-2 w-2 rounded-full bg-wine-600/80" />
                       </Animation>
                     </article>
@@ -257,7 +257,7 @@ export function OriginStory() {
                     {/* the plate lifts away for the next one — a slight
                         turn, like a page lifting off the desk */}
                   {i < IDENTITIES.length - 1 && (
-                    <Animation target={`[data-id-plate="${i}"]`} start={s + 28} end={s + 32} fromTo={[{ y: 0, opacity: 1, rotation: 0 }, { y: -36, opacity: 0, rotation: -1.2, ease: 'power1.in', immediateRender: false }]} />
+                    <Animation target={`[data-id-plate="${i}"]`} start={s + 26} end={s + 29} fromTo={[{ y: 0, opacity: 1, rotation: 0 }, { y: -36, opacity: 0, rotation: -1.2, ease: 'power1.in', immediateRender: false }]} />
                   )}
                 </div>
               )

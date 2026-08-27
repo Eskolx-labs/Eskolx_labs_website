@@ -24,7 +24,7 @@ const PREFIX = (() => {
   }
   return p
 })()
-const TRAVEL_END = 88
+const TRAVEL_END = 80
 
 export function MarqueeBand() {
   const charDuration = TRAVEL_END / TOTAL

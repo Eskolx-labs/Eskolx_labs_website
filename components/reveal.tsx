@@ -29,9 +29,9 @@ export function Reveal({
   children,
   className,
   y = 24,
-  start = 'top 88%',
-  end = 'top 54%',
-  stagger = 0.09,
+  start = 'top 90%',
+  end = 'top 60%',
+  stagger = 0.07,
 }: RevealProps) {
   const ref = useRef<HTMLDivElement>(null)
 
@@ -59,7 +59,7 @@ export function Reveal({
           scale: 1,
           ease: 'power2.out',
           stagger,
-          scrollTrigger: { trigger: el, start, end, scrub: 0.3 },
+          scrollTrigger: { trigger: el, start, end, scrub: 0.2 },
         },
       )
     }, el)

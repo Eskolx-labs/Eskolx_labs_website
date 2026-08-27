@@ -137,7 +137,7 @@ export function Roadmap() {
                     target: `[data-vine-node="${i}"]`,
                     fromTo: [
                       { scale: 1, backgroundColor: '#ece1c6', borderColor: 'rgba(41,25,12,0.4)' },
-                      { scale: 1.55, backgroundColor: '#963a68', borderColor: '#963a68', duration: 2.5, ease: 'back.out(2)', immediateRender: false },
+                      { scale: 1.55, backgroundColor: '#963a68', borderColor: '#963a68', duration: 1.6, ease: 'back.out(2)', immediateRender: false },
                     ],
                   }}
                 />
@@ -145,10 +145,10 @@ export function Roadmap() {
               {[0, 1, 2].map((i) => (
                 <Waypoint
                   key={`settle-${i}`}
-                  at={VINE_PASS[i] + 2.5}
+                  at={VINE_PASS[i] + 1.6}
                   tween={{
                     target: `[data-vine-node="${i}"]`,
-                    to: { scale: 1, duration: 2, ease: 'power2.out', immediateRender: false },
+                    to: { scale: 1, duration: 1.4, ease: 'power2.out', immediateRender: false },
                   }}
                 />
               ))}
@@ -161,10 +161,10 @@ export function Roadmap() {
                 ))}
               </div>
               {PHASES.map((_, i) => (
-                <Animation key={`num-in-${i}`} target={`[data-rm-num="${i}"]`} start={VINE_PASS[i]} end={VINE_PASS[i] + 6} fromTo={[{ opacity: 0.35, x: 14 }, { opacity: 1, x: 0, color: '#963a68', ease: 'power3.out' }]} />
+                <Animation key={`num-in-${i}`} target={`[data-rm-num="${i}"]`} start={VINE_PASS[i]} end={VINE_PASS[i] + 4} fromTo={[{ opacity: 0.35, x: 14 }, { opacity: 1, x: 0, color: '#963a68', ease: 'power3.out' }]} />
               ))}
               {[0, 1].map((i) => (
-                <Animation key={`num-out-${i}`} target={`[data-rm-num="${i}"]`} start={VINE_PASS[i] + 21} end={VINE_PASS[i] + 27} fromTo={[{ opacity: 1, color: '#963a68' }, { opacity: 0.35, x: -14, color: '#29190c', ease: 'power2.in', immediateRender: false }]} />
+                <Animation key={`num-out-${i}`} target={`[data-rm-num="${i}"]`} start={VINE_PASS[i] + 22} end={VINE_PASS[i] + 26} fromTo={[{ opacity: 1, color: '#963a68' }, { opacity: 0.35, x: -14, color: '#29190c', ease: 'power2.in', immediateRender: false }]} />
               ))}
 
               {/* the beats themselves */}
@@ -180,7 +180,7 @@ export function Roadmap() {
                       {/* phase 1 is on stage at progress 0 — the room never
                           opens on a blank spread */}
                       {i > 0 ? (
-                        <Animation target={`[data-rm-rule="${i}"]`} start={s} end={s + 5} fromTo={[{ scaleX: 0 }, { scaleX: 1, ease: 'power2.out' }]}>
+                        <Animation target={`[data-rm-rule="${i}"]`} start={s} end={s + 4} fromTo={[{ scaleX: 0 }, { scaleX: 1, ease: 'power2.out' }]}>
                           <span data-rm-rule={i} className="mb-6 block h-px w-16 origin-left bg-gold-leaf/80" />
                         </Animation>
                       ) : (
@@ -192,12 +192,12 @@ export function Roadmap() {
                           never a graveyard of marks (the nodes on the vine
                           stay lit; they are the history, the dash is the
                           here-and-now) */}
-                      <Animation target={`[data-rm-rule="${i}"]`} start={s + 20} end={s + 26} fromTo={[{ scaleX: 1 }, { scaleX: 0, ease: 'power1.in', immediateRender: false }]} />
+                      <Animation target={`[data-rm-rule="${i}"]`} start={s + 21} end={s + 25} fromTo={[{ scaleX: 1 }, { scaleX: 0, ease: 'power1.in', immediateRender: false }]} />
                       {i > 0 && (
                         <Animation
                           target={`[data-rm-unit="${i}"]`}
-                          start={s + 2}
-                          end={s + 16}
+                          start={s + 1}
+                          end={s + 12}
                           fromTo={[{ y: 48, opacity: 0, scale: 0.985 }, { y: 0, opacity: 1, scale: 1, ease: 'power3.out' }]}
                         />
                       )}
@@ -226,8 +226,8 @@ export function Roadmap() {
                       {i < 2 && (
                         <Animation
                           target={`[data-rm-unit="${i}"]`}
-                          start={s + 20}
-                          end={s + 26}
+                          start={s + 21}
+                          end={s + 25}
                           fromTo={[{ y: 0, opacity: 1 }, { y: -26, opacity: 0, ease: 'power1.in', immediateRender: false }]}
                         />
                       )}
@@ -258,7 +258,7 @@ export function Roadmap() {
         <Animation
           target="[data-exit-inner]"
           start={8}
-          end={55}
+          end={45}
           fromTo={[{ y: 28, opacity: 0 }, { y: 0, opacity: 1, ease: 'power2.out' }]}
         />
         <div data-exit-inner className="mx-auto max-w-7xl px-4 pb-24 pt-16 sm:px-6 lg:px-8">

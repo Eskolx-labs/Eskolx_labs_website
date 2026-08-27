@@ -262,8 +262,8 @@ export function FieldGuide() {
         field={{ from: PARCHMENT, to: PARCHMENT }}
       >
         <div className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
-          <Animation target="[data-fg-head]" start={2} end={62} to={{ y: -26 }} />
-          <Animation target="[data-fg-seal]" start={3} end={9} fromTo={[{ scale: 1.35, rotate: -12, opacity: 0, transformOrigin: '50% 50%' }, { scale: 1, rotate: -6, opacity: 1, ease: 'power4.in' }]} />
+          <Animation target="[data-fg-head]" start={2} end={50} to={{ y: -26 }} />
+          <Animation target="[data-fg-seal]" start={3} end={8} fromTo={[{ scale: 1.35, rotate: -12, opacity: 0, transformOrigin: '50% 50%' }, { scale: 1, rotate: -6, opacity: 1, ease: 'power4.in' }]} />
           <Reveal className="flex flex-wrap items-end justify-between gap-6">
             <div className="max-w-2xl" data-fg-head>
               <p className="font-mono text-kicker uppercase tracking-label text-wine-600" data-reveal-item>
@@ -285,8 +285,8 @@ export function FieldGuide() {
             </span>
           </Reveal>
 
-          <Animation target='[data-fg-wipe="0"]' start={12} end={24} fromTo={[{ clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', ease: 'power2.inOut' }]} />
-          <Animation target='[data-fg-wipe="1"]' start={22} end={34} fromTo={[{ clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', ease: 'power2.inOut' }]} />
+          <Animation target='[data-fg-wipe="0"]' start={10} end={20} fromTo={[{ clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', ease: 'power2.inOut' }]} />
+          <Animation target='[data-fg-wipe="1"]' start={18} end={28} fromTo={[{ clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', ease: 'power2.inOut' }]} />
           <Reveal className="mt-14 grid gap-px overflow-hidden rounded-sm border border-parchment-ink/20 bg-parchment-ink/15 md:grid-cols-2" y={24}>
             <div data-fg-wipe="0" className="bg-parchment p-7 sm:p-9">
               <h3 className="display text-xl text-parchment-ink">What we do</h3>
@@ -406,8 +406,8 @@ export function FieldGuide() {
                         {i > 0 && i < ASKS.length - 1 && (
                           <Animation
                             target={`[data-bar-head="${i}"]`}
-                            start={BAR_FRAME[i] - 2}
-                            end={BAR_FRAME[i] + 4}
+                            start={BAR_FRAME[i] - 1}
+                            end={BAR_FRAME[i] + 3}
                             fromTo={[
                               { y: 18, scale: 0.985, opacity: 0.4 },
                               { y: 0, scale: 1, opacity: 1, ease: 'back.out(1.4)' },
@@ -495,11 +495,11 @@ export function FieldGuide() {
                     data-reveal-item
                     className="relative grid gap-1 py-4 sm:grid-cols-[8.5rem_1fr] sm:gap-4"
                   >
-                    {i > 0 && (
-                      <Animation target={`[data-status-rule="${i}"]`} start={62 + i * 5} end={68 + i * 5} fromTo={[{ scaleX: 0 }, { scaleX: 1, ease: 'power2.out' }]}>
-                        <span data-status-rule={i} aria-hidden="true" className="absolute left-0 top-0 block h-px w-full origin-left bg-[color-mix(in_srgb,var(--field-line)_90%,transparent)]" />
-                      </Animation>
-                    )}
+                        {i > 0 && (
+                          <Animation target={`[data-status-rule="${i}"]`} start={62 + i * 4} end={66 + i * 4} fromTo={[{ scaleX: 0 }, { scaleX: 1, ease: 'power2.out' }]}>
+                            <span data-status-rule={i} aria-hidden="true" className="absolute left-0 top-0 block h-px w-full origin-left bg-[color-mix(in_srgb,var(--field-line)_90%,transparent)]" />
+                          </Animation>
+                        )}
                     <dt className="font-mono text-kicker uppercase tracking-label-snug field-ink-soft sm:pt-1">{row.k}</dt>
                     <dd className="text-copy max-md:text-base leading-relaxed text-[color-mix(in_srgb,var(--field-ink)_85%,transparent)]">
                       {row.href ? (

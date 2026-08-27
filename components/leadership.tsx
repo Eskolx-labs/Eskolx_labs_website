@@ -66,9 +66,9 @@ export function Leadership() {
                   a half-arrived card reads as broken, not cinematic */}
               <Animation
                 target={`[data-keeper="${i}"]`}
-                start={4 + i * 4}
-                end={16 + i * 4}
-                fromTo={[{ y: 36, opacity: 0 }, { y: 0, opacity: 1 }]}
+                start={4 + i * 3}
+                end={13 + i * 3}
+                fromTo={[{ y: 36, opacity: 0 }, { y: 0, opacity: 1, ease: 'power2.out' }]}
               >
                 <div data-keeper={i}>
                   <span className="flex h-16 w-16 items-center justify-center rounded-full border border-wine-500/50 bg-wine-600/20 font-display text-xl tracking-wide text-cream-100">

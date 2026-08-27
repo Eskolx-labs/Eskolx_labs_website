@@ -96,10 +96,10 @@ export function InkPress() {
               })
               // the plate lands, bites, settles — then releases into the
               // settled field that has turned beneath it
-              tl.fromTo(root, { opacity: 0 }, { opacity: 0.94, duration: 0.14 }, 0)
-                .fromTo(disp, { attr: { scale: 0 } }, { attr: { scale: t.peak }, duration: 0.46, ease: 'power2.in' }, 0.06)
-                .to(disp, { attr: { scale: t.rest }, duration: 0.38, ease: 'power2.out' }, 0.52)
-                .to(root, { opacity: 0, duration: 0.05 }, 0.9)
+              tl.fromTo(root, { opacity: 0 }, { opacity: 0.94, duration: 0.1 }, 0)
+                .fromTo(disp, { attr: { scale: 0 } }, { attr: { scale: t.peak }, duration: 0.34, ease: 'power2.in' }, 0.05)
+                .to(disp, { attr: { scale: t.rest }, duration: 0.3, ease: 'power2.out' }, 0.42)
+                .to(root, { opacity: 0, duration: 0.04 }, 0.85)
             }
           })
         }

@@ -26,7 +26,7 @@ export function SiteFooter() {
               {/* the seal stamps onto the settled mark, then the paper
                   gives a hair where it landed — the cover's register,
                   closing the book the way it opened */}
-              <Animation target="[data-seal]" start={0} end={36} fromTo={[{ scale: 2, opacity: 0, rotate: -14 }, { scale: 1, opacity: 1, rotate: -4, ease: 'power4.in' }]}>
+              <Animation target="[data-seal]" start={0} end={30} fromTo={[{ scale: 2, opacity: 0, rotate: -14 }, { scale: 1, opacity: 1, rotate: -4, ease: 'power4.in' }]}>
                 <a href="#top" className="flex items-center gap-3.5">
                   <span className="font-script text-3xl leading-none field-ink">Eskolx Labs</span>
                   <SealMark label="Eskolx Labs seal" className="h-11 w-11 -rotate-4" data-seal />
@@ -99,7 +99,7 @@ export function SiteFooter() {
               shuts — the rail's progress arriving at its last page. The
               draw lands with a settle (power2.out) so the close reads as
               deliberate, not a slide. */}
-          <Animation target="[data-close-rule]" start={45} end={82} fromTo={[{ scaleX: 0 }, { scaleX: 1, ease: 'power2.out' }]}>
+          <Animation target="[data-close-rule]" start={45} end={75} fromTo={[{ scaleX: 0 }, { scaleX: 1, ease: 'power2.out' }]}>
             <span data-close-rule aria-hidden="true" className="mt-14 block h-px w-full origin-left bg-gold-leaf/70" />
           </Animation>
 

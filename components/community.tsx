@@ -83,7 +83,7 @@ export function Community() {
             {
               scaleX: 1,
               ease: 'power2.inOut',
-              scrollTrigger: { trigger: rule, start: 'top 92%', end: 'top 75%', scrub: 0.6 },
+              scrollTrigger: { trigger: rule, start: 'top 92%', end: 'top 78%', scrub: 0.3 },
             },
           )
         }
@@ -100,14 +100,14 @@ export function Community() {
             scrollTrigger: {
               trigger: card.closest('a') ?? card,
               start: `top ${88 + lead}%`,
-              end: `top ${56 + lead}%`,
-              scrub: 0.6,
+              end: `top ${60 + lead}%`,
+              scrub: 0.3,
             },
           })
           tl.fromTo(
             card,
             { y: 36, opacity: 0, rotate: -1 },
-            { y: 0, opacity: 1, rotate: 0, ease: 'back.out(1.2)', duration: 0.7 },
+            { y: 0, opacity: 1, rotate: 0, ease: 'back.out(1.2)', duration: 0.5 },
           )
           if (chip) {
             // the chip stamps AFTER the card settles — a stamp landing on
@@ -115,7 +115,7 @@ export function Community() {
             tl.fromTo(
               chip,
               { scale: 1.55, opacity: 0 },
-              { scale: 1, opacity: 1, ease: 'power3.in', duration: 0.35 },
+              { scale: 1, opacity: 1, ease: 'power3.in', duration: 0.25 },
               '>-0.05',
             )
           }
@@ -123,7 +123,7 @@ export function Community() {
             tl.fromTo(
               index,
               { opacity: 0, rotate: 8 },
-              { opacity: 1, rotate: 0, ease: 'power2.out', duration: 0.3 },
+              { opacity: 1, rotate: 0, ease: 'power2.out', duration: 0.2 },
               '>-0.1',
             )
           }

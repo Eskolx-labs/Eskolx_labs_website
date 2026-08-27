@@ -234,8 +234,8 @@ export function ConceptTiers() {
                       {i > 0 && i < TIERS.length - 1 && (
                         <Animation
                           target={`[data-tier-head="${i}"]`}
-                          start={TIER_FRAME[i] - 2}
-                          end={TIER_FRAME[i] + 4}
+                          start={TIER_FRAME[i] - 1}
+                          end={TIER_FRAME[i] + 3}
                           fromTo={[
                             { y: 18, scale: 0.985, opacity: 0.4 },
                             { y: 0, scale: 1, opacity: 1, ease: 'back.out(1.4)' },

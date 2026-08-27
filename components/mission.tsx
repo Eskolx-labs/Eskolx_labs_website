@@ -11,17 +11,17 @@ import { GithubIcon, TelegramIcon } from '@/components/brand-icons'
  * almanac's whole point in one centered page, on dark.
  *
  * The performance, in the motto's register:
- * Beat 1 (0-19) the rise: the room opens with the first line already
+ * Beat 1 (0-15) the rise: the room opens with the first line already
  *   mid-rise (start -4) - the spread is speaking when you arrive, never
  *   blank. The lines overlap so the eye flows, each landing with
  *   power4.out (the masked-line register: fast start, decelerate, no
  *   overshoot - an overshoot would clip against the mask).
- * Beat 2 (19-26) the accent: "build it." pops with a back.out spring
+ * Beat 2 (15-21) the accent: "build it." pops with a back.out spring
  *   after its line settles - the thesis lands, the way the motto's
  *   promise does. The whole line breathes as it lands.
- * Beat 3 (30-46) the doors: the pitch presses in slightly compressed,
+ * Beat 3 (24-38) the doors: the pitch presses in slightly compressed,
  *   then the CTA block steps in beneath it.
- * Beat 4 (80-90) the hand-off: the whole spread lifts away with a slight
+ * Beat 4 (80-88) the hand-off: the whole spread lifts away with a slight
  *   turn as the field turns back to day for the seal.
  *
  * Resting CSS state (no-JS, mobile, reduced motion): the thesis, pitch
@@ -32,9 +32,9 @@ import { GithubIcon, TelegramIcon } from '@/components/brand-icons'
 // opens with the first line already mid-rise; the lines overlap so the
 // eye flows from one to the next instead of stepping
 const LINE_RISE: [number, number][] = [
-  [-4, 9],
-  [5, 14],
-  [10, 19],
+  [-4, 7],
+  [3, 11],
+  [7, 15],
 ]
 export function Mission() {
   return (
@@ -101,21 +101,21 @@ export function Mission() {
                   with a spring while the whole line breathes */}
               <Animation
                 target="[data-mission-accent]"
-                start={19}
-                end={26}
+                start={15}
+                end={21}
                 fromTo={[
                   { scale: 0.82, autoAlpha: 0 },
                   { scale: 1, autoAlpha: 1, ease: 'back.out(1.6)' },
                 ]}
               />
-              <Animation target="[data-mission-wording]" start={19} end={24} to={{ scale: 1.012 }} />
-              <Animation target="[data-mission-wording]" start={24} end={30} to={{ scale: 1 }} />
+              <Animation target="[data-mission-wording]" start={15} end={19} to={{ scale: 1.012 }} />
+              <Animation target="[data-mission-wording]" start={19} end={24} to={{ scale: 1 }} />
             </h2>
 
             <Animation
               target="[data-mission-sub]"
-              start={30}
-              end={40}
+              start={24}
+              end={32}
               fromTo={[{ y: 24, scale: 0.985, opacity: 0 }, { y: 0, scale: 1, opacity: 1, ease: 'power2.out' }]}
             >
               <p
@@ -131,8 +131,8 @@ export function Mission() {
 
             <Animation
               target="[data-mission-cta]"
-              start={36}
-              end={46}
+              start={30}
+              end={38}
               fromTo={[{ y: 20, autoAlpha: 0 }, { y: 0, autoAlpha: 1, ease: 'power2.out' }]}
             >
               <div data-mission-cta className="mt-9 flex flex-col items-center justify-center gap-3.5 sm:flex-row sm:flex-wrap">
@@ -166,7 +166,7 @@ export function Mission() {
           <Animation
             target="[data-mission-copy]"
             start={80}
-            end={90}
+            end={88}
             to={{ y: -64, rotation: 1.2, opacity: 0, ease: 'power1.in' }}
           />
         </section>

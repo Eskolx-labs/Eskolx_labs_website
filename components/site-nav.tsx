@@ -168,7 +168,7 @@ export function SiteNav() {
           scrollTrigger: {
             trigger: '#mission',
             start: '50% top',
-            end: '62% top',
+            end: '58% top',
             scrub: true,
           },
         })
