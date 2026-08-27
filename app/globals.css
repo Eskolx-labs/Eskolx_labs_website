@@ -330,6 +330,38 @@
   border-color: rgba(41, 25, 12, 0.75);
 }
 
+/* the drawing underline: the site's gold link language draws left to
+   right on hover instead of toggling — hand-inked, the letterpress
+   register. Compositor-only (transform, no paint), so it never costs
+   the moving document. The line retracts right-to-left on hover-out
+   (the transform-origin flips), and draws on keyboard focus too.
+   Gated behind (hover: hover) so touch taps never flash it. */
+.link-draw {
+  position: relative;
+}
+.link-draw::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.2em;
+  height: 1.5px;
+  background: color-mix(in srgb, var(--gold-leaf) 65%, transparent);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+@media (hover: hover) and (pointer: fine) {
+  .link-draw:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+}
+.link-draw:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
 /* hairline rule with a centered diamond, engraving-plate divider */
 .rule-ornament {
   display: flex;

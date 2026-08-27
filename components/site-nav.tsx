@@ -217,7 +217,7 @@ export function SiteNav() {
                     : 'text-[color:var(--field-ink-soft)] hover:text-[color:var(--field-ink)]'
                 }`}
               >
-                <span className="block font-serif text-copy leading-tight underline-offset-8 group-hover:underline group-hover:decoration-gold-leaf/70">
+                <span className="link-draw block font-serif text-copy leading-tight underline-offset-8">
                   {link.label}
                 </span>
                 <span

@@ -214,7 +214,7 @@ export function Community() {
                   href={c.href}
                   target="_blank"
                   rel="noreferrer"
-                  className="underline-offset-4 transition-colors hover:text-wine-400 hover:underline hover:decoration-gold-leaf/60"
+                  className="link-draw transition-colors hover:text-wine-400"
                 >
                   {c.name}
                 </a>

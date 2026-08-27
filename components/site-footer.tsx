@@ -52,7 +52,7 @@ export function SiteFooter() {
                       href={l.href}
                       target={external ? '_blank' : undefined}
                       rel={external ? 'noreferrer' : undefined}
-                      className="inline-block py-1 text-copy text-[color:var(--field-ink-soft)] underline-offset-4 transition-colors hover:text-[color:var(--field-ink)] hover:underline hover:decoration-gold-leaf/60"
+                      className="link-draw inline-block py-1 text-copy text-[color:var(--field-ink-soft)] transition-colors hover:text-[color:var(--field-ink)]"
                     >
                       {l.label}
                     </a>

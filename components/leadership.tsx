@@ -87,7 +87,7 @@ export function Leadership() {
             href="https://github.com/eskolx-labs"
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-2 font-serif text-copy text-[color-mix(in_srgb,var(--field-ink)_85%,transparent)] underline-offset-4 transition-colors hover:text-[var(--field-ink)] hover:underline hover:decoration-gold-leaf/60"
+            className="link-draw inline-flex items-center gap-2 font-serif text-copy text-[color-mix(in_srgb,var(--field-ink)_85%,transparent)] transition-colors hover:text-[var(--field-ink)]"
           >
             Find us in the commit log
             <svg viewBox="0 0 14 14" className="h-3 w-3" aria-hidden="true">
