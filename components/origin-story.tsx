@@ -141,15 +141,18 @@ export function OriginStory() {
           const tl = gsap.timeline({ paused: true, defaults: { ease: 'none' } })
           if (titleEls.length) tl.fromTo(titleEls, { opacity: 0 }, { opacity: 1, duration: 0.04, stagger: 0.02 })
           if (bodyEls.length) tl.fromTo(bodyEls, { opacity: 0 }, { opacity: 1, duration: 0.03, stagger: 0.008 }, '>-0.01')
-          // the pen rides the writing: the title cursor slides to each
-          // character as it appears and lifts as the title ends — the
-          // pen lifts off the page. The body writes without a cursor
-          // (the title's blink is the hand; the body is its echo). The
-          // blink is finite (it covers exactly the title's writing
-          // window), so the timeline stays reversible — no kill, no
-          // stuck cursor.
+          // the pen rides the writing: the title cursor blinks and slides
+          // to each character as it appears, then hands off to the body
+          // cursor as the title ends — the pen steps down to the paragraph
+          // and rides the words (tracking their lines, since the body
+          // wraps) until the last word lands, then lifts off the page.
+          // The body cursor never blinks — the title's blink is the hand;
+          // the body is its echo. Both timelines stay fully reversible.
           const titleCursor = document.querySelector<HTMLElement>(`[data-tw-cursor="i${i}t"]`)
+          const bodyCursor = document.querySelector<HTMLElement>(`[data-tw-cursor="i${i}b"]`)
           const titleEnd = titleEls.length * 0.02
+          const bodyStart = titleEnd - 0.01
+          const bodyEnd = bodyStart + bodyEls.length * 0.008
           const cycle = 0.3 + 0.3 + 0.12
           if (titleCursor) {
             const blinks = Math.max(Math.ceil(titleEnd / cycle), 1)
@@ -162,12 +165,33 @@ export function OriginStory() {
             titleEls.forEach((ch, j) => {
               tl.to(titleCursor, { x: ch.offsetLeft + ch.offsetWidth, duration: 0.02, ease: 'power1.out' }, j * 0.02)
             })
-            // the pen lifts as the last character lands: the fade starts
-            // at the title's end and, starting later, wins the opacity
-            // conflict while it runs — the pen never sits blinking at the
-            // finished line while the body writes below, and never
-            // resurrects after the fade
-            tl.to(titleCursor, { opacity: 0, duration: 0.25, ease: 'power1.out' }, titleEnd)
+            // the pen hands off as the title ends: it lifts here while the
+            // body cursor takes over below — the hand never stops writing.
+            // The fade spans from the title's end to the blink's last
+            // cycle, so it wins the opacity conflict while it runs and the
+            // blink can never yoyo the pen back under the finished line.
+            const fadeEnd = blinks * cycle
+            tl.to(
+              titleCursor,
+              { opacity: 0, duration: Math.max(fadeEnd - titleEnd, 0.12), ease: 'power1.out' },
+              titleEnd,
+            )
+          }
+          if (bodyCursor) {
+            // the pen steps down to the paragraph's first word, rides the
+            // words as they appear (stepping down as the lines wrap), and
+            // lifts as the last word lands — no blink, just the hand
+            const first = bodyEls[0]
+            tl.set(bodyCursor, { x: first.offsetLeft + first.offsetWidth, y: first.offsetTop }, bodyStart)
+            tl.fromTo(bodyCursor, { opacity: 0 }, { opacity: 1, duration: 0.1, ease: 'power1.out' }, bodyStart)
+            bodyEls.forEach((w, j) => {
+              tl.to(
+                bodyCursor,
+                { x: w.offsetLeft + w.offsetWidth, y: w.offsetTop, duration: 0.008, ease: 'power1.out' },
+                bodyStart + j * 0.008,
+              )
+            })
+            tl.to(bodyCursor, { opacity: 0, duration: 0.2, ease: 'power1.out' }, bodyEnd)
           }
           ScrollTrigger.create({
             trigger: '#ecosystem [data-pin]',
@@ -248,7 +272,7 @@ export function OriginStory() {
                       </h3>
 
                       <p className="mt-4 max-w-[62ch] font-serif text-base leading-relaxed text-parchment-ink/80 sm:text-lg">
-                        <Typed id={`i${i}b`} text={card.body} unit="word" />
+                        <Typed id={`i${i}b`} text={card.body} unit="word" cursor />
                       </p>
 
                       {/* the wax dot presses once the plate is written */}
