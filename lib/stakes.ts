@@ -46,7 +46,7 @@ export function scrollToPlate(rootId: string, stackSel: string, index: number, c
     el.getBoundingClientRect().top + window.scrollY + Math.max(room, 0) * fraction
   const lenis = (window as Window & { __lenis?: { scrollTo: (t: number, o?: object) => void } })
     .__lenis
-  if (lenis) lenis.scrollTo(target, { duration: 1.4 })
+  if (lenis) lenis.scrollTo(target, { duration: 0.8 })
   else window.scrollTo({ top: target, behavior: 'smooth' })
 }
 

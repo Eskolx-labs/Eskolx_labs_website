@@ -78,24 +78,28 @@ const IDENTITIES = [
 
 /* Hand-typed text: units blink onto the plate one by one from a
    time-based timeline, so a reader who stops scrolling still watches the
-   sentence finish — pausing never leaves a word half-written. Plain text
-   to screen readers; static and fully visible under reduced motion. */
+   sentence finish — pausing never leaves a word half-written. A cursor
+   (a blinking ink bar) rides the writing and fades as the last word
+   lands. Plain text to screen readers; static and fully visible under
+   reduced motion. */
 function Typed({
   id,
   text,
   unit,
   className,
+  cursor = false,
 }: {
   id: string
   text: string
   unit: 'char' | 'word'
   className?: string
+  cursor?: boolean
 }) {
   const parts = unit === 'char' ? Array.from(text) : text.split(' ')
   return (
     <span className={className}>
       <span className="sr-only">{text}</span>
-      <span aria-hidden="true">
+      <span aria-hidden="true" className={cursor ? 'relative inline-block' : undefined}>
         {parts.map((p, j) => (
           <span
             key={j}
@@ -105,6 +109,7 @@ function Typed({
             {unit === 'word' && j < parts.length - 1 ? `${p}\u00A0` : p === ' ' ? ' ' : p}
           </span>
         ))}
+        {cursor && <span data-tw-cursor={id} className="tw-cursor" />}
       </span>
     </span>
   )
@@ -134,8 +139,60 @@ export function OriginStory() {
           const bodyEls = gsap.utils.toArray<HTMLElement>(`[data-tw^="i${i}b-"]`)
           if (!titleEls.length && !bodyEls.length) return
           const tl = gsap.timeline({ paused: true, defaults: { ease: 'none' } })
-          if (titleEls.length) tl.fromTo(titleEls, { opacity: 0 }, { opacity: 1, duration: 0.05, stagger: 0.026 })
-          if (bodyEls.length) tl.fromTo(bodyEls, { opacity: 0 }, { opacity: 1, duration: 0.04, stagger: 0.011 }, '>-0.01')
+          if (titleEls.length) tl.fromTo(titleEls, { opacity: 0 }, { opacity: 1, duration: 0.04, stagger: 0.02 })
+          if (bodyEls.length) tl.fromTo(bodyEls, { opacity: 0 }, { opacity: 1, duration: 0.03, stagger: 0.008 }, '>-0.01')
+          // the pen rides the writing: the title cursor blinks and slides
+          // to each character as it appears, then hands off to the body
+          // cursor as the title ends — the pen steps down to the paragraph
+          // and rides the words (tracking their lines, since the body
+          // wraps) until the last word lands, then lifts off the page.
+          // The body cursor never blinks — the title's blink is the hand;
+          // the body is its echo. Both timelines stay fully reversible.
+          const titleCursor = document.querySelector<HTMLElement>(`[data-tw-cursor="i${i}t"]`)
+          const bodyCursor = document.querySelector<HTMLElement>(`[data-tw-cursor="i${i}b"]`)
+          const titleEnd = titleEls.length * 0.02
+          const bodyStart = titleEnd - 0.01
+          const bodyEnd = bodyStart + bodyEls.length * 0.008
+          const cycle = 0.3 + 0.3 + 0.12
+          if (titleCursor) {
+            const blinks = Math.max(Math.ceil(titleEnd / cycle), 1)
+            tl.fromTo(
+              titleCursor,
+              { opacity: 1 },
+              { opacity: 0.15, duration: 0.3, repeat: blinks, yoyo: true, repeatDelay: 0.12 },
+              0,
+            )
+            titleEls.forEach((ch, j) => {
+              tl.to(titleCursor, { x: ch.offsetLeft + ch.offsetWidth, duration: 0.02, ease: 'power1.out' }, j * 0.02)
+            })
+            // the pen hands off as the title ends: it lifts here while the
+            // body cursor takes over below — the hand never stops writing.
+            // The fade spans from the title's end to the blink's last
+            // cycle, so it wins the opacity conflict while it runs and the
+            // blink can never yoyo the pen back under the finished line.
+            const fadeEnd = blinks * cycle
+            tl.to(
+              titleCursor,
+              { opacity: 0, duration: Math.max(fadeEnd - titleEnd, 0.12), ease: 'power1.out' },
+              titleEnd,
+            )
+          }
+          if (bodyCursor) {
+            // the pen steps down to the paragraph's first word, rides the
+            // words as they appear (stepping down as the lines wrap), and
+            // lifts as the last word lands — no blink, just the hand
+            const first = bodyEls[0]
+            tl.set(bodyCursor, { x: first.offsetLeft + first.offsetWidth, y: first.offsetTop }, bodyStart)
+            tl.fromTo(bodyCursor, { opacity: 0 }, { opacity: 1, duration: 0.1, ease: 'power1.out' }, bodyStart)
+            bodyEls.forEach((w, j) => {
+              tl.to(
+                bodyCursor,
+                { x: w.offsetLeft + w.offsetWidth, y: w.offsetTop, duration: 0.008, ease: 'power1.out' },
+                bodyStart + j * 0.008,
+              )
+            })
+            tl.to(bodyCursor, { opacity: 0, duration: 0.2, ease: 'power1.out' }, bodyEnd)
+          }
           ScrollTrigger.create({
             trigger: '#ecosystem [data-pin]',
             start: () => `top+=${room() * (i * 0.32 + 0.02)} top`,
@@ -180,22 +237,23 @@ export function OriginStory() {
                   {/* plate entrance — the first plate is already on stage at
                       progress 0, so the room never opens on a blank spread */}
                   {i > 0 && (
-                    <Animation target={`[data-id-plate="${i}"]`} start={s} end={s + 4} fromTo={[{ y: 44, opacity: 0 }, { y: 0, opacity: 1, ease: 'power2.out' }]} />
+                    <Animation target={`[data-id-plate="${i}"]`} start={s} end={s + 3} fromTo={[{ y: 44, opacity: 0 }, { y: 0, opacity: 1, ease: 'power2.out' }]} />
                   )}
                     <article data-id-plate={i} className="plate-frame hatch relative mx-auto max-w-3xl border border-parchment-ink/20 bg-parchment p-8 text-parchment-ink shadow-[0_24px_60px_-30px_rgb(0_0_0/0.45)] sm:p-10 lg:p-12">
                       {/* index numeral */}
-                      <Animation target={`[data-id-num="${i}"]`} start={s + 2} end={s + 5} fromTo={[{ opacity: 0 }, { opacity: 1 }]}>
+                      <Animation target={`[data-id-num="${i}"]`} start={s + 1} end={s + 3} fromTo={[{ opacity: 0 }, { opacity: 1 }]}>
                         <span data-id-num={i} className="tabular absolute right-7 top-7 font-mono text-sm tracking-widest text-parchment-ink/50">
                           {`0${i + 1}`}
                         </span>
                       </Animation>
 
-                      {/* the icon draws itself across */}
+                      {/* the icon draws itself across — a pen stroke: fast
+                          start, slow finish */}
                       <Animation
                         target={`[data-id-icon="${i}"]`}
-                        start={s + 4}
-                        end={s + 9}
-                        fromTo={[{ clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', ease: 'power2.inOut' }]}
+                        start={s + 3}
+                        end={s + 7}
+                        fromTo={[{ clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', ease: 'power2.in' }]}
                       >
                         <div data-id-icon={i} className="inline-block text-parchment-ink/85">
                           <card.icon className="h-11 w-11" />
@@ -203,29 +261,30 @@ export function OriginStory() {
                       </Animation>
 
                       {/* kicker stamps in before the writing starts */}
-                      <Animation target={`[data-id-kicker="${i}"]`} start={s + 5} end={s + 8} fromTo={[{ scale: 1.6, opacity: 0 }, { scale: 1, opacity: 1, ease: 'power4.in' }]}>
+                      <Animation target={`[data-id-kicker="${i}"]`} start={s + 4} end={s + 6} fromTo={[{ scale: 1.6, opacity: 0 }, { scale: 1, opacity: 1, ease: 'power4.in' }]}>
                         <p data-id-kicker={i} className="mt-6 font-mono text-kicker uppercase tracking-[0.24em] text-wine-700">
                           Identity {`0${i + 1}`}
                         </p>
                       </Animation>
 
                       <h3 className="display mt-4 min-h-[2.6em] text-[clamp(1.6rem,2.8vw,2.3rem)] leading-[1.12]" >
-                        <Typed id={`i${i}t`} text={card.title} unit="char" />
+                        <Typed id={`i${i}t`} text={card.title} unit="char" cursor />
                       </h3>
 
                       <p className="mt-4 max-w-[62ch] font-serif text-base leading-relaxed text-parchment-ink/80 sm:text-lg">
-                        <Typed id={`i${i}b`} text={card.body} unit="word" />
+                        <Typed id={`i${i}b`} text={card.body} unit="word" cursor />
                       </p>
 
                       {/* the wax dot presses once the plate is written */}
-                      <Animation target={`[data-id-stamp="${i}"]`} start={s + 24} end={s + 27} fromTo={[{ scale: 1.7, opacity: 0 }, { scale: 1, opacity: 1, ease: 'power4.in' }]}>
+                      <Animation target={`[data-id-stamp="${i}"]`} start={s + 22} end={s + 24} fromTo={[{ scale: 1.7, opacity: 0 }, { scale: 1, opacity: 1, ease: 'power4.in' }]}>
                         <span data-id-stamp={i} aria-hidden="true" className="absolute bottom-8 right-8 block h-2 w-2 rounded-full bg-wine-600/80" />
                       </Animation>
                     </article>
 
-                    {/* the plate lifts away for the next one */}
+                    {/* the plate lifts away for the next one — a slight
+                        turn, like a page lifting off the desk */}
                   {i < IDENTITIES.length - 1 && (
-                    <Animation target={`[data-id-plate="${i}"]`} start={s + 28} end={s + 32} fromTo={[{ y: 0, opacity: 1 }, { y: -36, opacity: 0, ease: 'power1.in', immediateRender: false }]} />
+                    <Animation target={`[data-id-plate="${i}"]`} start={s + 26} end={s + 29} fromTo={[{ y: 0, opacity: 1, rotation: 0 }, { y: -36, opacity: 0, rotation: -1.2, ease: 'power1.in', immediateRender: false }]} />
                   )}
                 </div>
               )

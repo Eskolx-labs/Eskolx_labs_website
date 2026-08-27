@@ -24,7 +24,7 @@ const PREFIX = (() => {
   }
   return p
 })()
-const TRAVEL_END = 88
+const TRAVEL_END = 80
 
 export function MarqueeBand() {
   const charDuration = TRAVEL_END / TOTAL
@@ -88,12 +88,27 @@ export function MarqueeBand() {
                         </Animation>
                       )
                     })}
-                    <span
-                      className="inline-block px-[0.28em] text-[clamp(2rem,5vw,4.5rem)] leading-none text-gold-leaf"
-                      aria-hidden="true"
+                    {/* the harvest's fruit: the separator pulses as the
+                        wave passes — the phrase's destination lands with
+                        the fruit, not just the letters. The star sits on
+                        the baseline with the letters and lifts by half
+                        the height difference, so it reads mid-height
+                        against them, not at their bottoms. */}
+                    <Animation
+                      start={charDuration * (PREFIX[wi] + word.length) * 0.7}
+                      end={charDuration * (PREFIX[wi] + word.length) * 0.7 + charDuration}
+                      fromTo={[
+                        { scale: 0.6, autoAlpha: 0.4 },
+                        { scale: 1, autoAlpha: 1, ease: 'back.out(2)' },
+                      ]}
                     >
-                      ❋
-                    </span>
+                      <span
+                        className="inline-block -translate-y-[0.18em] px-[0.28em] text-[clamp(2rem,5vw,4.5rem)] leading-none text-gold-leaf"
+                        aria-hidden="true"
+                      >
+                        ❋
+                      </span>
+                    </Animation>
                   </div>
                 )
               })}

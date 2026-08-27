@@ -131,7 +131,7 @@ function FaqRow({ item, index }: { item: (typeof FAQ)[number]; index: number }) 
       >
         <span className="font-serif text-[16px] font-medium leading-snug field-ink">{item.q}</span>
         <span
-          className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--field-line)_90%,transparent)] text-[color:var(--field-ink-soft)] transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${open ? 'rotate-45' : ''}`}
+          className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--field-line)_90%,transparent)] text-[color:var(--field-ink-soft)] transition-transform duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${open ? 'rotate-45' : ''}`}
         >
           <svg viewBox="0 0 12 12" className="h-3 w-3" aria-hidden="true">
             <path d="M6 1 V11 M1 6 H11" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
@@ -166,6 +166,14 @@ function FaqRow({ item, index }: { item: (typeof FAQ)[number]; index: number }) 
 // end while ink and background move together and contrast never drops
 const FIELD_PLATE =
   'border-[color-mix(in_srgb,var(--field-line)_70%,transparent)] bg-[color-mix(in_srgb,var(--field-bg)_88%,transparent)]'
+
+// the bar's stack travel is a pure linear function of the room (measured
+// fractions: 0, 1/3, 2/3, 1 at every viewport), so each plate frames at a
+// fixed timeline beat. The heading settles as its plate frames — the
+// arrival the linear slide never gives. Plate 1 is settled at the open;
+// plate 4 frames at the room's close, where a settle would fall past the
+// timeline's 0-100 band and compress every other beat.
+const BAR_FRAME = [0, 33.3, 66.6, 99.8]
 
 /*
  * The practicalities spread, in three movements. The covenant (what we do
@@ -254,8 +262,8 @@ export function FieldGuide() {
         field={{ from: PARCHMENT, to: PARCHMENT }}
       >
         <div className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
-          <Animation target="[data-fg-head]" start={2} end={62} to={{ y: -26 }} />
-          <Animation target="[data-fg-seal]" start={3} end={9} fromTo={[{ scale: 1.35, rotate: -12, opacity: 0, transformOrigin: '50% 50%' }, { scale: 1, rotate: -6, opacity: 1, ease: 'power4.in' }]} />
+          <Animation target="[data-fg-head]" start={2} end={50} to={{ y: -26 }} />
+          <Animation target="[data-fg-seal]" start={3} end={8} fromTo={[{ scale: 1.35, rotate: -12, opacity: 0, transformOrigin: '50% 50%' }, { scale: 1, rotate: -6, opacity: 1, ease: 'power4.in' }]} />
           <Reveal className="flex flex-wrap items-end justify-between gap-6">
             <div className="max-w-2xl" data-fg-head>
               <p className="font-mono text-kicker uppercase tracking-label text-wine-600" data-reveal-item>
@@ -277,8 +285,8 @@ export function FieldGuide() {
             </span>
           </Reveal>
 
-          <Animation target='[data-fg-wipe="0"]' start={12} end={24} fromTo={[{ clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', ease: 'power2.inOut' }]} />
-          <Animation target='[data-fg-wipe="1"]' start={22} end={34} fromTo={[{ clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', ease: 'power2.inOut' }]} />
+          <Animation target='[data-fg-wipe="0"]' start={10} end={20} fromTo={[{ clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', ease: 'power2.inOut' }]} />
+          <Animation target='[data-fg-wipe="1"]' start={18} end={28} fromTo={[{ clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', ease: 'power2.inOut' }]} />
           <Reveal className="mt-14 grid gap-px overflow-hidden rounded-sm border border-parchment-ink/20 bg-parchment-ink/15 md:grid-cols-2" y={24}>
             <div data-fg-wipe="0" className="bg-parchment p-7 sm:p-9">
               <h3 className="display text-xl text-parchment-ink">What we do</h3>
@@ -384,33 +392,51 @@ export function FieldGuide() {
                   style={{ overflow: 'clip' }}
                 >
                   <div data-bar-stack className="will-change-transform max-md:transform-none">
-                    {ASKS.map((r) => (
+                    {ASKS.map((r, i) => (
                       <article
                         key={r.n}
                         data-bar-plate={r.n}
                         className={`flex min-h-[280px] flex-col justify-center p-8 sm:p-10 ${FIELD_PLATE} [@media(min-width:768px)_and_(max-height:699.9px)]:min-h-0 [@media(min-width:768px)_and_(max-height:699.9px)]:p-6`}
                       >
-                        <span
-                          data-bar-num={r.n}
-                          className="tabular inline-flex h-12 w-12 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--field-line)_90%,transparent)] font-mono text-sm field-ink-soft"
-                        >
-                          {r.n}
-                        </span>
-                        <h3 className="display mt-5 text-2xl leading-snug field-ink sm:text-3xl">
-                          {r.title}
-                        </h3>
-                        <p className="mt-3 max-w-[52ch] text-[16px] leading-relaxed text-[color-mix(in_srgb,var(--field-ink)_80%,transparent)]">
-                          {r.body}
-                          {r.href && (
-                            <>
-                              {' '}
-                              <a href={r.href} target="_blank" rel="noreferrer" className="text-wine-400 underline decoration-gold-leaf/40 underline-offset-4 transition-colors hover:text-wine-300">
-                                {r.linkText}
-                              </a>
-                              {r.after}
-                            </>
-                          )}
-                        </p>
+                        {/* the plate's content settles as it frames — the
+                            arrival the linear slide never gives. Plate 1
+                            is settled at the open; plate 4 frames at the
+                            room's close, where a settle would fall past
+                            the timeline's 0-100 band. */}
+                        {i > 0 && i < ASKS.length - 1 && (
+                          <Animation
+                            target={`[data-bar-head="${i}"]`}
+                            start={BAR_FRAME[i] - 1}
+                            end={BAR_FRAME[i] + 3}
+                            fromTo={[
+                              { y: 18, scale: 0.985, opacity: 0.4 },
+                              { y: 0, scale: 1, opacity: 1, ease: 'back.out(1.4)' },
+                            ]}
+                          />
+                        )}
+                        <div data-bar-head={i}>
+                          <span
+                            data-bar-num={r.n}
+                            className="tabular inline-flex h-12 w-12 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--field-line)_90%,transparent)] font-mono text-sm field-ink-soft"
+                          >
+                            {r.n}
+                          </span>
+                          <h3 className="display mt-5 text-2xl leading-snug field-ink sm:text-3xl">
+                            {r.title}
+                          </h3>
+                          <p className="mt-3 max-w-[52ch] text-[16px] leading-relaxed text-[color-mix(in_srgb,var(--field-ink)_80%,transparent)]">
+                            {r.body}
+                            {r.href && (
+                              <>
+                                {' '}
+                                <a href={r.href} target="_blank" rel="noreferrer" className="text-wine-400 underline decoration-gold-leaf/40 underline-offset-4 transition-colors hover:text-wine-300">
+                                  {r.linkText}
+                                </a>
+                                {r.after}
+                              </>
+                            )}
+                          </p>
+                        </div>
                       </article>
                     ))}
                   </div>
@@ -469,11 +495,11 @@ export function FieldGuide() {
                     data-reveal-item
                     className="relative grid gap-1 py-4 sm:grid-cols-[8.5rem_1fr] sm:gap-4"
                   >
-                    {i > 0 && (
-                      <Animation target={`[data-status-rule="${i}"]`} start={62 + i * 5} end={68 + i * 5} fromTo={[{ scaleX: 0 }, { scaleX: 1, ease: 'power1.inOut' }]}>
-                        <span data-status-rule={i} aria-hidden="true" className="absolute left-0 top-0 block h-px w-full origin-left bg-[color-mix(in_srgb,var(--field-line)_90%,transparent)]" />
-                      </Animation>
-                    )}
+                        {i > 0 && (
+                          <Animation target={`[data-status-rule="${i}"]`} start={62 + i * 4} end={66 + i * 4} fromTo={[{ scaleX: 0 }, { scaleX: 1, ease: 'power2.out' }]}>
+                            <span data-status-rule={i} aria-hidden="true" className="absolute left-0 top-0 block h-px w-full origin-left bg-[color-mix(in_srgb,var(--field-line)_90%,transparent)]" />
+                          </Animation>
+                        )}
                     <dt className="font-mono text-kicker uppercase tracking-label-snug field-ink-soft sm:pt-1">{row.k}</dt>
                     <dd className="text-copy max-md:text-base leading-relaxed text-[color-mix(in_srgb,var(--field-ink)_85%,transparent)]">
                       {row.href ? (

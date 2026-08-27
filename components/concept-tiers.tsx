@@ -37,6 +37,15 @@ const TIERS = [
 // module-level so the Root's timeline effect never sees a fresh object
 const TIERS_FIELD = { from: LOAM, to: LOAM }
 
+// the stack's travel is a pure linear function of the room (measured
+// fractions: 0, 1/3, 2/3, 1 at every viewport), so each plate frames at
+// a fixed timeline beat. The heading settles as its plate frames — the
+// arrival the linear slide never gives. Plate 1 is settled at the open
+// (the room never opens on a blank spread); plate 4 frames at the room's
+// close, where a settle would fall past the timeline's 0-100 band and
+// compress every other beat.
+const TIER_FRAME = [0, 33.3, 66.6, 99.8]
+
 export function ConceptTiers() {
   // which stake the rail reports as current, and which plates have framed,
   // measured from the real stack (see lib/stakes). Written straight to the
@@ -94,6 +103,40 @@ export function ConceptTiers() {
             invalidateOnRefresh: true,
           },
         })
+        // the stage lifts away in the room's tail: the stack finishes its
+        // travel at a different room fraction at every viewport (measured:
+        // 0.89 at 1440x900, 1.19 at 1024x768, 2.7 on phones), so the exit
+        // is sized from the real geometry — it starts as the last plate
+        // frames and hands the stage to the dawn seam, never idling on a
+        // finished plate. The lift is a hair of y with the fade, the
+        // book's exit grammar.
+        const stage = document.querySelector<HTMLElement>('[data-tier-stage]')
+        if (stage) {
+          gsap.fromTo(stage, { y: 0, opacity: 1 }, {
+            y: -48,
+            opacity: 0,
+            ease: 'power1.in',
+            scrollTrigger: {
+              trigger: '#tiers [data-pin]',
+              start: () => {
+                const pin = document.querySelector('#tiers [data-pin]') as HTMLElement
+                const room = Math.max(pin.offsetHeight - window.innerHeight, 1)
+                const travel = Math.max(stack.scrollHeight - frame.clientHeight, 0)
+                const finish = Math.min(travel / room, 1)
+                return `top+=${room * Math.min(finish + 0.02, 0.97)} top`
+              },
+              end: () => {
+                const pin = document.querySelector('#tiers [data-pin]') as HTMLElement
+                const room = Math.max(pin.offsetHeight - window.innerHeight, 1)
+                const travel = Math.max(stack.scrollHeight - frame.clientHeight, 0)
+                const finish = Math.min(travel / room, 1)
+                return `top+=${room * Math.min(finish + 0.1, 1)} top`
+              },
+              scrub: true,
+              invalidateOnRefresh: true,
+            },
+          })
+        }
       })
       ScrollTrigger.refresh()
       return () => {
@@ -113,7 +156,7 @@ export function ConceptTiers() {
           mirror of the dawn seam before the method */}
       <Root
         id="dusk-seam"
-        className="relative flex h-[28vh] items-center justify-center bg-loam-950 md:h-[55vh]"
+        className="relative flex h-[28vh] items-center justify-center bg-loam-950 md:h-[45vh]"
         start="top bottom"
         end="bottom top"
         field={{
@@ -137,6 +180,10 @@ export function ConceptTiers() {
       >
       <Pin height="255vh" mobileHeight="170vh" pinMobile>
         <section className="relative flex h-full flex-col overflow-hidden">
+          {/* the stage lifts away in the room's tail — sized from the real
+              geometry in the stack-travel effect, because the stack
+              finishes at a different room fraction at every viewport */}
+          <div data-tier-stage className="flex h-full flex-col overflow-hidden">
           <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center px-4 pt-16 sm:px-6 lg:px-8">
             {/* room furniture: static inside the pinned shell (see the
                 guide-bar note — viewport Reveals scramble in sticky rooms) */}
@@ -217,41 +264,57 @@ export function ConceptTiers() {
                 style={{ overflow: 'clip' }}
               >
                 <div data-tier-stack className="will-change-transform max-md:transform-none">
-                  {TIERS.map((tier) => (
+                  {TIERS.map((tier, i) => (
                     <div key={tier.id} className="p-7 sm:p-9">
-                      <div className="rule-ornament">
-                        <span data-tier-kicker={tier.id} className="font-mono text-kicker tracking-label text-gold-leaf">
-                          TIER {tier.id}
-                        </span>
+                      {/* the heading settles as its plate frames: a slight
+                          rise and a hair of scale, landing with a spring —
+                          the arrival the linear slide never gives */}
+                      {i > 0 && i < TIERS.length - 1 && (
+                        <Animation
+                          target={`[data-tier-head="${i}"]`}
+                          start={TIER_FRAME[i] - 1}
+                          end={TIER_FRAME[i] + 3}
+                          fromTo={[
+                            { y: 18, scale: 0.985, opacity: 0.4 },
+                            { y: 0, scale: 1, opacity: 1, ease: 'back.out(1.4)' },
+                          ]}
+                        />
+                      )}
+                      <div data-tier-head={i}>
+                        <div className="rule-ornament">
+                          <span data-tier-kicker={tier.id} className="font-mono text-kicker tracking-label text-gold-leaf">
+                            TIER {tier.id}
+                          </span>
+                        </div>
+                        <h3 className="display mt-5 text-2xl leading-snug text-cream-100">
+                          {tier.name}
+                        </h3>
+                        <p className="mt-3 max-w-[65ch] leading-relaxed text-cream-200/80">{tier.goal}</p>
+
+                        <ul className="mt-7 space-y-2.5">
+                          {tier.concepts.map((c) => (
+                            <li key={c} className="flex items-center gap-3 text-copy text-cream-100/90">
+                              <svg viewBox="0 0 14 14" className="h-3.5 w-3.5 shrink-0 text-wine-400" aria-hidden="true">
+                                <path
+                                  d="M2 7.5 L5.5 11 L12 3"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                />
+                              </svg>
+                              {c}
+                            </li>
+                          ))}
+                        </ul>
                       </div>
-                      <h3 className="display mt-5 text-2xl leading-snug text-cream-100">
-                        {tier.name}
-                      </h3>
-                      <p className="mt-3 max-w-[65ch] leading-relaxed text-cream-200/80">{tier.goal}</p>
-
-                      <ul className="mt-7 space-y-2.5">
-                        {tier.concepts.map((c) => (
-                          <li key={c} className="flex items-center gap-3 text-copy text-cream-100/90">
-                            <svg viewBox="0 0 14 14" className="h-3.5 w-3.5 shrink-0 text-wine-400" aria-hidden="true">
-                              <path
-                                d="M2 7.5 L5.5 11 L12 3"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              />
-                            </svg>
-                            {c}
-                          </li>
-                        ))}
-                      </ul>
-
                     </div>
                   ))}
                 </div>
               </div>
             </div>
+          </div>
           </div>
         </section>
       </Pin>

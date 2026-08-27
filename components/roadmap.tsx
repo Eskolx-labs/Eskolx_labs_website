@@ -24,13 +24,29 @@ const PHASES = [
   },
 ]
 
+// the vine grows 2-88 at linear speed; the growth tip passes the three
+// nodes at the beats below (measured against the rail's real geometry:
+// 15/42/69 at 1440x900, 15/42/70 at 1024x768, 15/43/70 at 768x700 — the
+// nodes sit at fixed fractions of the rail, so the passes hold). Each
+// node pops as the tip passes it — the lighting is caused by the vine,
+// not a color lerp on a schedule.
+const VINE_PASS = [15, 42, 69]
+
 /*
  * The method told as one pinned, frameless spread: the room holds while
- * three phases rise onto the same open stage, one at a time — gold rule
- * first, then the whole entry settles as a unit — while the vine rail draws
- * itself past each chapter node and a quiet numeral marks your place. No
- * card, no window dressing; below md (or reduced motion) the beats simply
- * stack as an ordinary flowing section.
+ * three phases rise onto the same open stage, one at a time.
+ *
+ * The performance, in the book's register:
+ * The vine grows as its own linear draw (2-88) with a wine tip riding
+ * the leading edge; each node pops as the tip passes it, so the lighting
+ * is caused by the vine, not a color lerp on a schedule. Each phase
+ * rises as its node pops (the rule draws, the unit lands with
+ * power3.out), holds while the vine climbs to the next, and hands the
+ * stage with a slight lift. The numerals slide along the rail with the
+ * reading, and the quiet exit rises as it enters.
+ *
+ * Below md (or reduced motion) the beats simply stack as an ordinary
+ * flowing section.
  */
 export function Roadmap() {
   return (
@@ -40,7 +56,7 @@ export function Roadmap() {
           paper without ever bleaching the tiers mid-read */}
       <Root
         id="dawn-seam"
-        className="relative flex h-[28vh] items-center justify-center bg-loam-950 md:h-[55vh]"
+        className="relative flex h-[28vh] items-center justify-center bg-loam-950 md:h-[45vh]"
         start="top bottom"
         end="bottom top"
         field={{
@@ -79,12 +95,26 @@ export function Roadmap() {
 
             {/* the open stage: three beats share one place, no frame */}
             <div className="relative mt-8 min-h-0 flex-1 md:mt-10">
-              {/* vine rail draws past the chapter nodes. Decorative only, and
-                  absolute against a shell that reduced motion collapses — so
-                  it exists only while motion runs. */}
+              {/* vine rail draws past the chapter nodes, a wine tip riding
+                  its leading edge. Decorative only, and absolute against a
+                  shell that reduced motion collapses — so it exists only
+                  while motion runs. */}
               <div aria-hidden="true" className="absolute bottom-6 left-[19px] top-1 hidden w-px motion-safe:md:block">
-                <Animation target="[data-vine-rail]" start={2} end={88} fromTo={[{ scaleY: 0 }, { scaleY: 1, ease: 'power1.inOut' }]}>
+                <Animation target="[data-vine-rail]" start={2} end={88} fromTo={[{ scaleY: 0 }, { scaleY: 1 }]}>
                   <span data-vine-rail className="block h-full w-full origin-top bg-parchment-ink/25" />
+                </Animation>
+                {/* the growth tip: rides the vine's leading edge as it
+                    grows, so the eye follows the point of growth */}
+                <Animation
+                  target="[data-vine-tip]"
+                  start={2}
+                  end={88}
+                  fromTo={[
+                    { y: 0 },
+                    { y: () => Math.max(((document.querySelector('[data-vine-rail]') as HTMLElement | null)?.offsetHeight ?? 0) - 10, 0) },
+                  ]}
+                >
+                  <span data-vine-tip className="absolute top-0 block h-2.5 w-2.5 rounded-full bg-wine-500" style={{ left: '-5px' }} />
                 </Animation>
                 <svg viewBox="0 0 24 24" aria-hidden="true" className="absolute -bottom-5 -left-[11px] h-5 w-5 text-parchment-ink/40" fill="none">
                   <path d="M12 2 C11.4 7 13.5 10 17 11 M17 11 c3-.8 4.4 1.2 3.2 3 c-1 1.5-3.2 1-3.4-.8" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
@@ -96,41 +126,51 @@ export function Roadmap() {
                   data-vine-node={i}
                   aria-hidden="true"
                   style={{ top: `${14 + i * 30}%` }}
-                  className="absolute left-[14px] hidden h-[11px] w-[11px] rounded-full border-2 border-parchment-ink/40 bg-parchment transition-colors duration-300 motion-safe:md:block"
+                  className="absolute left-[14px] hidden h-[11px] w-[11px] rounded-full border-2 border-parchment-ink/40 bg-parchment motion-safe:md:block"
                 />
               ))}
               {[0, 1, 2].map((i) => (
                 <Waypoint
                   key={i}
-                  at={i * 31 + 11}
+                  at={VINE_PASS[i]}
                   tween={{
                     target: `[data-vine-node="${i}"]`,
-                    to: { backgroundColor: '#963a68', borderColor: '#963a68' },
-                    duration: 4,
+                    fromTo: [
+                      { scale: 1, backgroundColor: '#ece1c6', borderColor: 'rgba(41,25,12,0.4)' },
+                      { scale: 1.55, backgroundColor: '#963a68', borderColor: '#963a68', duration: 1.6, ease: 'back.out(2)', immediateRender: false },
+                    ],
+                  }}
+                />
+              ))}
+              {[0, 1, 2].map((i) => (
+                <Waypoint
+                  key={`settle-${i}`}
+                  at={VINE_PASS[i] + 1.6}
+                  tween={{
+                    target: `[data-vine-node="${i}"]`,
+                    to: { scale: 1, duration: 1.4, ease: 'power2.out', immediateRender: false },
                   }}
                 />
               ))}
 
-              {/* the reader's place: chapter numerals */}
+              {/* the reader's place: chapter numerals slide along the rail
+                  as the reading advances, a cursor on the spine */}
               <div aria-hidden="true" className="absolute right-0 top-1/2 hidden -translate-y-1/2 flex-col items-end gap-7 font-mono text-sm tracking-widest text-parchment-ink/70 lg:flex">
                 {PHASES.map((p, i) => (
                   <span key={p.phase} data-rm-num={i}>{`0${i + 1}`}</span>
                 ))}
               </div>
-              {PHASES.map((_, i) => {
-                const s = i * 31
-                return (
-                  <Animation key={`num-in-${i}`} target={`[data-rm-num="${i}"]`} start={s + 6} end={s + 11} fromTo={[{ opacity: 0.35 }, { opacity: 1, color: '#963a68' }]} />
-                )
-              })}
+              {PHASES.map((_, i) => (
+                <Animation key={`num-in-${i}`} target={`[data-rm-num="${i}"]`} start={VINE_PASS[i]} end={VINE_PASS[i] + 4} fromTo={[{ opacity: 0.35, x: 14 }, { opacity: 1, x: 0, color: '#963a68', ease: 'power3.out' }]} />
+              ))}
               {[0, 1].map((i) => (
-                <Animation key={`num-out-${i}`} target={`[data-rm-num="${i}"]`} start={i * 31 + 30} end={i * 31 + 35} fromTo={[{ opacity: 1, color: '#963a68' }, { opacity: 0.35, color: '#29190c', immediateRender: false }]} />
+                <Animation key={`num-out-${i}`} target={`[data-rm-num="${i}"]`} start={VINE_PASS[i] + 22} end={VINE_PASS[i] + 26} fromTo={[{ opacity: 1, color: '#963a68' }, { opacity: 0.35, x: -14, color: '#29190c', ease: 'power2.in', immediateRender: false }]} />
               ))}
 
               {/* the beats themselves */}
               <div className="grid h-full">
                 {PHASES.map((p, i) => {
-                  const s = i * 31
+                  const s = VINE_PASS[i]
                   return (
                     <div
                       key={p.phase}
@@ -140,18 +180,25 @@ export function Roadmap() {
                       {/* phase 1 is on stage at progress 0 — the room never
                           opens on a blank spread */}
                       {i > 0 ? (
-                        <Animation target={`[data-rm-rule="${i}"]`} start={s} end={s + 8} fromTo={[{ scaleX: 0 }, { scaleX: 1, ease: 'power2.out' }]}>
+                        <Animation target={`[data-rm-rule="${i}"]`} start={s} end={s + 4} fromTo={[{ scaleX: 0 }, { scaleX: 1, ease: 'power2.out' }]}>
                           <span data-rm-rule={i} className="mb-6 block h-px w-16 origin-left bg-gold-leaf/80" />
                         </Animation>
                       ) : (
                         <span data-rm-rule={i} className="mb-6 block h-px w-16 origin-left bg-gold-leaf/80" />
                       )}
+                      {/* the dash is a chapter-begin cue: it draws in as
+                          its phase rises and draws back out as the phase
+                          hands the stage — one live dash at any moment,
+                          never a graveyard of marks (the nodes on the vine
+                          stay lit; they are the history, the dash is the
+                          here-and-now) */}
+                      <Animation target={`[data-rm-rule="${i}"]`} start={s + 21} end={s + 25} fromTo={[{ scaleX: 1 }, { scaleX: 0, ease: 'power1.in', immediateRender: false }]} />
                       {i > 0 && (
                         <Animation
                           target={`[data-rm-unit="${i}"]`}
-                          start={s + 2}
-                          end={s + 18}
-                          fromTo={[{ y: 48, opacity: 0 }, { y: 0, opacity: 1, ease: 'power2.out' }]}
+                          start={s + 1}
+                          end={s + 12}
+                          fromTo={[{ y: 48, opacity: 0, scale: 0.985 }, { y: 0, opacity: 1, scale: 1, ease: 'power3.out' }]}
                         />
                       )}
                       <div data-rm-unit={i}>
@@ -179,8 +226,8 @@ export function Roadmap() {
                       {i < 2 && (
                         <Animation
                           target={`[data-rm-unit="${i}"]`}
-                          start={s + 22}
-                          end={s + 29}
+                          start={s + 21}
+                          end={s + 25}
                           fromTo={[{ y: 0, opacity: 1 }, { y: -26, opacity: 0, ease: 'power1.in', immediateRender: false }]}
                         />
                       )}
@@ -211,8 +258,8 @@ export function Roadmap() {
         <Animation
           target="[data-exit-inner]"
           start={8}
-          end={55}
-          fromTo={[{ y: 28, opacity: 0 }, { y: 0, opacity: 1 }]}
+          end={45}
+          fromTo={[{ y: 28, opacity: 0 }, { y: 0, opacity: 1, ease: 'power2.out' }]}
         />
         <div data-exit-inner className="mx-auto max-w-7xl px-4 pb-24 pt-16 sm:px-6 lg:px-8">
           <div className="flex flex-col items-start justify-between gap-5 border-t border-parchment-ink/25 pt-10 sm:flex-row sm:items-center">

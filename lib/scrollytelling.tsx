@@ -251,6 +251,7 @@ type WaypointProps = {
     to?: gsap.TweenVars
     fromTo?: [gsap.TweenVars, gsap.TweenVars]
     duration?: number
+    ease?: string
   }
   children?: ReactNode
 }
@@ -263,9 +264,10 @@ export function Waypoint({ at, tween, children }: WaypointProps) {
     const targets = scoped(tween.target)
     if (!targets || targets.length === 0) return
     const duration = tween.duration ?? 0.001
+    const ease = tween.ease ?? 'power1.inOut'
     const t = tween.to
-      ? gsap.to(targets, { ...tween.to, duration, ease: 'power1.inOut' })
-      : gsap.fromTo(targets, tween.fromTo![0], { ...tween.fromTo![1], duration, ease: 'power1.inOut' })
+      ? gsap.to(targets, { ...tween.to, duration, ease })
+      : gsap.fromTo(targets, tween.fromTo![0], { ...tween.fromTo![1], duration, ease })
     timeline.add(t, at)
     return () => {
       t.kill()

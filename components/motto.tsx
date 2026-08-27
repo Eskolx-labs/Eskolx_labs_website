@@ -65,21 +65,21 @@ export function Motto() {
           {/* the performance, in em offsets so any viewport scales it.
               Four beats, strictly in order, all scrubbed to scroll.
 
-              Beat 1 (0-10) the settle: the compound presses in from
+              Beat 1 (0-8) the settle: the compound presses in from
               slightly small and low - the page's first breath.
 
-              Beat 2 (12-26) the pluck: grip, tense, flick. The ing
+              Beat 2 (12-23) the pluck: grip, tense, flick. The ing
               pulls back a hair, then arcs away alone - x and y carry
               different eases so the path curves, and the rotation and
               shrink sell the release. Deep does not move yet.
 
-              Beat 3 (28-50) the crossing: anticipation, the pass, the
+              Beat 3 (26-47) the crossing: anticipation, the pass, the
               landing. Deep squashes down and ducks under while Learn
               stretches up and steps over - a handoff with weight, not
               a swap. The whole line breathes as they pass, and both
               settle back to the line with a soft overshoot.
 
-              Beat 4 (52-62) the pop: only after the words have settled
+              Beat 4 (50-58) the pop: only after the words have settled
               does "build expertise." land beneath with a back.out
               spring and resolve to rest.
 
@@ -89,7 +89,7 @@ export function Motto() {
           <Animation
             target="[data-motto-wording]"
             start={0}
-            end={10}
+            end={8}
             fromTo={[
               { scale: 0.94, y: '0.15em', opacity: 0.8 },
               { scale: 1, y: '0em', opacity: 1, ease: 'power2.out' },
@@ -99,60 +99,60 @@ export function Motto() {
           <Animation
             target="[data-motto-ing]"
             start={12}
-            end={15}
+            end={14}
             fromTo={[
               { x: '0em', y: '0em', scale: 1, autoAlpha: 1 },
               { x: '-0.06em', y: '0.1em', scale: 1.08, ease: 'power1.out' },
             ]}
           />
-          <Animation target="[data-motto-ing]" start={15} end={26} to={{ x: '1.7em', ease: 'power2.out' }} />
-          <Animation target="[data-motto-ing]" start={15} end={26} to={{ y: '-1.5em', ease: 'power2.out' }} />
-          <Animation target="[data-motto-ing]" start={15} end={26} to={{ rotation: 26, scale: 0.08, autoAlpha: 0, ease: 'power2.in' }} />
+          <Animation target="[data-motto-ing]" start={14} end={23} to={{ x: '1.7em', ease: 'power2.out' }} />
+          <Animation target="[data-motto-ing]" start={14} end={23} to={{ y: '-1.5em', ease: 'power2.out' }} />
+          <Animation target="[data-motto-ing]" start={14} end={23} to={{ rotation: 26, scale: 0.08, autoAlpha: 0, ease: 'power2.in' }} />
           {/* Beat 3: the crossing - anticipation, the pass, the landing */}
-          <Animation target="[data-motto-deep]" start={28} end={33} to={{ y: '0.12em', scaleY: 0.9, rotation: -3, ease: 'power1.out' }} />
-          <Animation target="[data-motto-learn]" start={28} end={33} to={{ y: '-0.12em', scaleY: 1.08, rotation: 2, ease: 'power1.out' }} />
+          <Animation target="[data-motto-deep]" start={26} end={30} to={{ y: '0.12em', scaleY: 0.9, rotation: -3, ease: 'power1.out' }} />
+          <Animation target="[data-motto-learn]" start={26} end={30} to={{ y: '-0.12em', scaleY: 1.08, rotation: 2, ease: 'power1.out' }} />
           <Animation
             target="[data-motto-deep]"
-            start={33}
-            end={45}
+            start={30}
+            end={41}
             fromTo={[{ x: '-2.74em' }, { x: '0em', ease: 'power2.inOut' }]}
           />
           <Animation
             target="[data-motto-learn]"
-            start={33}
-            end={45}
+            start={30}
+            end={41}
             fromTo={[{ x: '2.5em' }, { x: '0em', ease: 'power2.inOut' }]}
           />
-          <Animation target="[data-motto-deep]" start={45} end={50} to={{ y: '0.05em', scaleY: 1, rotation: 0, ease: 'power2.out' }} />
-          <Animation target="[data-motto-deep]" start={50} end={53} to={{ y: '0em' }} />
-          <Animation target="[data-motto-learn]" start={45} end={50} to={{ y: '-0.05em', scaleY: 1, rotation: 0, ease: 'power2.out' }} />
-          <Animation target="[data-motto-learn]" start={50} end={53} to={{ y: '0em' }} />
+          <Animation target="[data-motto-deep]" start={41} end={45} to={{ y: '0.05em', scaleY: 1, rotation: 0, ease: 'power2.out' }} />
+          <Animation target="[data-motto-deep]" start={45} end={47} to={{ y: '0em' }} />
+          <Animation target="[data-motto-learn]" start={41} end={45} to={{ y: '-0.05em', scaleY: 1, rotation: 0, ease: 'power2.out' }} />
+          <Animation target="[data-motto-learn]" start={45} end={47} to={{ y: '0em' }} />
           {/* the line breathes: a micro-push as the words pass */}
-          <Animation target="[data-motto-wording]" start={33} end={40} to={{ scale: 1.015 }} />
-          <Animation target="[data-motto-wording]" start={40} end={50} to={{ scale: 1 }} />
+          <Animation target="[data-motto-wording]" start={30} end={36} to={{ scale: 1.015 }} />
+          <Animation target="[data-motto-wording]" start={36} end={45} to={{ scale: 1 }} />
           {/* Beat 4: the pop - the promise lands with a spring */}
           <Animation
             target="[data-motto-promise]"
-            start={52}
-            end={58}
+            start={50}
+            end={55}
             fromTo={[
               { y: '0.7em', scale: 0.85, opacity: 0 },
               { y: '0em', scale: 1.05, opacity: 1, ease: 'back.out(1.6)' },
             ]}
           />
-          <Animation target="[data-motto-promise]" start={58} end={62} to={{ scale: 1, ease: 'power1.out' }} />
+          <Animation target="[data-motto-promise]" start={55} end={58} to={{ scale: 1, ease: 'power1.out' }} />
 
           {/* the whole spread lifts away before the field turns to night */}
           <Animation
             target="[data-motto-wording]"
             start={80}
-            end={90}
+            end={88}
             to={{ y: -48, opacity: 0 }}
           />
           <Animation
             target="[data-motto-promise]"
             start={80}
-            end={90}
+            end={88}
             to={{ y: -48, opacity: 0 }}
           />
         </section>

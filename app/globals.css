@@ -257,7 +257,14 @@
   }
 }
 
-/* letterpress buttons: plate with double hairline, presses on actuation */
+/* letterpress buttons: plate with double hairline, presses on actuation.
+   The press is asymmetric on purpose: down is a fast snap (the plate
+   accelerates into the paper, ~100ms), up is a spring with a slight
+   overshoot (~220ms, the plate bounces off the paper). The plate scales
+   0.99 as it presses so it reads as going INTO the paper, not just
+   twitching 1px. The shadow moves faster than the transform — it leads
+   the press and settles before the plate rebounds. Hover is gated
+   behind (hover: hover) so touch taps never double-flash. */
 .btn-plate {
   position: relative;
   display: inline-flex;
@@ -275,21 +282,30 @@
     inset 0 0 0 1px var(--field-bg),
     inset 0 0 0 2px rgba(41, 25, 12, 0.12),
     0 10px 24px -12px rgb(0 0 0 / 0.35);
+  /* release: the plate springs off the paper */
   transition:
-    transform 140ms cubic-bezier(0.2, 0.8, 0.2, 1),
-    box-shadow 140ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    transform 220ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 150ms cubic-bezier(0.2, 0.8, 0.2, 1),
     background-color 140ms linear,
     border-color 140ms linear;
 }
-.btn-plate:hover {
-  transform: translateY(-1px);
+@media (hover: hover) and (pointer: fine) {
+  .btn-plate:hover {
+    transform: translateY(-1px);
+  }
 }
 .btn-plate:active {
-  transform: translateY(1px);
+  /* press: a fast snap into the paper, shadow leading the way */
+  transform: translateY(1px) scale(0.99);
   box-shadow:
     inset 0 0 0 1px var(--field-bg),
     inset 0 0 0 2px rgba(41, 25, 12, 0.2),
     0 4px 10px -8px rgb(0 0 0 / 0.4);
+  transition:
+    transform 100ms cubic-bezier(0.3, 0, 0.8, 0.15),
+    box-shadow 90ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    background-color 100ms linear,
+    border-color 100ms linear;
 }
 
 .btn-wine {
@@ -312,6 +328,38 @@
 .btn-outline:hover {
   background: rgb(41 25 12 / 0.06);
   border-color: rgba(41, 25, 12, 0.75);
+}
+
+/* the drawing underline: the site's gold link language draws left to
+   right on hover instead of toggling — hand-inked, the letterpress
+   register. Compositor-only (transform, no paint), so it never costs
+   the moving document. The line retracts right-to-left on hover-out
+   (the transform-origin flips), and draws on keyboard focus too.
+   Gated behind (hover: hover) so touch taps never flash it. */
+.link-draw {
+  position: relative;
+}
+.link-draw::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.2em;
+  height: 1.5px;
+  background: color-mix(in srgb, var(--gold-leaf) 65%, transparent);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+@media (hover: hover) and (pointer: fine) {
+  .link-draw:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+}
+.link-draw:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: left;
 }
 
 /* hairline rule with a centered diamond, engraving-plate divider */
@@ -378,19 +426,27 @@
 .tabular {
   font-variant-numeric: tabular-nums;
 }
+
+/* the hand-typing cursor: a wine ink bar that rides the writing — it
+   slides to each character as it appears and blinks while the hand
+   writes, then fades as the last word lands. The motion is driven by
+   the typing timeline (GSAP), so it pauses and reverses with the
+   writing. */
+.tw-cursor {
+  position: absolute;
+  left: 0;
+  display: inline-block;
+  width: 0.55em;
+  height: 0.9em;
+  top: 0.1em;
+  background: var(--wine-500);
+  opacity: 0;
+}
 }
 
 /* anchor jumps clear the fixed rail */
 [id] {
   scroll-margin-top: 5rem;
-}
-
-/* the current stake lifts on the desktop rail too — past and present must
-   not read identically on the element whose job is "you are here" */
-#tiers [data-stake][aria-current='true'],
-[data-bar-stake][aria-current='true'] {
-  background-color: #963a68;
-  transform: translateY(-1px);
 }
 
 /* Plate-room stake lighting, and the phone strip treatment. Unlayered on
@@ -432,6 +488,17 @@
 }
 [data-tier-kicker][data-lit] {
   color: #d29cb6;
+}
+
+/* the current stake pops on the desktop rail too — past and present must
+   not read identically on the element whose job is "you are here". This
+   rule sits AFTER the data-lit block so it beats the lit fill at equal
+   specificity: the current stake carries the wine fill and a spring pop,
+   the past stakes keep the quiet lit border. */
+#tiers [data-stake][aria-current='true'],
+[data-bar-stake][aria-current='true'] {
+  background-color: #963a68;
+  transform: translateY(-1px) scale(1.04);
 }
 
 /* Below lg only the phone strips carry the stakes, and a lit state that
