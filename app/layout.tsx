@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import localFont from 'next/font/local'
 import { SmoothScroll } from '@/lib/motion'
-import { LivingGrain } from '@/components/living-grain'
 import { DebugHud } from '@/components/debug-hud'
 import './globals.css'
 
@@ -113,7 +112,6 @@ export default function RootLayout({
       <body className="grain antialiased">
         <div dangerouslySetInnerHTML={{ __html: CONTRACT }} style={{ display: 'none' }} />
         <SmoothScroll>{children}</SmoothScroll>
-        <LivingGrain />
         <DebugHud />
       </body>
     </html>

@@ -5,7 +5,7 @@ site, its nature, what the craft community does with this kind of motion, and a
 different angle on it. One entry at a time gets deep research + implementation;
 this file is the map.
 
-Progress: #2 motto (done pre-pass), #3 mission (done), #1 hero cover (done), #4 seal flood (removed — carried no content), #5 roadmap (done), #6 concept tiers (done), #7 origin story (done), #8 field guide (done), #9 community (done), #10 footer (done), #11 marquee (done), #12 reveal (done), #13 living grain (done), #14 ink press (in progress).
+Progress: #2 motto (done pre-pass), #3 mission (done), #1 hero cover (done), #4 seal flood (removed — carried no content), #5 roadmap (done), #6 concept tiers (done), #7 origin story (done), #8 field guide (done), #9 community (done), #10 footer (done), #11 marquee (done), #12 reveal (done), #13 living grain (removed — imperceptible, cost a paint every frame), #14 ink press (in progress).
 
 Legend for "nature":
 - **scrubbed** — driven by scroll progress (GSAP timeline / ScrollTrigger)
@@ -110,7 +110,7 @@ Legend for "nature":
 - **Nature**: ambient, canvas, velocity-reactive.
 - **Expert practice**: velocity-reactive ambient layers are the "the page breathes" pattern. The craft: fibers respond to velocity with a linear boost — the best work adds *inertia* (velocity eases in/out, fibers lag then catch up) and *direction* (fibers streak along the scroll axis, not just drift).
 - **Different angle**: the fibers are rectangles with stretch — they could *curl* (a slight rotation aligned with velocity) or *swirl* near the edges. The boost is clamped at ±14 — a gentler curve with a longer tail would feel more like wind than a push.
-- **STATUS: DONE** (committed 3146f9b). The draft is now an asymmetric exponential chase (fast attack λ10/s, slow decay λ3/s, frame-rate independent, zeroed below 0.5) — the surge is tied to the finger, the tail lingers. Each mote carries its own drag (3-10) so the field shears into a gradient of lag. Streaks are stroked lines aligned with each mote's actual velocity plus a slow tumble — no save/restore. Verified: 504 lit pixels at rest, 778 mid-scroll, 498 settled; 65/65 regression checks.
+- **STATUS: REMOVED** (committed with the removal). The dust was imperceptible at its honest alpha (4-12%, max 28/255 on the canvas) and cost a canvas paint every frame; raising the alpha to visible (58c23ef) read as noise, not atmosphere. The user's call: the layer is dead weight — removed entirely, including the smoothed-draft work from 3146f9b (archived in git history if the layer ever returns).
 
 ### 14. Ink press — the field turn as wet ink  (components/ink-press.tsx)
 - **What**: on the dawn seam, a fixed overlay of the target color runs through SVG turbulence+displacement; the bite rises (power2.in), settles (power2.out), releases.
