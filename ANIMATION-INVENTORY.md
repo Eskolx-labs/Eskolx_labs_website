@@ -5,7 +5,7 @@ site, its nature, what the craft community does with this kind of motion, and a
 different angle on it. One entry at a time gets deep research + implementation;
 this file is the map.
 
-Progress: #2 motto (done pre-pass), #3 mission (done), #1 hero cover (done), #4 seal flood (removed — carried no content), #5 roadmap (done), #6 concept tiers (in progress).
+Progress: #2 motto (done pre-pass), #3 mission (done), #1 hero cover (done), #4 seal flood (removed — carried no content), #5 roadmap (done), #6 concept tiers (done), #7 origin story (in progress).
 
 Legend for "nature":
 - **scrubbed** — driven by scroll progress (GSAP timeline / ScrollTrigger)
@@ -64,6 +64,7 @@ Legend for "nature":
 - **Nature**: scrubbed entrances + time-based typing.
 - **Expert practice**: the hand-typing is the standout — time-based so it finishes even when scroll stops. The craft around it: the *stamp* eases (power4.in) are the right register for ink; the icon clipPath draw is a straight wipe — a draw with a slight ease asymmetry (fast start, slow finish) reads as a pen stroke. The plate entrance (y:44, power2.out) has no anticipation or overshoot.
 - **Different angle**: the typing is char/word stagger with linear opacity — a *cursor* (a blinking ink bar) would make the hand-writing feel alive, and the last word could land with a micro-settle. The plate lift-away (y:-36, power1.in) is a straight slide — a slight rotation (like a page lifting) would hand the stage to the next plate.
+- **STATUS: in progress**
 
 ### 8. Field guide — covenant, bar, ledger  (components/field-guide.tsx)
 - **What**: head drifts y:-26 (2-62); seal stamps scale 1.35→1 (power4.in); two covenant panels wipe via clipPath (power2.inOut); bar stack travels (linear); status rules draw scaleX (power1.inOut); FAQ rows unfold on grid-rows CSS transition; stake lighting toggles.

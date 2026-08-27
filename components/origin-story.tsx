@@ -78,18 +78,22 @@ const IDENTITIES = [
 
 /* Hand-typed text: units blink onto the plate one by one from a
    time-based timeline, so a reader who stops scrolling still watches the
-   sentence finish — pausing never leaves a word half-written. Plain text
-   to screen readers; static and fully visible under reduced motion. */
+   sentence finish — pausing never leaves a word half-written. A cursor
+   (a blinking ink bar) rides the writing and fades as the last word
+   lands. Plain text to screen readers; static and fully visible under
+   reduced motion. */
 function Typed({
   id,
   text,
   unit,
   className,
+  cursor = false,
 }: {
   id: string
   text: string
   unit: 'char' | 'word'
   className?: string
+  cursor?: boolean
 }) {
   const parts = unit === 'char' ? Array.from(text) : text.split(' ')
   return (
@@ -105,6 +109,7 @@ function Typed({
             {unit === 'word' && j < parts.length - 1 ? `${p}\u00A0` : p === ' ' ? ' ' : p}
           </span>
         ))}
+        {cursor && <span data-tw-cursor={id} className="tw-cursor" />}
       </span>
     </span>
   )
@@ -136,6 +141,24 @@ export function OriginStory() {
           const tl = gsap.timeline({ paused: true, defaults: { ease: 'none' } })
           if (titleEls.length) tl.fromTo(titleEls, { opacity: 0 }, { opacity: 1, duration: 0.05, stagger: 0.026 })
           if (bodyEls.length) tl.fromTo(bodyEls, { opacity: 0 }, { opacity: 1, duration: 0.04, stagger: 0.011 }, '>-0.01')
+          // the cursor blinks while the hand writes, then fades as the
+          // last word lands — the pen lifts off the page. The blink is
+          // finite (it covers exactly the writing window), so the fade
+          // follows it on the timeline and reversing the timeline
+          // unwinds both — no kill, no stuck cursor.
+          const cursor = document.querySelector<HTMLElement>(`[data-tw-cursor="i${i}t"]`)
+          if (cursor) {
+            const writeEnd = titleEls.length * 0.026 + bodyEls.length * 0.011
+            const cycle = 0.3 + 0.3 + 0.12
+            const blinks = Math.max(Math.ceil(writeEnd / cycle), 1)
+            tl.fromTo(
+              cursor,
+              { opacity: 1 },
+              { opacity: 0.15, duration: 0.3, repeat: blinks, yoyo: true, repeatDelay: 0.12 },
+              0,
+            )
+            tl.to(cursor, { opacity: 0, duration: 0.25, ease: 'power1.out' }, writeEnd)
+          }
           ScrollTrigger.create({
             trigger: '#ecosystem [data-pin]',
             start: () => `top+=${room() * (i * 0.32 + 0.02)} top`,
@@ -190,12 +213,13 @@ export function OriginStory() {
                         </span>
                       </Animation>
 
-                      {/* the icon draws itself across */}
+                      {/* the icon draws itself across — a pen stroke: fast
+                          start, slow finish */}
                       <Animation
                         target={`[data-id-icon="${i}"]`}
                         start={s + 4}
                         end={s + 9}
-                        fromTo={[{ clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', ease: 'power2.inOut' }]}
+                        fromTo={[{ clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', ease: 'power2.in' }]}
                       >
                         <div data-id-icon={i} className="inline-block text-parchment-ink/85">
                           <card.icon className="h-11 w-11" />
@@ -210,7 +234,7 @@ export function OriginStory() {
                       </Animation>
 
                       <h3 className="display mt-4 min-h-[2.6em] text-[clamp(1.6rem,2.8vw,2.3rem)] leading-[1.12]" >
-                        <Typed id={`i${i}t`} text={card.title} unit="char" />
+                        <Typed id={`i${i}t`} text={card.title} unit="char" cursor />
                       </h3>
 
                       <p className="mt-4 max-w-[62ch] font-serif text-base leading-relaxed text-parchment-ink/80 sm:text-lg">
@@ -223,9 +247,10 @@ export function OriginStory() {
                       </Animation>
                     </article>
 
-                    {/* the plate lifts away for the next one */}
+                    {/* the plate lifts away for the next one — a slight
+                        turn, like a page lifting off the desk */}
                   {i < IDENTITIES.length - 1 && (
-                    <Animation target={`[data-id-plate="${i}"]`} start={s + 28} end={s + 32} fromTo={[{ y: 0, opacity: 1 }, { y: -36, opacity: 0, ease: 'power1.in', immediateRender: false }]} />
+                    <Animation target={`[data-id-plate="${i}"]`} start={s + 28} end={s + 32} fromTo={[{ y: 0, opacity: 1, rotation: 0 }, { y: -36, opacity: 0, rotation: -1.2, ease: 'power1.in', immediateRender: false }]} />
                   )}
                 </div>
               )
