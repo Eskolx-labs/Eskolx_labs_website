@@ -379,15 +379,18 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* the hand-typing cursor: a wine ink bar that blinks while the hand
-   writes and fades as the last word lands. The blink is driven by the
-   typing timeline (GSAP), so it pauses and reverses with the writing. */
+/* the hand-typing cursor: a wine ink bar that rides the writing — it
+   slides to each character as it appears and blinks while the hand
+   writes, then fades as the last word lands. The motion is driven by
+   the typing timeline (GSAP), so it pauses and reverses with the
+   writing. */
 .tw-cursor {
+  position: absolute;
+  left: 0;
   display: inline-block;
   width: 0.55em;
-  height: 1em;
-  margin-left: 0.12em;
-  vertical-align: -0.12em;
+  height: 0.9em;
+  top: 0.1em;
   background: var(--wine-500);
   opacity: 0;
 }

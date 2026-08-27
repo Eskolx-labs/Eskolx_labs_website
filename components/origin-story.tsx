@@ -99,7 +99,7 @@ function Typed({
   return (
     <span className={className}>
       <span className="sr-only">{text}</span>
-      <span aria-hidden="true">
+      <span aria-hidden="true" className={cursor ? 'relative inline-block' : undefined}>
         {parts.map((p, j) => (
           <span
             key={j}
@@ -141,11 +141,12 @@ export function OriginStory() {
           const tl = gsap.timeline({ paused: true, defaults: { ease: 'none' } })
           if (titleEls.length) tl.fromTo(titleEls, { opacity: 0 }, { opacity: 1, duration: 0.05, stagger: 0.026 })
           if (bodyEls.length) tl.fromTo(bodyEls, { opacity: 0 }, { opacity: 1, duration: 0.04, stagger: 0.011 }, '>-0.01')
-          // the cursor blinks while the hand writes, then fades as the
-          // last word lands — the pen lifts off the page. The blink is
-          // finite (it covers exactly the writing window), so the fade
-          // follows it on the timeline and reversing the timeline
-          // unwinds both — no kill, no stuck cursor.
+          // the cursor rides the writing: it slides to each character as
+          // it appears (the char's own stagger beat), blinks while the
+          // hand writes, and fades as the last word lands — the pen lifts
+          // off the page. The blink is finite (it covers exactly the
+          // writing window), so the timeline stays reversible — no kill,
+          // no stuck cursor.
           const cursor = document.querySelector<HTMLElement>(`[data-tw-cursor="i${i}t"]`)
           if (cursor) {
             const writeEnd = titleEls.length * 0.026 + bodyEls.length * 0.011
@@ -157,6 +158,12 @@ export function OriginStory() {
               { opacity: 0.15, duration: 0.3, repeat: blinks, yoyo: true, repeatDelay: 0.12 },
               0,
             )
+            // the pen tip: slide to just past each char as it lands —
+            // back-to-back (duration = the stagger interval) so the pen
+            // rides the writing instead of jumping ahead
+            titleEls.forEach((ch, j) => {
+              tl.to(cursor, { x: ch.offsetLeft + ch.offsetWidth, duration: 0.026, ease: 'power1.out' }, j * 0.026)
+            })
             tl.to(cursor, { opacity: 0, duration: 0.25, ease: 'power1.out' }, writeEnd)
           }
           ScrollTrigger.create({
