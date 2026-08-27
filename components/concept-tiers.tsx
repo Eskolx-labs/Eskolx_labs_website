@@ -103,6 +103,40 @@ export function ConceptTiers() {
             invalidateOnRefresh: true,
           },
         })
+        // the stage lifts away in the room's tail: the stack finishes its
+        // travel at a different room fraction at every viewport (measured:
+        // 0.89 at 1440x900, 1.19 at 1024x768, 2.7 on phones), so the exit
+        // is sized from the real geometry — it starts as the last plate
+        // frames and hands the stage to the dawn seam, never idling on a
+        // finished plate. The lift is a hair of y with the fade, the
+        // book's exit grammar.
+        const stage = document.querySelector<HTMLElement>('[data-tier-stage]')
+        if (stage) {
+          gsap.fromTo(stage, { y: 0, opacity: 1 }, {
+            y: -48,
+            opacity: 0,
+            ease: 'power1.in',
+            scrollTrigger: {
+              trigger: '#tiers [data-pin]',
+              start: () => {
+                const pin = document.querySelector('#tiers [data-pin]') as HTMLElement
+                const room = Math.max(pin.offsetHeight - window.innerHeight, 1)
+                const travel = Math.max(stack.scrollHeight - frame.clientHeight, 0)
+                const finish = Math.min(travel / room, 1)
+                return `top+=${room * Math.min(finish + 0.02, 0.97)} top`
+              },
+              end: () => {
+                const pin = document.querySelector('#tiers [data-pin]') as HTMLElement
+                const room = Math.max(pin.offsetHeight - window.innerHeight, 1)
+                const travel = Math.max(stack.scrollHeight - frame.clientHeight, 0)
+                const finish = Math.min(travel / room, 1)
+                return `top+=${room * Math.min(finish + 0.1, 1)} top`
+              },
+              scrub: true,
+              invalidateOnRefresh: true,
+            },
+          })
+        }
       })
       ScrollTrigger.refresh()
       return () => {
@@ -122,7 +156,7 @@ export function ConceptTiers() {
           mirror of the dawn seam before the method */}
       <Root
         id="dusk-seam"
-        className="relative flex h-[28vh] items-center justify-center bg-loam-950 md:h-[55vh]"
+        className="relative flex h-[28vh] items-center justify-center bg-loam-950 md:h-[45vh]"
         start="top bottom"
         end="bottom top"
         field={{
@@ -146,6 +180,10 @@ export function ConceptTiers() {
       >
       <Pin height="255vh" mobileHeight="170vh" pinMobile>
         <section className="relative flex h-full flex-col overflow-hidden">
+          {/* the stage lifts away in the room's tail — sized from the real
+              geometry in the stack-travel effect, because the stack
+              finishes at a different room fraction at every viewport */}
+          <div data-tier-stage className="flex h-full flex-col overflow-hidden">
           <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center px-4 pt-16 sm:px-6 lg:px-8">
             {/* room furniture: static inside the pinned shell (see the
                 guide-bar note — viewport Reveals scramble in sticky rooms) */}
@@ -276,6 +314,7 @@ export function ConceptTiers() {
                 </div>
               </div>
             </div>
+          </div>
           </div>
         </section>
       </Pin>

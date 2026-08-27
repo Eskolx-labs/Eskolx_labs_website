@@ -56,7 +56,7 @@ export function Roadmap() {
           paper without ever bleaching the tiers mid-read */}
       <Root
         id="dawn-seam"
-        className="relative flex h-[28vh] items-center justify-center bg-loam-950 md:h-[55vh]"
+        className="relative flex h-[28vh] items-center justify-center bg-loam-950 md:h-[45vh]"
         start="top bottom"
         end="bottom top"
         field={{

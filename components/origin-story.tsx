@@ -162,9 +162,12 @@ export function OriginStory() {
             titleEls.forEach((ch, j) => {
               tl.to(titleCursor, { x: ch.offsetLeft + ch.offsetWidth, duration: 0.02, ease: 'power1.out' }, j * 0.02)
             })
-            // the fade sits AFTER the blink's last cycle, so the blink
-            // never yoyo's the pen back under the finished line
-            tl.to(titleCursor, { opacity: 0, duration: 0.25, ease: 'power1.out' }, blinks * cycle)
+            // the pen lifts as the last character lands: the fade starts
+            // at the title's end and, starting later, wins the opacity
+            // conflict while it runs — the pen never sits blinking at the
+            // finished line while the body writes below, and never
+            // resurrects after the fade
+            tl.to(titleCursor, { opacity: 0, duration: 0.25, ease: 'power1.out' }, titleEnd)
           }
           ScrollTrigger.create({
             trigger: '#ecosystem [data-pin]',
