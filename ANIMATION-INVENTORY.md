@@ -5,7 +5,7 @@ site, its nature, what the craft community does with this kind of motion, and a
 different angle on it. One entry at a time gets deep research + implementation;
 this file is the map.
 
-Progress: #2 motto (done pre-pass), #3 mission (done), #1 hero cover (done), #4 seal flood (removed — carried no content), #5 roadmap (done), #6 concept tiers (done), #7 origin story (done), #8 field guide (done), #9 community (done), #10 footer (done), #11 marquee (done), #12 reveal (done), #13 living grain (removed — imperceptible, cost a paint every frame), #14 ink press (done — already expert-grade, stale doc fixed), #15 field controller (done — already expert-grade), #16 site nav (done), #17 buttons (done), #18 cards (done in the community pass), #19 links (in progress).
+Progress: #2 motto (done pre-pass), #3 mission (done), #1 hero cover (done), #4 seal flood (removed — carried no content), #5 roadmap (done), #6 concept tiers (done), #7 origin story (done), #8 field guide (done), #9 community (done), #10 footer (done), #11 marquee (done), #12 reveal (done), #13 living grain (removed — imperceptible, cost a paint every frame), #14 ink press (done — already expert-grade, stale doc fixed), #15 field controller (done — already expert-grade), #16 site nav (done), #17 buttons (done), #18 cards (done in the community pass), #19 links (done). ALL 19 CLOSED.
 
 Legend for "nature":
 - **scrubbed** — driven by scroll progress (GSAP timeline / ScrollTrigger)
@@ -155,7 +155,7 @@ Legend for "nature":
 - **What**: hover underlines with gold decoration, color transitions.
 - **Nature**: micro.
 - **Expert practice**: the underline-offset + decoration-gold is the site's signature link language — consistent and quiet. The best sites animate the underline *drawing* (background-size or scaleX) rather than toggling it.
-- **Different angle**: the underline appears on hover (decoration toggles) — a *drawing* underline (scaleX from left, 200ms expo) would make the links feel hand-inked, matching the letterpress register.
+- **STATUS: DONE** (committed 6cceb19). The gold line now draws left-to-right on hover (300ms, cubic-bezier(0.16,1,0.3,1) — the hand-inked expo) and retracts right-to-left on hover-out (the transform-origin flips) — a ::after with scaleX, the only compositor-only draw. It draws on keyboard focus too (WCAG 2.4.7), gated behind (hover: hover) for touch. Applied to the nav links, footer links, the keepers' commit-log link, and the harvest's secondary row. Verified: rest scaleX 0, hover draws to 1, hover-out retracts to 0; 65/65 regression checks.
 
 ---
 
