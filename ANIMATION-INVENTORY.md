@@ -5,7 +5,7 @@ site, its nature, what the craft community does with this kind of motion, and a
 different angle on it. One entry at a time gets deep research + implementation;
 this file is the map.
 
-Progress: #2 motto (done pre-pass), #3 mission (done), #1 hero cover (done), #4 seal flood (removed — carried no content), #5 roadmap (done), #6 concept tiers (done), #7 origin story (done), #8 field guide (done), #9 community (in progress).
+Progress: #2 motto (done pre-pass), #3 mission (done), #1 hero cover (done), #4 seal flood (removed — carried no content), #5 roadmap (done), #6 concept tiers (done), #7 origin story (done), #8 field guide (done), #9 community (done), #10 footer (in progress).
 
 Legend for "nature":
 - **scrubbed** — driven by scroll progress (GSAP timeline / ScrollTrigger)
@@ -78,7 +78,7 @@ Legend for "nature":
 - **Nature**: scrubbed cascade + micro hovers.
 - **Expert practice**: the cascade is the "staggered entrance" pattern — the lead offsets (7% per card) are the right idea. The craft: cards rise with power2.out but no overshoot; the chip stamps with power3.in (hard) which is right for a stamp but the card and chip overlap (-=0.28) so the chip lands mid-card-rise — the best work lets the card *settle* before the chip stamps.
 - **Different angle**: the card hover (translate-y -1, shadow) is a CSS transition — a *lift with a slight rotate* and a springier ease would make the harvest feel physical. The arrow nudge (translate-x 1) is fine but could rotate with the lift.
-- **STATUS: in progress**
+- **STATUS: DONE** (committed 27885b2). The cards land with a slight back.out(1.2) overshoot; the chips stamp AFTER their card settles (the overlap is now a trailing gap) — ink on paper; the card hover lifts with a spring (cubic-bezier(0.34,1.56,0.64,1)), a hair more travel (-1.5) and a slight rotate (0.4°). Verified: chips stamp after their cards settle; 65/65 regression checks.
 
 ### 10. Footer — the close  (components/site-footer.tsx)
 - **What**: seal stamps scale 2→1 (power4.in, 0-40); close rule draws scaleX (power1.inOut, 45-82).
