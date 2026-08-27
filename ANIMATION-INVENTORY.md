@@ -117,6 +117,7 @@ Legend for "nature":
 - **Nature**: scrubbed, filter-based, one authored moment.
 - **Expert practice**: this is already a distinctive, expert-grade effect (the displacement bite with a settle is the right grammar for "pressed into paper"). The craft: the bite peaks at scale 74 and rests at 22 — the *rest* is the key detail (the grain stays, the press is real).
 - **Different angle**: only the dawn seam presses; the guide's dusk rides the lerp. A second press on the dusk (or the flood) would give the book two authored turns — but restraint may be the point. The press could also *sound* the field's ink snap (the held-then-snapped re-ink) — the press is the visual of the snap.
+- **STATUS: in progress**
 
 ### 15. Field controller — the two almanac fields  (lib/field-controller.ts)
 - **What**: the page's field colors scrub continuously against scroll (lerp with a luminance-crossover ink snap, quantized to 1/64 steps, throttled writes).
