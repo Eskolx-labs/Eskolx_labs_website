@@ -78,6 +78,7 @@ Legend for "nature":
 - **Nature**: scrubbed cascade + micro hovers.
 - **Expert practice**: the cascade is the "staggered entrance" pattern — the lead offsets (7% per card) are the right idea. The craft: cards rise with power2.out but no overshoot; the chip stamps with power3.in (hard) which is right for a stamp but the card and chip overlap (-=0.28) so the chip lands mid-card-rise — the best work lets the card *settle* before the chip stamps.
 - **Different angle**: the card hover (translate-y -1, shadow) is a CSS transition — a *lift with a slight rotate* and a springier ease would make the harvest feel physical. The arrow nudge (translate-x 1) is fine but could rotate with the lift.
+- **STATUS: in progress**
 
 ### 10. Footer — the close  (components/site-footer.tsx)
 - **What**: seal stamps scale 2→1 (power4.in, 0-40); close rule draws scaleX (power1.inOut, 45-82).

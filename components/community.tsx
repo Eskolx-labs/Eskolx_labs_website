@@ -107,14 +107,16 @@ export function Community() {
           tl.fromTo(
             card,
             { y: 36, opacity: 0, rotate: -1 },
-            { y: 0, opacity: 1, rotate: 0, ease: 'power2.out', duration: 0.7 },
+            { y: 0, opacity: 1, rotate: 0, ease: 'back.out(1.2)', duration: 0.7 },
           )
           if (chip) {
+            // the chip stamps AFTER the card settles — a stamp landing on
+            // a still-rising card reads as noise, not ink
             tl.fromTo(
               chip,
               { scale: 1.55, opacity: 0 },
               { scale: 1, opacity: 1, ease: 'power3.in', duration: 0.35 },
-              '-=0.28',
+              '>-0.05',
             )
           }
           if (index) {
@@ -122,7 +124,7 @@ export function Community() {
               index,
               { opacity: 0, rotate: 8 },
               { opacity: 1, rotate: 0, ease: 'power2.out', duration: 0.3 },
-              '-=0.15',
+              '>-0.1',
             )
           }
         })
@@ -163,7 +165,7 @@ export function Community() {
               href={c.href}
               target="_blank"
               rel="noreferrer"
-              className="group relative flex flex-col overflow-hidden rounded-sm border border-parchment-ink/25 bg-parchment transition-all duration-300 ease-out hover:-translate-y-1 hover:border-wine-500/60 hover:shadow-[0_22px_48px_-24px_rgb(0_0_0/0.4)]"
+              className="group relative flex flex-col overflow-hidden rounded-sm border border-parchment-ink/25 bg-parchment transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:-translate-y-1.5 hover:rotate-[0.4deg] hover:border-wine-500/60 hover:shadow-[0_22px_48px_-24px_rgb(0_0_0/0.4)]"
             >
               <div data-harvest={i} className="flex flex-1 flex-col p-7">
                 <div className="flex items-start justify-between">
