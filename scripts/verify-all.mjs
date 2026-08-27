@@ -77,12 +77,6 @@ const fieldState = (page) => page.evaluate(() => {
   const a = lum(bg); const b = lum(ink)
   return { bg, ink, contrast: (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05) }
 })
-const sealState = (page) => page.evaluate(() => {
-  const s = document.querySelector('[data-flood-seal]')
-  const m = new DOMMatrixReadOnly(getComputedStyle(s).transform === 'none' ? 'matrix(1,0,0,1,0,0)' : getComputedStyle(s).transform)
-  return { scale: m.a, opacity: +getComputedStyle(s).opacity }
-})
-
 // ---- desktop 1440x900 ----------------------------------------------------
 {
   const vp = [1440, 900]
@@ -110,14 +104,6 @@ const sealState = (page) => page.evaluate(() => {
     const travel = stack.scrollHeight - stack.parentElement.clientHeight
     return travel / (pin.offsetHeight - innerHeight) < 0.95
   }))
-  await scrollPin(page, '#seal-flood [data-pin]', 0.5)
-  await page.waitForTimeout(500)
-  const sealMid = await sealState(page)
-  check('desktop: seal zooms mid-flood', sealMid.scale > 5 && sealMid.opacity === 1, `scale ${sealMid.scale}`)
-  await scrollPin(page, '#seal-flood [data-pin]', 1)
-  await page.waitForTimeout(500)
-  const sealEnd = await sealState(page)
-  check('desktop: seal releases at flood end', sealEnd.opacity === 0)
   // room openings: first beat on stage at progress 0
   await scrollToSel(page, '#ecosystem')
   await page.waitForTimeout(400)
@@ -130,12 +116,6 @@ const sealState = (page) => page.evaluate(() => {
   check('desktop: method opens on phase 1', await page.evaluate(() => {
     const t = [...document.querySelectorAll('h3')].find((e) => e.textContent.includes('Basic statistical packages'))
     return t && +getComputedStyle(t.closest('[data-rm-unit], div')).opacity === 1
-  }))
-  await scrollToSel(page, '#seal-flood')
-  await page.waitForTimeout(400)
-  check('desktop: flood opens on its label', await page.evaluate(() => {
-    const l = document.querySelector('[data-flood-label]')
-    return l && +getComputedStyle(l).opacity === 1
   }))
   // ink snap: sample the guide-dusk turn, no step below 3.2
   const { top, span } = await page.evaluate(() => {
@@ -233,7 +213,6 @@ const sealState = (page) => page.evaluate(() => {
     getComputedStyle(document.querySelector('[data-mission-line="0"]')).transform !== 'none'))
   check('phone: trellis pin active', await pinActive('#tiers'))
   check('phone: bar pin active', await pinActive('#guide-bar'))
-  check('phone: flood pin active', await pinActive('#seal-flood'))
   await scrollPin(page, '#tiers [data-pin]', 1)
   await page.waitForTimeout(400)
   check('phone: trellis reaches tier 4', await page.evaluate(() => {
@@ -297,10 +276,8 @@ const sealState = (page) => page.evaluate(() => {
     const expected = 1
     check(`phone: ${room} tap 04 lands on plate 4`, Math.abs(landed.frac - expected) < 0.08)
   }
-  await scrollPin(page, '#seal-flood [data-pin]', 0.4)
+  await scrollPin(page, '#guide-bar [data-pin]', 0.4)
   await page.waitForTimeout(400)
-  const sealMid = await sealState(page)
-  check('phone: seal zooms and stays visible', sealMid.scale > 2 && sealMid.opacity === 1, `scale ${sealMid.scale}`)
   check('phone: plate windows use overflow clip', await page.evaluate(() =>
     ['tiers', 'guide-bar'].every((id) => {
       const stack = document.querySelector(`#${id} [data-tier-stack], #${id} [data-bar-stack]`)
@@ -361,7 +338,7 @@ const sealState = (page) => page.evaluate(() => {
     return el && getComputedStyle(el).visibility === 'visible'
   }))
   check('short: tier rooms stay pinned', await page.evaluate(() =>
-    ['#tiers', '#guide-bar', '#seal-flood'].every((id) => getComputedStyle(document.querySelector(`${id} [data-pin] > div > div`)).position === 'sticky')))
+    ['#tiers', '#guide-bar'].every((id) => getComputedStyle(document.querySelector(`${id} [data-pin] > div > div`)).position === 'sticky')))
   check('short: roadmap phases not superimposed', await page.evaluate(() => {
     const beats = [...document.querySelectorAll('[data-rm-beat]')]
     const tops = beats.map((b) => b.getBoundingClientRect().top + window.scrollY)
@@ -376,7 +353,7 @@ const sealState = (page) => page.evaluate(() => {
   const vp = [844, 390]
   const page = await newPage(vp)
   check('landscape: every pin collapses', await page.evaluate(() =>
-    ['#top', '#tiers', '#guide-bar', '#seal-flood', '#roadmap'].every((id) => getComputedStyle(document.querySelector(`${id} [data-pin] > div > div`)).position === 'static')))
+    ['#top', '#tiers', '#guide-bar', '#roadmap'].every((id) => getComputedStyle(document.querySelector(`${id} [data-pin] > div > div`)).position === 'static')))
   check('landscape: no horizontal overflow', await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
   await page.close()
 }
@@ -491,7 +468,7 @@ const sealState = (page) => page.evaluate(() => {
   // bands with frozen pins and no timelines.
   const page = await newPage([1440, 699])
   check('band 699h: tier rooms pinned', await page.evaluate(() =>
-    ['#top', '#tiers', '#guide-bar', '#seal-flood'].every((id) => getComputedStyle(document.querySelector(`${id} [data-pin] > div > div`)).position === 'sticky')))
+    ['#top', '#tiers', '#guide-bar'].every((id) => getComputedStyle(document.querySelector(`${id} [data-pin] > div > div`)).position === 'sticky')))
   await page.setViewportSize({ width: 1440, height: 700 })
   await page.waitForTimeout(1000)
   check('band 700h: hero pinned again', await page.evaluate(() =>

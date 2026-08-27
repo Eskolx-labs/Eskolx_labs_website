@@ -5,7 +5,6 @@ import { Mission } from '@/components/mission'
 import { OriginStory } from '@/components/origin-story'
 import { ConceptTiers } from '@/components/concept-tiers'
 import { Roadmap } from '@/components/roadmap'
-import { SealFlood } from '@/components/seal-flood'
 import { Leadership } from '@/components/leadership'
 import { MarqueeBand } from '@/components/marquee-band'
 import { Community } from '@/components/community'
@@ -25,7 +24,6 @@ export default function Page() {
         <OriginStory />
         <ConceptTiers />
         <Roadmap />
-        <SealFlood />
         <Leadership />
         <MarqueeBand />
         <Community />

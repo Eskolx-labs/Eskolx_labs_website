@@ -5,7 +5,7 @@ site, its nature, what the craft community does with this kind of motion, and a
 different angle on it. One entry at a time gets deep research + implementation;
 this file is the map.
 
-Progress: #2 motto (done pre-pass), #3 mission (done), #1 hero cover (in progress).
+Progress: #2 motto (done pre-pass), #3 mission (done), #1 hero cover (done), #4 seal flood (removed — carried no content), #5 roadmap (in progress).
 
 Legend for "nature":
 - **scrubbed** — driven by scroll progress (GSAP timeline / ScrollTrigger)
@@ -23,6 +23,7 @@ Legend for "nature":
 - **Nature**: time-based arrival + scrubbed exits.
 - **Expert practice**: load-in arrivals are the one place a site may use time-based motion; the best covers treat the arrival as a *press* (stamp) with anticipation and a settle, and the exit as a *hand-off* — the mark should feel it is leaving the stage for the next actor, not just fading.
 - **Different angle**: the seal stamps with power4.in (fast, hard) but the wordmark just fades up. A cover arrival with a shared rhythm (mark settles, seal stamps *onto* it, a hairline draws under) reads as one choreographed opening. The lift-away is a straight fade — a slight scale-down + rotation toward the top edge (like the page turning) would hand the spread to the motto.
+- **STATUS: DONE** (committed 8b2b8e3). One timeline now: the mark settles (power3.out, scale 0.98), the seal stamps onto it (power4.in), the paper gives a hair (1.03) and settles — the follow-through the motto taught. A gold hairline draws beneath as the seal stamps (the book's rule language opening the cover). The hand-off recedes: scale 0.97, -1.2° turn as the field turns to day. Verified beat-by-beat, 70/70 regression checks.
 
 ### 2. Motto spread — the four-beat choreography  (components/motto.tsx)
 - **What**: settle → pluck (ing flicked away on a curved arc) → crossing (Deep ducks under Learn with squash/stretch + overshoot) → pop (build expertise. back.out spring). Just reworked; the reference for the rest of this pass.
@@ -42,6 +43,7 @@ Legend for "nature":
 - **Nature**: scrubbed, one continuous swell.
 - **Expert practice**: the "grow past the frame" move (minimal-goods circle-grow) is a known pattern; the craft is in the *ease curve* — a constant power1.inOut makes the whole swell feel like one speed. A press should accelerate into the frame (power2.in) and decelerate as it fills (power2.out) — the stamp *lands*.
 - **Different angle**: the dissolve of die→vine is opacity-only, so the seal visibly thins before it floods. A clipPath or scale-based dissolve (the die "wearing away" from the edges) would read as the stamp pressing through the paper rather than fading. The label lift is a straight fade-up — it could slide aside like a caption being pushed by the growing stamp.
+- **STATUS: REMOVED** (committed with the removal). The interlude carried no content (one caption, one emblem), and the keepers seam already owns the night turn — the book flows method → keepers without it. Reworked once (press in, wear through, lift off, acf4c4b) before the removal; the work is archived in git history if the interlude ever returns.
 
 ### 5. Roadmap — the growing method  (components/roadmap.tsx)
 - **What**: vine rail draws scaleY 0→1 (2-88); vine nodes light via Waypoints (color to wine); chapter numerals fade/color in and out; each phase: gold rule scaleX (power2.out), unit rises y:48 (power2.out), lifts y:-26 (power1.in); exit block rises y:28.
