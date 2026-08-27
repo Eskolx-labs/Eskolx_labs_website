@@ -5,7 +5,7 @@ site, its nature, what the craft community does with this kind of motion, and a
 different angle on it. One entry at a time gets deep research + implementation;
 this file is the map.
 
-Progress: #2 motto (done pre-pass), #3 mission (done), #1 hero cover (done), #4 seal flood (removed — carried no content), #5 roadmap (done), #6 concept tiers (done), #7 origin story (done), #8 field guide (done), #9 community (done), #10 footer (done), #11 marquee (done), #12 reveal (done), #13 living grain (removed — imperceptible, cost a paint every frame), #14 ink press (done — already expert-grade, stale doc fixed), #15 field controller (done — already expert-grade), #16 site nav (in progress).
+Progress: #2 motto (done pre-pass), #3 mission (done), #1 hero cover (done), #4 seal flood (removed — carried no content), #5 roadmap (done), #6 concept tiers (done), #7 origin story (done), #8 field guide (done), #9 community (done), #10 footer (done), #11 marquee (done), #12 reveal (done), #13 living grain (removed — imperceptible, cost a paint every frame), #14 ink press (done — already expert-grade, stale doc fixed), #15 field controller (done — already expert-grade), #16 site nav (done), #17-19 micro (in progress).
 
 Legend for "nature":
 - **scrubbed** — driven by scroll progress (GSAP timeline / ScrollTrigger)
@@ -136,6 +136,7 @@ Legend for "nature":
 - **Nature**: scrubbed + CSS micro.
 - **Expert practice**: the seal's 180° rotation across the whole page is the "slow ambient" pattern — linear is right for a full-page rotation. The marker slide uses the expo-out curve (0.16,1,0.3,1) — the correct choice for a sliding indicator.
 - **Different angle**: the seal rotation is *constant* — a rotation that *eases* (fast at chapter boundaries, slow mid-chapter) would tie it to the book's rhythm. The reading rule is linear — it could share the close rule's timing language at the end. The CTA fade is a plain autoAlpha — a small rise (y:8) with the fade would make it feel like it steps in.
+- **STATUS: DONE** (committed 21777f8). The CTA now steps in with a small rise (y 8→0, power2.out) as the thesis lifts — the book's entrance grammar. The seal spin (0→180 linear), reading rule (linear fill), and marker slide (expo curve) were already right: the spin is a full-page ambient that must stay linear, the rule is the book-wide progress, and the marker's expo is the correct slide curve. 65/65 regression checks.
 
 ### 17. Buttons — the letterpress plates  (app/globals.css .btn-plate)
 - **What**: hover lifts -1px, active presses +1px with shadow collapse, 140ms cubic-bezier(0.2,0.8,0.2,1).
