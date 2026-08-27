@@ -385,14 +385,6 @@
   scroll-margin-top: 5rem;
 }
 
-/* the current stake lifts on the desktop rail too — past and present must
-   not read identically on the element whose job is "you are here" */
-#tiers [data-stake][aria-current='true'],
-[data-bar-stake][aria-current='true'] {
-  background-color: #963a68;
-  transform: translateY(-1px);
-}
-
 /* Plate-room stake lighting, and the phone strip treatment. Unlayered on
  purpose: these must beat the utility classes on the same elements
  (bg-loam-900/60 and friends), and Tailwind v4's utilities layer wins the
@@ -432,6 +424,17 @@
 }
 [data-tier-kicker][data-lit] {
   color: #d29cb6;
+}
+
+/* the current stake pops on the desktop rail too — past and present must
+   not read identically on the element whose job is "you are here". This
+   rule sits AFTER the data-lit block so it beats the lit fill at equal
+   specificity: the current stake carries the wine fill and a spring pop,
+   the past stakes keep the quiet lit border. */
+#tiers [data-stake][aria-current='true'],
+[data-bar-stake][aria-current='true'] {
+  background-color: #963a68;
+  transform: translateY(-1px) scale(1.04);
 }
 
 /* Below lg only the phone strips carry the stakes, and a lit state that

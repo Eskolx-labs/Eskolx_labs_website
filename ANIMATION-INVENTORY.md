@@ -57,6 +57,7 @@ Legend for "nature":
 - **Nature**: scrubbed travel + state lighting.
 - **Expert practice**: stack-travel is the "one window, many plates" pattern; the craft is in the *transition between plates* — currently the stack slides linearly (ease none), so plates cross at constant speed with no beat. The best work gives the crossing a slight ease (power1.inOut) so each plate *arrives* and *departs* with weight, and the incoming plate's content settles after the frame stops.
 - **Different angle**: the rail drift (y:14) is a constant slide — a parallax with a different speed than the stack is right, but it could also *light* with a spring. The stake lighting is a hard class toggle — a 150ms transition on the lit state would make the rail feel alive. The phone strip progress is scaleX via class — same.
+- **STATUS: in progress**
 
 ### 7. Origin story — the Eshcol plates  (components/origin-story.tsx)
 - **What**: plate rises y:44 (power2.out); numeral fades; icon draws via clipPath inset (power2.inOut); kicker stamps scale 1.6→1 (power4.in); title/body hand-type on a time-based timeline (stagger 0.026/0.011); wax dot stamps scale 1.7→1 (power4.in); plate lifts y:-36 (power1.in).
