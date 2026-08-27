@@ -103,6 +103,7 @@ Legend for "nature":
 - **Nature**: scrubbed, generic.
 - **Expert practice**: the "rise in, sink out" is the workhorse; the craft is in *not* using it everywhere — it's the default for every section heading, which flattens the book's rhythm. The best sites reserve the generic reveal for secondary content and give primary moments bespoke beats.
 - **Different angle**: the reveal is opacity+y with power2.out — fine, but it's used on ~15 elements across the site, so the *sameness* is the issue, not the motion itself. Could get a slight blur-in (filter) for a softer register, or a per-element stagger that follows reading order.
+- **STATUS: in progress**
 
 ### 13. Living grain — the drifting fibers  (components/living-grain.tsx)
 - **What**: 110 canvas fibers drift like dust; Lenis velocity blows them across the page (boost), shear-stretching them; ink tone tracks the field.
