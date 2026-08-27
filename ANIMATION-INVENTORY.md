@@ -5,7 +5,7 @@ site, its nature, what the craft community does with this kind of motion, and a
 different angle on it. One entry at a time gets deep research + implementation;
 this file is the map.
 
-Progress: #2 motto (done pre-pass), #3 mission (done), #1 hero cover (done), #4 seal flood (removed — carried no content), #5 roadmap (done), #6 concept tiers (done), #7 origin story (done), #8 field guide (done), #9 community (done), #10 footer (done), #11 marquee (done), #12 reveal (done), #13 living grain (removed — imperceptible, cost a paint every frame), #14 ink press (done — already expert-grade, stale doc fixed), #15 field controller (done — already expert-grade), #16 site nav (done), #17 buttons (in progress), #18 cards (done in the community pass), #19 links (pending).
+Progress: #2 motto (done pre-pass), #3 mission (done), #1 hero cover (done), #4 seal flood (removed — carried no content), #5 roadmap (done), #6 concept tiers (done), #7 origin story (done), #8 field guide (done), #9 community (done), #10 footer (done), #11 marquee (done), #12 reveal (done), #13 living grain (removed — imperceptible, cost a paint every frame), #14 ink press (done — already expert-grade, stale doc fixed), #15 field controller (done — already expert-grade), #16 site nav (done), #17 buttons (done), #18 cards (done in the community pass), #19 links (in progress).
 
 Legend for "nature":
 - **scrubbed** — driven by scroll progress (GSAP timeline / ScrollTrigger)
@@ -143,6 +143,7 @@ Legend for "nature":
 - **Nature**: micro.
 - **Expert practice**: the press-on-actuation is the right physical metaphor for a letterpress plate. 140ms is snappy — good. The hover lift (-1px) is subtle — the best plates lift with a *slight shadow growth* (already there) and a *tiny rotate* for tactility.
 - **Different angle**: the press is translateY only — a scale (0.99) with the press would read as the plate going *into* the paper. The ease (0.2,0.8,0.2,1) is a gentle in-out — a springier release (0.16,1,0.3,1) on hover-out would feel more mechanical.
+- **STATUS: DONE** (committed c0b000e). The press is now asymmetric: down is a fast snap (100ms, cubic-bezier(0.3,0,0.8,0.15)) with scale 0.99 — the plate accelerates INTO the paper; up is a spring (220ms, cubic-bezier(0.34,1.56,0.64,1)) with a slight overshoot — the plate bounces off the paper. The shadow moves faster than the transform (leads the press, settles before the rebound). Hover gated behind (hover: hover) and (pointer: fine) — no touch double-flash. Verified: hover -1, press y 1 + scale 0.99, release overshoots to -1.2 then settles; 65/65 regression checks.
 
 ### 18. Cards, chips, arrows — hover micro  (community.tsx, concept-tiers.tsx, field-guide.tsx)
 - **What**: harvest cards lift -1px + shadow (300ms ease-out); chips rotate -6° on hover; arrows nudge translate-x 1; stake buttons tint; FAQ + rotates 45°.
