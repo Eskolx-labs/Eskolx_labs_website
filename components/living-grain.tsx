@@ -95,7 +95,10 @@ export function LivingGrain() {
         vy: -(0.06 + Math.random() * 0.2),
         vx: (Math.random() - 0.5) * 0.05,
         phase: Math.random() * Math.PI * 2,
-        alpha: 0.04 + Math.random() * 0.08,
+        // visible but quiet: the old 0.04-0.12 range rendered at 4-12%
+        // opacity — technically present, imperceptible on both fields.
+        // 0.10-0.24 reads as dust in library light without shouting.
+        alpha: 0.1 + Math.random() * 0.14,
         // per-particle drag: light motes surge first, heavy ones lag —
         // the field shears into a gradient of lag instead of moving as
         // one rigid sheet
