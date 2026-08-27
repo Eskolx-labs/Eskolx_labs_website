@@ -5,7 +5,7 @@ site, its nature, what the craft community does with this kind of motion, and a
 different angle on it. One entry at a time gets deep research + implementation;
 this file is the map.
 
-Progress: #2 motto (done pre-pass), #3 mission (done), #1 hero cover (done), #4 seal flood (removed — carried no content), #5 roadmap (done), #6 concept tiers (done), #7 origin story (done), #8 field guide (in progress).
+Progress: #2 motto (done pre-pass), #3 mission (done), #1 hero cover (done), #4 seal flood (removed — carried no content), #5 roadmap (done), #6 concept tiers (done), #7 origin story (done), #8 field guide (done), #9 community (in progress).
 
 Legend for "nature":
 - **scrubbed** — driven by scroll progress (GSAP timeline / ScrollTrigger)
@@ -71,7 +71,7 @@ Legend for "nature":
 - **Nature**: scrubbed + CSS micro.
 - **Expert practice**: the wipes are the "curtain" pattern — power2.inOut is the right ease but the two panels wipe with a 10-unit overlap that reads as a single curtain; a *staggered* wipe (second panel starts as the first finishes) reads as two pages. The seal stamp (scale 1.35) is gentler than the hero's (2.2) — inconsistent stamp register across the site.
 - **Different angle**: the status rules draw with power1.inOut (linear-ish) — a power2.out would make each rule *arrive*. The FAQ unfold is a CSS grid-rows transition — the standard modern pattern, but the + icon rotates with the same ease as the panel; a springier icon (back.out) would make the row feel mechanical in the good way.
-- **STATUS: in progress**
+- **STATUS: DONE** (committed 6c99cf7). The bar plates' content settles as each frames (back.out(1.4), measured fractions 0/1/3/2/3/1 stable across viewports; plate 1 settled at the open, plate 4 frames at the room's close). The status rules draw with power2.out (each arrives). The FAQ + icon rotates with a spring (cubic-bezier(0.34,1.56,0.64,1)) while the panel keeps its smooth expo. The covenant wipes were already staggered (2-unit overlap). 65/65 regression checks.
 
 ### 9. Community — the harvest table  (components/community.tsx)
 - **What**: head drifts y:34→-22 (6-94); rule draws scaleX (power2.inOut, scrub 0.6); three cards cascade in (y:36, opacity, rotate -1, power2.out) with chip scale 1.55 (power3.in) and index rotate 8; Reveal for the secondary row.
