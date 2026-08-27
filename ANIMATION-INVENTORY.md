@@ -96,6 +96,7 @@ Legend for "nature":
 - **Nature**: scrubbed, per-letter stagger.
 - **Expert practice**: the per-letter pop with back.out is already the right register (basement.studio marquee). The craft: the track travels with *no ease* (linear) — correct for a marquee; the letters pop with back.out(1.4) — the standard. The stagger is computed from char index × 0.7 — a *wave* (letters popping in the direction of travel) is the classic; here the pop window is per-letter so it reads as a wave already.
 - **Different angle**: the letters pop but never *settle* — the back.out overshoot is there. The harvest word is wine-colored but pops identically to the rest — a gold flash on the harvest letters would make the phrase land. The ❋ separators are static — they could pulse once as the wave passes.
+- **STATUS: in progress**
 
 ### 12. Reveal — the come-and-go layer  (components/reveal.tsx)
 - **What**: generic rise-in (y:34, opacity, power2.out, stagger 0.09) scrubbed over the box's viewport crossing, identical in both directions.

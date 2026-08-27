@@ -88,12 +88,24 @@ export function MarqueeBand() {
                         </Animation>
                       )
                     })}
-                    <span
-                      className="inline-block px-[0.28em] text-[clamp(2rem,5vw,4.5rem)] leading-none text-gold-leaf"
-                      aria-hidden="true"
+                    {/* the harvest's fruit: the separator pulses as the
+                        wave passes — the phrase's destination lands with
+                        the fruit, not just the letters */}
+                    <Animation
+                      start={charDuration * (PREFIX[wi] + word.length) * 0.7}
+                      end={charDuration * (PREFIX[wi] + word.length) * 0.7 + charDuration}
+                      fromTo={[
+                        { scale: 0.6, autoAlpha: 0.4 },
+                        { scale: 1, autoAlpha: 1, ease: 'back.out(2)' },
+                      ]}
                     >
-                      ❋
-                    </span>
+                      <span
+                        className="inline-block px-[0.28em] text-[clamp(2rem,5vw,4.5rem)] leading-none text-gold-leaf"
+                        aria-hidden="true"
+                      >
+                        ❋
+                      </span>
+                    </Animation>
                   </div>
                 )
               })}
