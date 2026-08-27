@@ -5,7 +5,7 @@ site, its nature, what the craft community does with this kind of motion, and a
 different angle on it. One entry at a time gets deep research + implementation;
 this file is the map.
 
-Progress: #2 motto (done pre-pass), #3 mission (done), #1 hero cover (done), #4 seal flood (removed — carried no content), #5 roadmap (done), #6 concept tiers (done), #7 origin story (done), #8 field guide (done), #9 community (done), #10 footer (done), #11 marquee (in progress).
+Progress: #2 motto (done pre-pass), #3 mission (done), #1 hero cover (done), #4 seal flood (removed — carried no content), #5 roadmap (done), #6 concept tiers (done), #7 origin story (done), #8 field guide (done), #9 community (done), #10 footer (done), #11 marquee (done), #12 reveal (in progress).
 
 Legend for "nature":
 - **scrubbed** — driven by scroll progress (GSAP timeline / ScrollTrigger)
@@ -96,7 +96,7 @@ Legend for "nature":
 - **Nature**: scrubbed, per-letter stagger.
 - **Expert practice**: the per-letter pop with back.out is already the right register (basement.studio marquee). The craft: the track travels with *no ease* (linear) — correct for a marquee; the letters pop with back.out(1.4) — the standard. The stagger is computed from char index × 0.7 — a *wave* (letters popping in the direction of travel) is the classic; here the pop window is per-letter so it reads as a wave already.
 - **Different angle**: the letters pop but never *settle* — the back.out overshoot is there. The harvest word is wine-colored but pops identically to the rest — a gold flash on the harvest letters would make the phrase land. The ❋ separators are static — they could pulse once as the wave passes.
-- **STATUS: in progress**
+- **STATUS: DONE** (committed 36825b6). The letters' wave was already right (back.out(1.4) per-letter pops). The separators now pulse as the wave passes (back.out(2), scale 0.6→1, opacity 0.4→1) — the fruit lands with the letters, so the phrase's destination carries its own beat. Verified: separators pulse in sync with the wave; 65/65 regression checks.
 
 ### 12. Reveal — the come-and-go layer  (components/reveal.tsx)
 - **What**: generic rise-in (y:34, opacity, power2.out, stagger 0.09) scrubbed over the box's viewport crossing, identical in both directions.
