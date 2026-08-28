@@ -12,7 +12,7 @@ import type ScrollTrigger from 'gsap/ScrollTrigger'
  * translate reaches -offsetTop(i), i.e. at progress offsetTop(i)/travel.
  */
 
-export function plateFractions(stack: HTMLElement, frame: HTMLElement): number[] {
+function plateFractions(stack: HTMLElement, frame: HTMLElement): number[] {
   const travel = Math.max(stack.scrollHeight - frame.clientHeight, 1)
   return Array.from(stack.children).map(
     (c) => Math.min((c as HTMLElement).offsetTop / travel, 1),
@@ -21,7 +21,7 @@ export function plateFractions(stack: HTMLElement, frame: HTMLElement): number[]
 
 /** scroll progress through a pinned room, 0..1; -1 when the room is not
     pinned (collapsed to flow by a media guard) so callers can fall back */
-export function roomProgress(rootId: string): number {
+function roomProgress(rootId: string): number {
   const el = document.getElementById(rootId)
   const pin = el?.querySelector<HTMLElement>('[data-pin]')
   if (!el || !pin) return -1

@@ -40,7 +40,7 @@ type ScrollytellingContextValue = {
 
 const ScrollytellingContext = createContext<ScrollytellingContextValue | null>(null)
 
-export function useScrollytelling() {
+function useScrollytelling() {
   const ctx = useContext(ScrollytellingContext)
   if (!ctx) throw new Error('useScrollytelling must be used within <Scrollytelling.Root>')
   return ctx

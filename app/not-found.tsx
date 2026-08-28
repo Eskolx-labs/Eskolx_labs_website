@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { GithubIcon, TelegramIcon } from '@/components/brand-icons'
 
 /* the leaf that was never bound. Static export writes this as 404.html;
@@ -17,9 +18,9 @@ export default function NotFound() {
         book is one turn away.
       </p>
       <div className="mt-9 flex flex-col items-center gap-3.5 sm:flex-row">
-        <a href="/" className="btn-plate btn-wine">
+        <Link href="/" className="btn-plate btn-wine">
           Back to the soil
-        </a>
+        </Link>
         <a
           href="https://github.com/eskolx-labs"
           target="_blank"
