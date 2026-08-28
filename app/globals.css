@@ -1,8 +1,5 @@
 @import 'tailwindcss';
-@import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
-
-@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --font-display: var(--font-im-fell), 'Iowan Old Style', Georgia, serif;
@@ -40,7 +37,6 @@
   --color-loam-950: #241407;
   --color-loam-900: #2e1c0d;
   --color-loam-850: #382412;
-  --color-loam-800: #45301b;
   --color-loam-700: #5a4227;
   --color-cream-100: #f0e4c8;
   --color-cream-200: #e2d1ab;
@@ -51,8 +47,6 @@
   --color-wine-600: #7c2c54;
   --color-wine-700: #5c1f3e;
   --color-gold-leaf: #b3946a;
-  --color-gold-ink: #6f542a;
-  --color-vermilion: #bf3b2b;
   --color-parchment: #ece1c6;
   --color-parchment-ink: #29190c;
 
@@ -60,7 +54,6 @@
   --color-field-ink: var(--field-ink);
   --color-field-ink-soft: var(--field-ink-soft);
   --color-field-line: var(--field-line);
-  --color-field-line-soft: var(--field-line-soft);
 
   --radius-sm: calc(var(--radius) * 0.5);
   --radius-md: calc(var(--radius) * 0.75);
@@ -78,7 +71,6 @@
   --loam-950: #241407;
   --loam-900: #2e1c0d;
   --loam-850: #382412;
-  --loam-800: #45301b;
   --loam-700: #5a4227;
   --cream-100: #f0e4c8;
   --cream-200: #e2d1ab;
@@ -88,7 +80,6 @@
   --field-ink: var(--parchment-ink);
   --field-ink-soft: #5c4a33;
   --field-line: #b9a67f;
-  --field-line-soft: #d3c5a3;
 
   /* wine — the grape family, sampled from both reference clusters */
   --wine-300: #d29cb6;
@@ -99,12 +90,6 @@
 
   /* tan-gold leaf tone from the etched foliage */
   --gold-leaf: #b3946a;
-  /* the same gold darkened to an ink safe on the day spread */
-  --gold-ink: #6f542a;
-
-  /* vermilion seal, the one red on every spread */
-  --vermilion: #bf3b2b;
-  --vermilion-deep: #a8321c;
 
   --ring: var(--wine-400);
   --radius: 0.375rem;
@@ -239,9 +224,6 @@
   .field-line {
     border-color: var(--field-line);
   }
-  .field-line-soft {
-    border-color: var(--field-line-soft);
-  }
 
 
 @media (prefers-reduced-motion: reduce) {
@@ -309,8 +291,8 @@
 }
 
 .btn-wine {
-  /* template buttons are dusty plum with a cream border; vermilion is
-     reserved for the seal alone */
+  /* template buttons are dusty plum with a cream border; the seal alone
+     may carry a red */
   background: var(--wine-600);
   color: var(--cream-100);
   border-color: rgb(236 225 198 / 0.75);

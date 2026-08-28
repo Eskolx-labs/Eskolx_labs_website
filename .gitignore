@@ -10,3 +10,5 @@ out/
 .impeccable/
 tsconfig.tsbuildinfo
 *.tsbuildinfo
+
+.playwright-mcp/

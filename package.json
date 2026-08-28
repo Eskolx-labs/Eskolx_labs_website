@@ -11,17 +11,12 @@
     "test": "node scripts/verify-all.mjs"
   },
   "dependencies": {
-    "@base-ui/react": "^1.5.0",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
     "gsap": "^3.15.0",
     "lenis": "^1.3.26",
     "next": "16.3.0",
     "react": "^19",
     "react-dom": "^19",
-    "shadcn": "^4.8.0",
-    "tailwind-merge": "^3.3.1",
-    "tw-animate-css": "^1.4.0"
+    "shadcn": "^4.8.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.6",

@@ -12,7 +12,7 @@
  * color is a pure function of scrollY, identical in both directions.
  */
 
-export type FieldPair = { bg: string; ink: string; soft: string; line: string }
+type FieldPair = { bg: string; ink: string; soft: string; line: string }
 
 export const PARCHMENT: FieldPair = {
   bg: '#ece1c6',
