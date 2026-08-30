@@ -38,9 +38,9 @@ const PRIMARY = [
     icon: LinkedinIcon,
     name: 'LinkedIn',
     cta: 'Open LinkedIn',
-    handle: 'linkedin.com/in/eskolx-labs',
+    handle: 'linkedin.com/company/eskolx-labs',
     desc: 'Technical announcements & talent recruitment',
-    href: 'https://www.linkedin.com/in/eskolx-labs/',
+    href: 'https://www.linkedin.com/company/eskolx-labs/',
   },
 ]
 
