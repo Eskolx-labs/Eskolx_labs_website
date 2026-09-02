@@ -108,7 +108,7 @@ const fieldState = (page) => page.evaluate(() => {
   await scrollToSel(page, '#ecosystem')
   await page.waitForTimeout(400)
   check('desktop: identity opens on its heading', await page.evaluate(() => {
-    const h = [...document.querySelectorAll('h2')].find((e) => e.textContent.includes('Eshcol Identity'))
+    const h = [...document.querySelectorAll('h2')].find((e) => e.textContent.includes('Why the Name Eshcol'))
     return h && +getComputedStyle(h).opacity === 1
   }))
   await scrollToSel(page, '#roadmap')
@@ -334,7 +334,7 @@ const fieldState = (page) => page.evaluate(() => {
   check('short: thesis lines masked until scrolled', await page.evaluate(() =>
     getComputedStyle(document.querySelector('[data-mission-line="0"]')).transform !== 'none'))
   check('short: nav logo visible', await page.evaluate(() => {
-    const el = document.querySelector('header a[href="#top"]')
+    const el = document.querySelector('header a[href="/"]')
     return el && getComputedStyle(el).visibility === 'visible'
   }))
   check('short: tier rooms stay pinned', await page.evaluate(() =>
@@ -389,7 +389,7 @@ const fieldState = (page) => page.evaluate(() => {
   check('reduced: hero headline static visible', await page.evaluate(() => getComputedStyle(document.querySelector('[data-mission-line="0"]')).transform === 'none' && +getComputedStyle(document.querySelector('[data-mission-line="0"]')).opacity === 1))
   check('reduced: wordmark clears the nav', await page.evaluate(() => {
     const mark = document.querySelector('[data-hero-mark]').getBoundingClientRect()
-    const nav = document.querySelector('header a[href="#top"]').getBoundingClientRect()
+    const nav = document.querySelector('header a[href="/"]').getBoundingClientRect()
     return mark.top >= nav.bottom - 2
   }))
   check('reduced: pins collapsed', await page.evaluate(() => getComputedStyle(document.querySelector('#top [data-pin] > div > div')).position === 'static'))
@@ -453,7 +453,7 @@ const fieldState = (page) => page.evaluate(() => {
   })
   await page.waitForTimeout(700)
   check('content: harvest heading rides field ink', await page.evaluate(() => {
-    const h = [...document.querySelectorAll('h2')].find((e) => e.textContent.includes('harvest table'))
+    const h = [...document.querySelectorAll('h2')].find((e) => e.textContent.includes('Community Channels'))
     const fieldInk = getComputedStyle(document.body).getPropertyValue('--field-ink').trim()
     return getComputedStyle(h).color === fieldInk
   }))

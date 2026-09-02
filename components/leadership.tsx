@@ -47,11 +47,10 @@ export function Leadership() {
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <Reveal className="max-w-3xl">
           <h2 className="display text-[clamp(2rem,3.8vw,3.2rem)] leading-tight field-ink" data-reveal-item>
-            The keepers of the root
+            Leadership
           </h2>
           <p className="mt-4 max-w-xl text-lg leading-relaxed text-[color-mix(in_srgb,var(--field-ink)_80%,transparent)]" data-reveal-item>
-            Leadership and governance. Two people tend the direction; everyone
-            else tends the code.
+            Two people tend the direction; everyone else tends the code.
           </p>
         </Reveal>
 

@@ -71,8 +71,8 @@ const IDENTITIES = [
   },
   {
     icon: IconSoil,
-    title: 'Dark Earth Foundation',
-    body: 'Dark earth is where the work happens before anything shows above ground. A function starts as a question and a paper, becomes naive code, gets tested against the famous implementations, and improves until it earns its place in the library.',
+    title: 'From Paper to Library',
+    body: 'We start with the paper, then the code, then the test. A function begins as a question and a book, becomes naive code, gets compared against the famous implementations, and improves until it earns its place in the library.',
   },
 ]
 
@@ -217,7 +217,7 @@ export function OriginStory() {
             <div data-reveal-item>
               <p className="font-mono text-kicker uppercase tracking-label text-wine-600">The name</p>
               <h2 className="display mt-4 max-w-xl text-[clamp(2rem,3.6vw,3rem)] leading-tight text-parchment-ink">
-                The Eshcol Identity
+                Why the Name Eshcol
               </h2>
               <p className="mt-4 max-w-2xl font-serif text-lg leading-relaxed text-parchment-ink/75">
                 Three facts of the soil this lab grows in.

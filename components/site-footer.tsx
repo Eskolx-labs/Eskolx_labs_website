@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { Root, Animation } from '@/lib/scrollytelling'
 import { LOAM } from '@/lib/field-controller'
 import { Reveal } from '@/components/reveal'
@@ -8,7 +9,9 @@ import { SealMark } from '@/components/botanical/seal-mark'
 const LINKS = [
   { label: 'GitHub', href: 'https://github.com/eskolx-labs' },
   { label: 'Telegram', href: 'https://t.me/eskolx_labs' },
-  { label: 'Guide', href: '#fieldguide' },
+  { label: 'The Program', href: '/program' },
+  { label: 'Credits', href: '/credits' },
+  { label: 'Guide', href: '/#fieldguide' },
 ]
 
 export function SiteFooter() {
@@ -27,10 +30,10 @@ export function SiteFooter() {
                   gives a hair where it landed — the cover's register,
                   closing the book the way it opened */}
               <Animation target="[data-seal]" start={0} end={30} fromTo={[{ scale: 2, opacity: 0, rotate: -14 }, { scale: 1, opacity: 1, rotate: -4, ease: 'power4.in' }]}>
-                <a href="#top" className="flex items-center gap-3.5">
+                <Link href="/" className="flex items-center gap-3.5">
                   <span className="font-script text-3xl leading-none field-ink">Eskolx Labs</span>
                   <SealMark label="Eskolx Labs seal" className="h-11 w-11 -rotate-4" data-seal />
-                </a>
+                </Link>
               </Animation>
               <Animation target="[data-seal]" start={36} end={40} fromTo={[{ scale: 1 }, { scale: 1.03, ease: 'power2.out', immediateRender: false }]} />
               <Animation target="[data-seal]" start={40} end={44} fromTo={[{ scale: 1.03 }, { scale: 1, ease: 'power1.out', immediateRender: false }]} />
@@ -46,6 +49,18 @@ export function SiteFooter() {
                 </span>
                 {LINKS.map((l) => {
                   const external = l.href.startsWith('http')
+                  const internal = l.href.startsWith('/')
+                  if (internal) {
+                    return (
+                      <Link
+                        key={l.label}
+                        href={l.href}
+                        className="link-draw inline-block py-1 text-copy text-[color:var(--field-ink-soft)] transition-colors hover:text-[color:var(--field-ink)]"
+                      >
+                        {l.label}
+                      </Link>
+                    )
+                  }
                   return (
                     <a
                       key={l.label}
@@ -76,8 +91,8 @@ export function SiteFooter() {
                 <p className="mt-2 max-w-[26ch] font-serif text-sm leading-relaxed text-[color:var(--field-ink-soft)]">
                   Statistical libraries, rebuilt from scratch, in the open.
                 </p>
-                <a
-                  href="#top"
+                <Link
+                  href="/"
                   className="mt-3 inline-flex items-center gap-2 py-1 text-sm text-[color:var(--field-ink-soft)] transition-colors hover:text-[color:var(--field-ink)]"
                 >
                   <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" aria-hidden="true">
@@ -89,8 +104,8 @@ export function SiteFooter() {
                       strokeLinecap="round"
                     />
                   </svg>
-                  Back to the soil
-                </a>
+                  Back to the top
+                </Link>
               </div>
             </div>
           </Reveal>

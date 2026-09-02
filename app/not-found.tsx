@@ -8,18 +8,18 @@ export default function NotFound() {
   return (
     <main className="grain field-bg flex min-h-screen flex-col items-center justify-center px-6 text-center">
       <p className="font-mono text-kicker uppercase tracking-label text-[color:var(--field-ink-soft)]">
-        404 · Leaf not bound
+        404 · Page not found
       </p>
       <h1 className="display mt-5 max-w-xl text-[clamp(2rem,5vw,3.2rem)] leading-tight text-[color:var(--field-ink)]">
-        This page isn&apos;t in the almanac.
+        This page isn&apos;t here.
       </h1>
       <p className="mt-5 max-w-[52ch] text-base leading-relaxed text-[color:var(--field-ink-soft)]">
-        The address wore out, or the leaf was never bound. The rest of the
-        book is one turn away.
+        The address wore out, or the page was never written. The rest of the
+        site is one turn away.
       </p>
       <div className="mt-9 flex flex-col items-center gap-3.5 sm:flex-row">
         <Link href="/" className="btn-plate btn-wine">
-          Back to the soil
+          Back to the homepage
         </Link>
         <a
           href="https://github.com/eskolx-labs"

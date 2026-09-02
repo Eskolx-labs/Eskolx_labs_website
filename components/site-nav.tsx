@@ -1,18 +1,23 @@
 'use client'
 
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import Link from 'next/link'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { GithubIcon, TelegramIcon } from '@/components/brand-icons'
 import { SealMark } from '@/components/botanical/seal-mark'
 
 const NAV_LINKS = [
-  { label: 'Eshcol', gloss: 'Name & roots', href: '#ecosystem' },
-  { label: 'Trellis', gloss: 'Curriculum', href: '#tiers' },
-  { label: 'Method', gloss: 'The plan', href: '#roadmap' },
-  { label: 'Keepers', gloss: 'The team', href: '#leadership' },
-  { label: 'Harvest', gloss: 'Community', href: '#community' },
-  { label: 'Guide', gloss: 'Joining & FAQ', href: '#fieldguide' },
+  { label: 'The Name', gloss: 'Why Eshcol', href: '/#ecosystem' },
+  { label: 'The Tiers', gloss: 'Four tiers', href: '/#tiers' },
+  { label: 'Team', gloss: 'Leadership', href: '/#leadership' },
+  { label: 'Community', gloss: 'Channels', href: '/#community' },
+  { label: 'Join Us', gloss: 'Requirements & FAQ', href: '/#fieldguide' },
+]
+
+const PAGE_LINKS = [
+  { label: 'The Program', gloss: '12-week plan', href: '/program' },
+  { label: 'Credits', gloss: 'Who made what', href: '/credits' },
 ]
 
 export function SiteNav() {
@@ -85,8 +90,9 @@ export function SiteNav() {
         const probe = window.scrollY + window.innerHeight * 0.38
         let current: string | null = null
         for (const link of NAV_LINKS) {
-          const el = document.getElementById(link.href.slice(1))
-          if (el && el.offsetTop <= probe) current = link.href.slice(1)
+          const id = link.href.split('#')[1]
+          const el = document.getElementById(id)
+          if (el && el.offsetTop <= probe) current = id
         }
         setGrounded((g) => (g === groundedNow ? g : groundedNow))
         setActiveId((a) => (a === current ? a : current))
@@ -188,9 +194,9 @@ export function SiteNav() {
       }`}
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <a
+        <Link
           ref={logoRef}
-          href="#top"
+          href="/"
           className="group flex origin-left items-center gap-2.5 max-md:hidden"
         >
           <span className="font-script text-[1.5rem] leading-none text-[color:var(--field-ink)]">
@@ -199,11 +205,11 @@ export function SiteNav() {
           <span ref={sealRef} className="inline-flex shrink-0">
             <SealMark className="h-7 w-7" />
           </span>
-        </a>
+        </Link>
 
         <nav className="relative hidden items-center gap-6 lg:flex">
           {NAV_LINKS.map((link) => {
-            const id = link.href.slice(1)
+            const id = link.href.split('#')[1]
             const active = activeId === id
             return (
               <a
@@ -237,6 +243,23 @@ export function SiteNav() {
             className="pointer-events-none absolute bottom-[2px] left-0 h-[2px] w-6 bg-gold-leaf opacity-0 transition-[transform,opacity] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
             style={{ transformOrigin: 'left center' }}
           />
+          {/* page links: separate pages, not spreads — wine text so the
+              visitor reads them as destinations, not scroll anchors */}
+          <span aria-hidden="true" className="mx-1 h-6 w-px bg-[color-mix(in_srgb,var(--field-line)_50%,transparent)]" />
+          {PAGE_LINKS.map((link) => (
+            <Link
+              key={link.label}
+              href={link.href}
+              className="group block py-0.5 text-center transition-colors"
+            >
+              <span className="link-draw block font-serif text-copy leading-tight underline-offset-8 text-wine-400 transition-colors group-hover:text-wine-300">
+                {link.label}
+              </span>
+              <span className="mt-0.5 block font-mono text-kicker leading-none uppercase tracking-label-snug text-wine-600/90 transition-colors group-hover:text-wine-500">
+                {link.gloss}
+              </span>
+            </Link>
+          ))}
         </nav>
 
         <div className="flex items-center gap-2 sm:gap-3 lg:flex">
@@ -311,6 +334,17 @@ export function SiteNav() {
                 </a>
               ))}
               <div className="mt-4 flex flex-col gap-3 pb-2">
+                {PAGE_LINKS.map((link) => (
+                  <Link
+                    key={link.label}
+                    href={link.href}
+                    onClick={() => setOpen(false)}
+                    className="flex items-baseline justify-between border-b border-[color-mix(in_srgb,var(--field-line)_30%,transparent)] py-3 font-serif text-wine-400 last:border-0 transition-colors hover:text-wine-300"
+                  >
+                    <span>{link.label}</span>
+                    <span className="font-mono text-kicker uppercase tracking-label-snug text-wine-600/80">{link.gloss}</span>
+                  </Link>
+                ))}
                 <a
                   href="https://github.com/eskolx-labs"
                   target="_blank"

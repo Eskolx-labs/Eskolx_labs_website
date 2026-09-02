@@ -122,10 +122,10 @@ export function Mission() {
                 data-mission-sub
                 className="mx-auto mt-7 max-w-xl text-lg leading-relaxed field-ink-soft max-md:mt-5 max-md:text-base"
               >
-                AI is making learning feel pointless. We hand you the
-                opposite: real, hard, highly technical problems. You
-                rebuild the statistical libraries everyone takes for
-                granted, then turn them on questions nobody has answered.
+                AI writes code you don&apos;t understand. We give you the hard
+                problems that force understanding. You rebuild the statistical
+                libraries everyone takes for granted, then turn them on
+                questions nobody has answered.
               </p>
             </Animation>
 

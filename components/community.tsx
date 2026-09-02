@@ -147,7 +147,7 @@ export function Community() {
         <Animation target="[data-harvest-head]" start={6} end={94} fromTo={[{ y: 34 }, { y: -22 }]}>
           <div data-harvest-head className="max-w-3xl">
             <h2 className="display text-[clamp(2rem,3.8vw,3.2rem)] leading-tight field-ink">
-              The harvest table
+              Community Channels
             </h2>
             <p className="mt-4 max-w-xl text-lg leading-relaxed text-[color-mix(in_srgb,var(--field-ink)_75%,transparent)]">
               Follow the code, the research, and the conversation across every

@@ -80,6 +80,11 @@ export function Hero() {
             />
           </div>
 
+          {/* one-sentence value proposition under the mark */}
+          <p className="z-10 mt-6 max-w-2xl text-center text-lg leading-relaxed field-ink-soft max-md:text-base">
+            We rebuild statistical libraries from scratch in Python so you understand them line by line.
+          </p>
+
           {/* the cover's rule: one gold hairline draws beneath the mark as
               the seal stamps — the book's rule language, opening the cover */}
           <span
@@ -94,9 +99,9 @@ export function Hero() {
               data-hero-cue
               href="#motto"
               className="group relative z-10 mt-14 flex flex-col items-center gap-2.5 text-sm field-ink-soft transition-colors hover:field-ink max-md:mt-10"
-              aria-label="Scroll to open the almanac"
+              aria-label="Scroll to begin"
             >
-              <span>Scroll to open the almanac</span>
+              <span>Scroll to begin</span>
               <span
                 aria-hidden="true"
                 className="flex h-9 w-9 items-center justify-center rounded-full border border-field-ink/30 transition-colors group-hover:border-field-ink/70 hero-cue-bounce"

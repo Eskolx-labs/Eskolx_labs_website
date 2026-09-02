@@ -29,6 +29,14 @@ const DONTs = [
     t: 'Ban AI',
     d: 'Build with it if you like. You will explain every line and understand everything you shipped.',
   },
+  {
+    t: 'Be a training platform',
+    d: 'No lectures, no grades, no certificates. You build real packages with a small team, and the work is the point.',
+  },
+  {
+    t: 'Hand you production-ready libraries today',
+    d: 'We build from scratch to learn. The packages are MIT-licensed and public, but early-stage.',
+  },
 ]
 
 const ASKS: {
@@ -91,7 +99,7 @@ const FAQ: {
   },
   {
     q: 'Why rebuild libraries that already exist?',
-    a: 'Using a library and understanding one are different skills. Ours start naive, get compared against the famous implementations, and improve until they are more than usable. That comparison is the curriculum.',
+    a: 'Using a library and understanding one are different skills. Ours start naive, get compared against the famous implementations, and improve until they are more than usable. That comparison is the work.',
   },
   {
     q: 'How technical is this, really?',
@@ -267,10 +275,10 @@ export function FieldGuide() {
           <Reveal className="flex flex-wrap items-end justify-between gap-6">
             <div className="max-w-2xl" data-fg-head>
               <p className="font-mono text-kicker uppercase tracking-label text-wine-600" data-reveal-item>
-                The field guide
+                Join us
               </p>
               <h2 className="display mt-4 text-[clamp(2rem,3.8vw,3.2rem)] leading-tight text-parchment-ink" data-reveal-item>
-                Practicalities, in plain ink
+                Requirements & FAQ
               </h2>
               <p className="mt-4 max-w-xl text-lg leading-relaxed text-parchment-ink/75" data-reveal-item>
                 How to join, how we work, where the project stands. No sales copy,
@@ -361,8 +369,7 @@ export function FieldGuide() {
               What we ask of you
             </h2>
             <p className="mt-4 max-w-xl text-lg leading-relaxed field-ink-soft">
-              The mission sets the bar. Here it is, plainly: four things,
-              and that is the whole filter.
+              Four requirements, and that is the whole filter.
             </p>
           </div>
 

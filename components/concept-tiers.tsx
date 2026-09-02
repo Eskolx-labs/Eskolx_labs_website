@@ -10,25 +10,25 @@ import { bindStakeLighting, scrollToPlate } from '@/lib/stakes'
 const TIERS = [
   {
     id: 1,
-    name: 'Foundational Statistics & Probability (from scratch)',
+    name: 'Foundational Statistics & Probability',
     concepts: ['Descriptive statistics', 'Elementary probability distributions', 'Hypothesis testing', 'Optimization of every routine'],
-    goal: 'The first season. Descriptive statistics, elementary probability distributions, and hypothesis testing, written as pure Python with no black boxes. At the end of the three months, participants turn their own packages loose on novel research.',
+    goal: 'Weeks 1-12. Descriptive statistics, elementary probability distributions, and hypothesis testing, written as pure Python with no black boxes. At the end of the three months, participants turn their own packages loose on novel research.',
   },
   {
     id: 2,
-    name: 'Modeling & Classical Machine Learning (from scratch)',
+    name: 'Modeling & Classical Machine Learning',
     concepts: ['Modeling on our own packages', 'Assumption checks', 'Feature diagnostics', 'Reference comparison against the famous implementations'],
     goal: 'After the basics, modeling and classical machine learning built on what we grew ourselves. Assumption checks and test selection wired end to end, every method backed by the paper it came from.',
   },
   {
     id: 3,
-    name: 'Advanced Applied Machine Learning (from scratch)',
+    name: 'Advanced Applied Machine Learning',
     concepts: ['Neural networks', 'Modern architectures', 'Time series & stationarity', 'Design of Experiments'],
     goal: 'Next comes advanced data science, still from scratch. You read the papers, then write tested, documented code you can explain line by line.',
   },
   {
     id: 4,
-    name: 'Toward Automated Data Science (from scratch)',
+    name: 'Toward Automated Data Science',
     concepts: ['Analysis pipelines', 'Spatial statistics', 'Knowledge-base-driven methods'],
     goal: 'The long game. Libraries and an open knowledge base good enough that data science starts automating itself, built by people who rebuilt the basics first.',
   },
@@ -183,10 +183,10 @@ export function ConceptTiers() {
                 guide-bar note — viewport Reveals scramble in sticky rooms) */}
             <div className="relative max-w-3xl">
               <h2 className="display text-[clamp(2rem,3.8vw,3.2rem)] leading-tight text-cream-100">
-                The four-tier trellis
+                The Four Tiers
               </h2>
               <p className="mt-4 max-w-xl text-lg leading-relaxed text-cream-200/80">
-                Build order, not marketing tiers. Each rung trains on the last:
+                Twelve weeks, four tiers. Each tier builds on the last:
                 statistical primitives, then modeling, then advanced methods,
                 until the libraries can carry real research.
               </p>
@@ -276,12 +276,15 @@ export function ConceptTiers() {
                       )}
                       <div data-tier-head={i}>
                         <div className="rule-ornament">
-                          <span data-tier-kicker={tier.id} className="font-mono text-kicker tracking-label text-gold-leaf">
+                          <span
+                            data-tier-kicker={tier.id}
+                            className="font-mono text-kicker tracking-label text-gold-leaf"
+                          >
                             TIER {tier.id}
                           </span>
                         </div>
                         <h3 className="display mt-5 text-2xl leading-snug text-cream-100">
-                          {tier.name}
+                          {tier.name.replace(' (from scratch)', '')}
                         </h3>
                         <p className="mt-3 max-w-[65ch] leading-relaxed text-cream-200/80">{tier.goal}</p>
 
